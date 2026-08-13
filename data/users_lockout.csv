@@ -1,0 +1,3 @@
+email,password,expect_regex
+perf_23127178_lockout_a@eshop.test,WrongPassword!,40[13]
+perf_23127178_lockout_b@eshop.test,WrongPassword!,40[13]
