@@ -1,0 +1,23 @@
+{
+  "name": "hw05-performance-testing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "HW05 — Performance Testing on EShop SUT (JMeter Load/Stress/Spike + k6 bonus). SV 23127178.",
+  "scripts": {
+    "preflight": "node tools/preflight.mjs",
+    "seed:perf": "node tools/seed-perf-data.mjs",
+    "reset:lockout": "node tools/reset-lockout.mjs",
+    "run:load": "bash tools/run-scenario.sh Load",
+    "run:stress": "bash tools/run-scenario.sh Stress",
+    "run:spike": "bash tools/run-scenario.sh Spike",
+    "run:all": "bash tools/run-all.sh",
+    "summary": "node tools/summarize-jtl.mjs",
+    "hardware": "bash tools/hardware-report.sh",
+    "pdf": "bash tools/build-pdfs.sh",
+    "capture": "bash tools/capture-run.sh",
+    "drift": "node tools/soak-drift.mjs",
+    "plans": "python3 tools/gen-test-plans.py",
+    "reset:orders": "node tools/reset-orders.mjs"
+  }
+}

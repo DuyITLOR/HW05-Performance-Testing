@@ -1,0 +1,51 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Node
+node_modules/
+*.tmp
+
+# Submission zip (xuất khi nộp, không commit)
+*.zip
+
+# SUT — là repo git riêng ở ../eshop-sut, không commit vào repo bài làm
+eshop-sut/
+group05_eshop/
+
+# Folder đóng gói nộp bài (dựng lại được bất cứ lúc nào — không commit)
+23127178_HW05_AI_Performance*/
+
+# ── Bằng chứng chạy perf test: cái gì commit, cái gì không ──────────────────────────────
+# CÓ commit — §11 (Anti-AI-Cheat) đòi đích danh và TA kiểm tay:
+#   test-plans/*.jmx            3 test plan, tên đúng {MSSV}_{ScenarioType}_{YYYYMMDD}
+#   results/jtl/*.jtl           raw log ĐẦY ĐỦ, không phải bản summary
+#   results/html/<scenario>/    3 HTML dashboard folder
+#   resource-monitor/           ảnh Activity Monitor + hardware report
+#   data/*.csv                  dữ liệu data-driven
+#
+# KHÔNG commit: log rác của chính JMeter, và raw output JSON của k6 (phình rất nhanh —
+#   k6 --out json ghi một dòng JSON cho MỖI metric point, 10 phút soak ~ vài trăm MB).
+#   Bản k6 giữ lại là summary export + CSV, đủ để đối chiếu.
+jmeter.log
+jmeter-server.log
+*.jtl.tmp
+k6/raw/*.json
+k6/raw/*.ndjson
+
+# Endurance/soak .jtl có thể vượt 50MB — GitHub cảnh báo từ 50MB, chặn ở 100MB.
+# Nếu vượt: nén .gz ĐỂ COMMIT KÈM (đừng xoá bản raw khỏi bản nộp .zip — §11 đòi "in full").
+endurance/jtl/*.jtl.orig
+
+# Claude Code nội bộ — vẫn giữ .claude/skills (Agent Skills nộp theo §7)
+.claude/projects/
+.claude/settings.local.json
+
+# Bãi thử khi quay video demo — không thuộc bài nộp
+demo/*
+!demo/README.md
+recordings/
