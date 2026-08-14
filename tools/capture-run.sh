@@ -113,7 +113,10 @@ for S in "${SCENARIOS[@]}"; do
   echo "  Lý do    : $WHY"
   echo "  Lưu vào  : $TARGET"
   echo ""
-  read -r -p "  ENTER để chạy $S (Ctrl+C để dừng hẳn)... " _
+  # Không hỏi ENTER trước từng lượt: 4 lần bấm cách nhau ~8 phút nghĩa là phải trực máy chỉ để
+  # bấm. Chỉ hỏi một lần ở đầu (lúc xếp cửa sổ), phần còn lại tự chạy. Ctrl+C để dừng hẳn.
+  echo "  Bắt đầu sau 5 giây… (Ctrl+C để dừng hẳn)"
+  sleep 5
 
   # Chạy nền để script còn đếm giây và nhắc chụp.
   bash tools/run-scenario.sh "$S" $OUT_ARG > "/tmp/capture-$S.log" 2>&1 &
