@@ -26,77 +26,80 @@ Kiểm lại bất cứ lúc nào: `npm run drift`
 | VU | 20 |
 | Ramp-up | 60s |
 | Think-time | 5 bước × (200–400ms) = **1–2s mỗi iteration** |
-| Thời lượng | **724s** (12 phút 4 giây) |
-| Bắt đầu / kết thúc (UTC) | `2026-08-13T06:35:16Z` → `2026-08-13T06:47:20Z` |
-| Raw log | [`endurance/jtl/23127178_Soak_20260813-133515.jtl`](jtl/) — 45.365 sample |
+| Thời lượng | **725s** (12 phút 5 giây) |
+| Bắt đầu / kết thúc (UTC) | `2026-08-14T03:32:46Z` → `2026-08-14T03:44:51Z` |
+| Raw log | [`endurance/jtl/23127178_Soak_20260814-103245.jtl`](jtl/) — 45.288 sample |
 | Dashboard | [`endurance/html/soak/index.html`](html/soak/index.html) |
-| Mẫu tài nguyên | [`endurance/resources/23127178_Soak_20260813-133515.resources.csv`](resources/) — 2 giây/mẫu |
+| Mẫu tài nguyên | [`endurance/resources/23127178_Soak_20260814-103245.resources.csv`](resources/) — 2 giây/mẫu |
+| Kích thước dữ liệu | bảng `products` **436.692 dòng**, file SQLite **33 MB** — xem [main-report §2.8](../report/main-report.md) |
 
 ## 3. Kết quả — ngưỡng tìm được
 
 | Chỉ số | Giá trị | Lấy từ đâu |
 |---|---|---|
-| **Max stable RPS** | **63,0 req/s** | 45.365 sample / 719,6s |
+| **Max stable RPS** | **62,9 req/s** | 45.288 sample / 719,7s |
 | **p95 toàn lượt** | **6 ms** | `results/summary.md`, dòng Soak |
-| p99 toàn lượt | 13 ms | như trên |
-| max | 160 ms | như trên |
+| p99 toàn lượt | 16 ms | như trên |
+| max | 365 ms | như trên |
 | Error rate | **0%** | không có sample nào `success=false` |
-| **RSS `node` đầu → cuối** | **19,8 → 35,8 MB** | file resources cùng lượt |
-| **Trần bộ nhớ (RSS đỉnh)** | **83,1 MB** | như trên |
-| CPU `node` đỉnh | **19,7%** | như trên — trần một luồng JS là ~100% |
-| CPU JMeter đỉnh | 60,9% · RSS đỉnh 788 MB | như trên |
+| **RSS `node` đầu → cuối** | **16,9 → 33,9 MB** | file resources cùng lượt |
+| **Trần bộ nhớ (RSS đỉnh)** | **80,8 MB** | như trên |
+| CPU `node` đỉnh | **20,7%** | như trên |
+| CPU JMeter đỉnh | 161% · RSS đỉnh 812 MB | như trên |
 
 ### Theo endpoint
 
 | Endpoint | Sample | avg | p90 | **p95** | p99 | max |
 |---|---|---|---|---|---|---|
-| 1 POST /api/login | 9.062 | 2,1 | 4 | **5** | 13 | 119 |
-| 2 GET /api/admin/orders | 9.058 | 3,7 | 6 | **7** | 15 | 148 |
-| 3 GET /api/admin/users | 9.054 | 1,9 | 3 | **4** | 9 | 72 |
-| 4 POST /api/admin/import-products | 9.049 | 4,0 | 7 | **8** | 16 | 96 |
-| 5 PUT /api/admin/orders/:id/status | 9.045 | 1,7 | 3 | **4** | 9 | 160 |
-| 6 POST /api/login (lockout probe) | 97 | 1,7 | 3 | **4** | 9 | 9 |
+| 1 POST /api/login | 9.046 | 2,2 | 3 | **5** | 12 | 365 |
+| 2 GET /api/admin/orders | 9.041 | 4,0 | 6 | **7** | 20 | 331 |
+| 3 GET /api/admin/users | 9.039 | 2,2 | 3 | **5** | 12 | 343 |
+| 4 POST /api/admin/import-products | 9.036 | 4,8 | 7 | **9** | 25 | 360 |
+| 5 PUT /api/admin/orders/:id/status | 9.031 | 2,0 | 3 | **4** | 11 | 362 |
+| 6 POST /api/login (lockout probe) | 95 | 1,6 | 3 | **4** | 5 | 5 |
 
 ## 4. p95 có trôi không — bảng theo từng phút
 
 | Phút | Sample | RPS | Error % | p50 | **p95** | p99 |
 |---|---|---|---|---|---|---|
-| 1 | 2.816 | 46,9 | 0% | 2 | **7** | 16 |
-| 2 | 3.981 | 66,4 | 0% | 2 | **6** | 12 |
-| 3 | 3.926 | 65,4 | 0% | 2 | **6** | 11 |
-| 4 | 3.955 | 65,9 | 0% | 2 | **7** | 18 |
-| 5 | 3.926 | 65,4 | 0% | 2 | **7** | 18 |
-| 6 | 3.924 | 65,4 | 0% | 2 | **7** | 11 |
-| 7 | 3.902 | 65,0 | 0% | 2 | **7** | 16 |
-| 8 | 3.933 | 65,6 | 0% | 2 | **6** | 14 |
-| 9 | 3.947 | 65,8 | 0% | 2 | **6** | 10 |
-| 10 | 3.928 | 65,5 | 0% | 2 | **6** | 17 |
-| 11 | 3.921 | 65,4 | 0% | 2 | **6** | 11 |
-| 12 | 3.912 | 65,2 | 0% | 2 | **6** | 10 |
+| 1 | 2.104 | 35,1 | 0% | 2 | **6** | 13 |
+| 2 | 3.979 | 66,3 | 0% | 2 | **6** | 12 |
+| 3 | 3.929 | 65,5 | 0% | 2 | **6** | 12 |
+| 4 | 3.937 | 65,6 | 0% | 2 | **6** | 11 |
+| 5 | 3.912 | 65,2 | 0% | 2 | **8** | 28 |
+| 6 | 3.930 | 65,5 | 0% | 2 | **7** | 9 |
+| 7 | 3.921 | 65,4 | 0% | 2 | **7** | 17 |
+| 8 | 3.900 | 65,0 | 0% | 2 | **8** | **105** |
+| 9 | 3.902 | 65,0 | 0% | 2 | **7** | 19 |
+| 10 | 3.935 | 65,6 | 0% | 2 | **6** | 9 |
+| 11 | 3.922 | 65,4 | 0% | 2 | **7** | 23 |
+| 12 | 3.917 | 65,3 | 0% | 2 | **6** | 11 |
 
 | Khoảng | p95 | Ghi chú |
 |---|---|---|
-| 5 phút đầu | **7 ms** | 17.898 sample |
-| 5 phút cuối | **6 ms** | 19.667 sample |
-| **Độ trôi** | **−14,3%** | ngưỡng cho phép ±20% → **đạt** |
+| 5 phút đầu | **6 ms** | 17.861 sample |
+| 5 phút cuối | **6 ms** | 19.599 sample |
+| **Độ trôi** | **+0%** | ngưỡng cho phép ±20% → **đạt** |
 
-**Kết luận: ỔN ĐỊNH** theo đúng định nghĩa đã chốt trước khi chạy. p95 **giảm** theo thời gian
-chứ không tăng.
+**Kết luận: ỔN ĐỊNH** theo đúng định nghĩa đã chốt trước khi chạy. Độ trôi **đúng 0%** — p95 phút 1
+và phút 12 đều 6ms.
 
-Phút 1 chỉ có 46,9 RPS vì còn đang ramp-up (60s); từ phút 2 trở đi throughput đứng rất chắc ở
-65–66 RPS với biên độ dưới 2%.
+Phút 1 chỉ có 35,1 RPS vì còn đang ramp-up (60s); từ phút 2 trở đi throughput đứng rất chắc ở
+65–66 RPS với biên độ dưới 2%. Phút 5 và 8 có p95 nhích lên 8ms và p99 phút 8 lên **105ms** — một
+đỉnh đơn lẻ, không thành xu hướng (phút 9–12 trở lại 6–7ms). Đây là loại nhiễu mà nếu chỉ nhìn số
+tổng thì không thấy, và cũng là lý do ngưỡng hồi quy ở Task 3 đặt 20% chứ không phải 5%.
 
 ## 5. Có rò rỉ bộ nhớ không
 
-RSS `node` tăng **+80,8%** (19,8 → 35,8 MB). Con số phần trăm nghe như rò rỉ, nhưng **không phải**,
-và cơ sở để loại giả thuyết đó không phải là "12 phút thì chưa sao":
+RSS `node` tăng **+100,6%** (16,9 → 33,9 MB) — gấp đôi. Con số phần trăm nghe rất giống rò rỉ,
+nhưng **không phải**, và cơ sở để loại giả thuyết đó không phải là "12 phút thì chưa sao":
 
-1. **Mốc xuất phát rất thấp.** 19,8 MB là RSS lúc process vừa nhận request đầu tiên, chưa nạp
-   xong module và chưa có cache trang SQLite. 35,8 MB là heap ổn định sau warm-up.
-2. **p95 giảm −14,3%.** Rò rỉ bộ nhớ trong Node gần như luôn kéo theo p95 **tăng** vì GC phải làm
-   việc nhiều dần. Ở đây p95 đi ngược lại.
-3. **Đỉnh 83,1 MB trên máy 16 GB** — bằng 0,5% RAM. Kể cả nếu tăng tuyến tính suốt 12 phút thì
-   cũng còn cách rất xa mọi giới hạn.
+1. **Mốc xuất phát rất thấp.** 16,9 MB là RSS lúc process vừa nhận request đầu tiên, chưa nạp xong
+   module và chưa có cache trang SQLite. 33,9 MB là heap ổn định sau warm-up. Gấp đôi một con số
+   nhỏ vẫn là một con số nhỏ — đây đúng là chỗ đọc phần trăm mà bỏ giá trị tuyệt đối sẽ kết luận sai.
+2. **p95 trôi 0%.** Rò rỉ bộ nhớ trong Node gần như luôn kéo theo p95 **tăng** vì GC phải làm việc
+   nhiều dần. Ở đây p95 phút 1 và phút 12 bằng nhau.
+3. **Đỉnh 80,8 MB trên máy 16 GB** — bằng 0,5% RAM.
 
 Muốn khẳng định chắc chắn thì phải chạy soak **≥60 phút** và xem RSS có tiếp tục leo sau khi
 p95 đã ổn định. Lượt 12 phút của bài này **không đủ để kết luận về rò rỉ**, chỉ đủ để nói *không
@@ -104,22 +107,21 @@ thấy dấu hiệu nào*.
 
 ## 6. Ngưỡng này có nghĩa gì và không có nghĩa gì
 
-**Có nghĩa:** trên máy `Le-Nhut-Duy.local` (M2 Pro, 12 lõi, 16 GB), với cấu hình load generator
-**và** SUT cùng máy, backend EShop giữ được **63 req/s trong 12 phút** với p95 6ms, 0% error, và
-không suy giảm.
+**Có nghĩa:** trên máy `Le-Nhut-Duy.local` (M2 Pro, 12 lõi, 16 GB), với load generator **và** SUT
+cùng máy, và bảng `products` ở **436.692 dòng**, backend EShop giữ được **62,9 req/s trong 12
+phút** với p95 6ms, 0% error, không suy giảm.
 
 **Không có nghĩa:**
 
-- **Không phải năng lực tối đa của backend.** 63 req/s là mức do **20 VU và think-time 1–2s**
-  quyết định, không phải do server chạm giới hạn: `node` CPU đỉnh chỉ **19,7%**. Lượt Stress cho
-  thấy cùng backend đó chịu **550 req/s** vẫn 0% error.
+- **Không phải năng lực tối đa của backend.** 62,9 req/s là mức do **20 VU và think-time 1–2s**
+  quyết định, không phải do server chạm giới hạn: `node` CPU đỉnh chỉ **20,7%**. Lượt Stress cho
+  thấy cùng backend đó chịu **524,8 req/s** vẫn 0% error, và ở đó `node` CPU mới đạt **108%**.
 - **Không phải ngưỡng của một endpoint đơn lẻ**, mà của **cả workflow 6 bước**.
-- **Không suy ra được cho môi trường khác.** SUT là một process Node, một luồng JS + SQLite ghi
-  tuần tự. Trần thật của nó là ~100% của **một** lõi; 11 lõi còn lại của máy không giúp gì.
-- **Không đo được ngưỡng thật vì load generator chạm giới hạn trước.** Ở Stress, JMeter tiêu CPU
-  đỉnh **158%** trong khi `node` (ở lượt Spike với 212 VU) chỉ đỉnh **79%**. Muốn tìm ngưỡng thật
-  của backend thì phải tách load generator sang máy khác, hoặc dùng k6 — xem
-  [`report/main-report.md §3.2`](../report/main-report.md).
+- **Không suy ra được cho kích thước dữ liệu khác.** Đây là giới hạn quan trọng nhất và nó có số
+  đo hẳn hoi: cùng lượt soak này trên DB nhỏ hơn 8 lần cho **cùng** p95 6ms, nhưng cùng lượt
+  **Stress** thì chênh **2,4–2,8 lần**. Ở 20 VU thì kích thước dữ liệu không ảnh hưởng; ở 200 VU
+  thì ảnh hưởng nặng — xem [`main-report §2.8`](../report/main-report.md).
+- **Không suy ra được cho môi trường khác.** SUT là một process Node + SQLite một writer.
 
 ## 7. Muốn tìm ngưỡng thật thì làm gì tiếp
 

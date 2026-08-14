@@ -1,0 +1,602 @@
+2026-08-14 10:17:32,503 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-08-14 10:17:32,532 INFO o.a.j.JMeter: Loading user properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/user.properties
+2026-08-14 10:17:32,537 INFO o.a.j.JMeter: Loading system properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/system.properties
+2026-08-14 10:17:32,538 INFO o.a.j.JMeter: Loading additional properties from: tools/jmeter-user.properties
+2026-08-14 10:17:32,539 INFO o.a.j.JMeter: Setting JMeter property: student.id=23127178
+2026-08-14 10:17:32,540 INFO o.a.j.JMeter: Setting JMeter property: scenario=Stress
+2026-08-14 10:17:32,550 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-08-14 10:17:32,550 INFO o.a.j.JMeter: Version 5.6.3
+2026-08-14 10:17:32,550 INFO o.a.j.JMeter: java.version=21.0.12
+2026-08-14 10:17:32,550 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2026-08-14 10:17:32,550 INFO o.a.j.JMeter: os.name=Mac OS X
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: os.arch=aarch64
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: os.version=26.1
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: file.encoding=UTF-8
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: java.awt.headless=true
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: Max memory     =1073741824
+2026-08-14 10:17:32,551 INFO o.a.j.JMeter: Available Processors =12
+2026-08-14 10:17:32,572 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-08-14 10:17:32,572 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-08-14 10:17:32,572 INFO o.a.j.JMeter: JMeterHome=/opt/homebrew/Cellar/jmeter/5.6.3/libexec
+2026-08-14 10:17:32,572 INFO o.a.j.JMeter: user.dir  =/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing
+2026-08-14 10:17:32,572 INFO o.a.j.JMeter: PWD       =/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing
+2026-08-14 10:17:32,581 INFO o.a.j.JMeter: IP: 127.0.0.1 Name: Le-Nhut-Duy.local FullName: localhost
+2026-08-14 10:17:32,589 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress'
+2026-08-14 10:17:32,591 INFO o.a.j.s.FileServer: Default base='/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing'
+2026-08-14 10:17:32,593 INFO o.a.j.s.FileServer: Set new base='/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/test-plans'
+2026-08-14 10:17:32,711 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-08-14 10:17:32,733 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-08-14 10:17:32,735 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-08-14 10:17:32,737 INFO o.a.j.s.SaveService: Loading file: test-plans/23127178_Stress_20260813.jmx
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-08-14 10:17:32,771 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-08-14 10:17:32,812 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-08-14 10:17:32,814 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
+2026-08-14 10:17:32,814 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: results/jtl/23127178_Stress_20260814-101731.jtl
+2026-08-14 10:17:32,814 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/reportgenerator.properties
+2026-08-14 10:17:32,815 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
+2026-08-14 10:17:32,817 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
+2026-08-14 10:17:32,818 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,820 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
+2026-08-14 10:17:32,821 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
+2026-08-14 10:17:32,828 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-08-14 10:17:32,828 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-08-14 10:17:32,828 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-08-14 10:17:32,831 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-08-14 10:17:32,831 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-08-14 10:17:32,851 INFO o.a.j.r.ClassFinder: Will scan jar /opt/homebrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-08-14 10:17:33,028 INFO o.a.j.JMeter: Running test (1786677453028)
+2026-08-14 10:17:33,043 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Bac 1 — 25 VU
+2026-08-14 10:17:33,043 INFO o.a.j.e.StandardJMeterEngine: Starting 25 threads for group Bac 1 — 25 VU.
+2026-08-14 10:17:33,043 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-14 10:17:33,043 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=25 ramp-up=30 delayedStart=false
+2026-08-14 10:17:33,054 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-1
+2026-08-14 10:17:33,055 INFO o.a.j.s.FileServer: Stored: data/orders.csv
+2026-08-14 10:17:33,059 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-08-14 10:17:33,059 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 2 : Bac 2 — +25 VU (tong 50)
+2026-08-14 10:17:33,059 INFO o.a.j.e.StandardJMeterEngine: Starting 25 threads for group Bac 2 — +25 VU (tong 50).
+2026-08-14 10:17:33,059 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-14 10:17:33,059 INFO o.a.j.t.ThreadGroup: Starting thread group... number=2 threads=25 ramp-up=30 delayedStart=false
+2026-08-14 10:17:33,067 INFO o.a.j.s.FileServer: Stored: data/products_import.csv
+2026-08-14 10:17:33,068 INFO o.a.j.s.FileServer: Stored: data/users.csv
+2026-08-14 10:17:33,071 INFO o.a.j.t.ThreadGroup: Started thread group number 2
+2026-08-14 10:17:33,071 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 3 : Bac 3 — +50 VU (tong 100)
+2026-08-14 10:17:33,071 INFO o.a.j.e.StandardJMeterEngine: Starting 50 threads for group Bac 3 — +50 VU (tong 100).
+2026-08-14 10:17:33,071 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-14 10:17:33,071 INFO o.a.j.t.ThreadGroup: Starting thread group... number=3 threads=50 ramp-up=30 delayedStart=false
+2026-08-14 10:17:33,085 INFO o.a.j.t.ThreadGroup: Started thread group number 3
+2026-08-14 10:17:33,085 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 4 : Bac 4 — +100 VU (tong 200)
+2026-08-14 10:17:33,085 INFO o.a.j.e.StandardJMeterEngine: Starting 100 threads for group Bac 4 — +100 VU (tong 200).
+2026-08-14 10:17:33,085 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-14 10:17:33,085 INFO o.a.j.t.ThreadGroup: Starting thread group... number=4 threads=100 ramp-up=30 delayedStart=false
+2026-08-14 10:17:33,112 INFO o.a.j.t.ThreadGroup: Started thread group number 4
+2026-08-14 10:17:33,112 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 5 : TG-lockout — nhanh account-lockout (2 VU)
+2026-08-14 10:17:33,112 INFO o.a.j.e.StandardJMeterEngine: Starting 2 threads for group TG-lockout — nhanh account-lockout (2 VU).
+2026-08-14 10:17:33,112 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-14 10:17:33,112 INFO o.a.j.t.ThreadGroup: Starting thread group... number=5 threads=2 ramp-up=1 delayedStart=false
+2026-08-14 10:17:33,112 INFO o.a.j.t.ThreadGroup: Started thread group number 5
+2026-08-14 10:17:33,112 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-08-14 10:17:33,188 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = Le-Nhut-Duy.local
+2026-08-14 10:17:33,193 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2026-08-14 10:17:33,193 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-08-14 10:17:33,193 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-08-14 10:17:33,193 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-08-14 10:17:33,193 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-08-14 10:17:33,287 INFO o.a.j.r.Summariser: summary +      1 in 00:00:00 =    3.9/s Avg:    29 Min:    29 Max:    29 Err:     0 (0.00%) Active: 1 Started: 1 Finished: 0
+2026-08-14 10:17:34,258 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-2
+2026-08-14 10:17:34,464 INFO o.a.j.u.JsseSSLManager: Using default SSL protocol: TLS
+2026-08-14 10:17:34,464 INFO o.a.j.u.JsseSSLManager: SSL session context: per-thread
+2026-08-14 10:17:35,452 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-3
+2026-08-14 10:17:36,655 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-4
+2026-08-14 10:17:37,851 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-5
+2026-08-14 10:17:39,055 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-6
+2026-08-14 10:17:40,253 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-7
+2026-08-14 10:17:41,448 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-8
+2026-08-14 10:17:42,651 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-9
+2026-08-14 10:17:43,117 INFO o.a.j.t.JMeterThread: Thread started: TG-lockout — nhanh account-lockout (2 VU) 5-1
+2026-08-14 10:17:43,117 INFO o.a.j.s.FileServer: Stored: data/users_lockout.csv
+2026-08-14 10:17:43,617 INFO o.a.j.t.JMeterThread: Thread started: TG-lockout — nhanh account-lockout (2 VU) 5-2
+2026-08-14 10:17:43,850 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-10
+2026-08-14 10:17:45,050 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-11
+2026-08-14 10:17:46,250 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-12
+2026-08-14 10:17:47,448 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-13
+2026-08-14 10:17:48,649 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-14
+2026-08-14 10:17:49,848 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-15
+2026-08-14 10:17:51,049 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-16
+2026-08-14 10:17:52,248 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-17
+2026-08-14 10:17:53,447 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-18
+2026-08-14 10:17:54,649 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-19
+2026-08-14 10:17:55,849 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-20
+2026-08-14 10:17:57,048 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-21
+2026-08-14 10:17:58,246 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-22
+2026-08-14 10:17:59,445 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-23
+2026-08-14 10:18:00,004 INFO o.a.j.r.Summariser: summary +   2023 in 00:00:27 =   75.7/s Avg:     3 Min:     0 Max:   278 Err:     0 (0.00%) Active: 25 Started: 25 Finished: 0
+2026-08-14 10:18:00,004 INFO o.a.j.r.Summariser: summary =   2024 in 00:00:27 =   75.0/s Avg:     3 Min:     0 Max:   278 Err:     0 (0.00%)
+2026-08-14 10:18:00,646 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-24
+2026-08-14 10:18:01,845 INFO o.a.j.t.JMeterThread: Thread started: Bac 1 — 25 VU 1-25
+2026-08-14 10:18:30,004 INFO o.a.j.r.Summariser: summary +   4814 in 00:00:30 =  160.5/s Avg:     2 Min:     0 Max:   149 Err:     0 (0.00%) Active: 27 Started: 27 Finished: 0
+2026-08-14 10:18:30,008 INFO o.a.j.r.Summariser: summary =   6838 in 00:00:57 =  120.0/s Avg:     2 Min:     0 Max:   278 Err:     0 (0.00%)
+2026-08-14 10:19:00,004 INFO o.a.j.r.Summariser: summary +   4807 in 00:00:30 =  160.2/s Avg:     3 Min:     0 Max:   284 Err:     0 (0.00%) Active: 27 Started: 27 Finished: 0
+2026-08-14 10:19:00,005 INFO o.a.j.r.Summariser: summary =  11645 in 00:01:27 =  133.9/s Avg:     3 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:19:30,004 INFO o.a.j.r.Summariser: summary +   4885 in 00:00:30 =  162.8/s Avg:     2 Min:     0 Max:    66 Err:     0 (0.00%) Active: 27 Started: 27 Finished: 0
+2026-08-14 10:19:30,005 INFO o.a.j.r.Summariser: summary =  16530 in 00:01:57 =  141.3/s Avg:     2 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:19:33,064 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-1
+2026-08-14 10:19:34,267 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-2
+2026-08-14 10:19:35,469 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-3
+2026-08-14 10:19:36,665 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-4
+2026-08-14 10:19:37,869 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-5
+2026-08-14 10:19:39,062 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-6
+2026-08-14 10:19:40,267 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-7
+2026-08-14 10:19:41,470 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-8
+2026-08-14 10:19:41,883 INFO o.a.j.t.JMeterThread: Thread finished: TG-lockout — nhanh account-lockout (2 VU) 5-2
+2026-08-14 10:19:42,662 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-9
+2026-08-14 10:19:42,877 INFO o.a.j.t.JMeterThread: Thread finished: TG-lockout — nhanh account-lockout (2 VU) 5-1
+2026-08-14 10:19:43,864 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-10
+2026-08-14 10:19:45,064 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-11
+2026-08-14 10:19:46,263 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-12
+2026-08-14 10:19:47,463 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-13
+2026-08-14 10:19:48,664 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-14
+2026-08-14 10:19:49,868 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-15
+2026-08-14 10:19:51,068 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-16
+2026-08-14 10:19:52,263 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-17
+2026-08-14 10:19:53,462 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-18
+2026-08-14 10:19:54,666 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-19
+2026-08-14 10:19:55,863 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-20
+2026-08-14 10:19:57,065 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-21
+2026-08-14 10:19:58,263 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-22
+2026-08-14 10:19:59,466 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-23
+2026-08-14 10:20:00,001 INFO o.a.j.r.Summariser: summary +   6875 in 00:00:30 =  229.2/s Avg:     1 Min:     0 Max:    55 Err:     0 (0.00%) Active: 48 Started: 50 Finished: 2
+2026-08-14 10:20:00,001 INFO o.a.j.r.Summariser: summary =  23405 in 00:02:27 =  159.2/s Avg:     2 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:20:00,661 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-24
+2026-08-14 10:20:01,863 INFO o.a.j.t.JMeterThread: Thread started: Bac 2 — +25 VU (tong 50) 2-25
+2026-08-14 10:20:30,002 INFO o.a.j.r.Summariser: summary +   9634 in 00:00:30 =  321.1/s Avg:     2 Min:     0 Max:    99 Err:     0 (0.00%) Active: 50 Started: 52 Finished: 2
+2026-08-14 10:20:30,003 INFO o.a.j.r.Summariser: summary =  33039 in 00:02:57 =  186.7/s Avg:     2 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:21:00,005 INFO o.a.j.r.Summariser: summary +   9655 in 00:00:30 =  321.8/s Avg:     2 Min:     0 Max:    84 Err:     0 (0.00%) Active: 50 Started: 52 Finished: 2
+2026-08-14 10:21:00,006 INFO o.a.j.r.Summariser: summary =  42694 in 00:03:27 =  206.3/s Avg:     2 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:21:30,006 INFO o.a.j.r.Summariser: summary +   9497 in 00:00:30 =  316.6/s Avg:     5 Min:     0 Max:   198 Err:     0 (0.00%) Active: 50 Started: 52 Finished: 2
+2026-08-14 10:21:30,008 INFO o.a.j.r.Summariser: summary =  52191 in 00:03:57 =  220.2/s Avg:     3 Min:     0 Max:   284 Err:     0 (0.00%)
+2026-08-14 10:21:33,079 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-1
+2026-08-14 10:21:33,673 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-2
+2026-08-14 10:21:34,280 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-3
+2026-08-14 10:21:34,882 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-4
+2026-08-14 10:21:35,480 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-5
+2026-08-14 10:21:36,100 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-6
+2026-08-14 10:21:36,676 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-7
+2026-08-14 10:21:37,276 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-8
+2026-08-14 10:21:37,880 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-9
+2026-08-14 10:21:38,479 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-10
+2026-08-14 10:21:39,080 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-11
+2026-08-14 10:21:39,680 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-12
+2026-08-14 10:21:40,278 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-13
+2026-08-14 10:21:40,878 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-14
+2026-08-14 10:21:41,480 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-15
+2026-08-14 10:21:42,077 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-16
+2026-08-14 10:21:42,675 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-17
+2026-08-14 10:21:43,278 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-18
+2026-08-14 10:21:43,875 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-19
+2026-08-14 10:21:44,475 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-20
+2026-08-14 10:21:45,079 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-21
+2026-08-14 10:21:45,678 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-22
+2026-08-14 10:21:46,278 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-23
+2026-08-14 10:21:46,880 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-24
+2026-08-14 10:21:47,475 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-25
+2026-08-14 10:21:48,071 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-26
+2026-08-14 10:21:48,682 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-27
+2026-08-14 10:21:49,275 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-28
+2026-08-14 10:21:49,878 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-29
+2026-08-14 10:21:50,478 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-30
+2026-08-14 10:21:51,074 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-31
+2026-08-14 10:21:51,673 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-32
+2026-08-14 10:21:52,277 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-33
+2026-08-14 10:21:52,881 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-34
+2026-08-14 10:21:53,478 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-35
+2026-08-14 10:21:54,078 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-36
+2026-08-14 10:21:54,676 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-37
+2026-08-14 10:21:55,281 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-38
+2026-08-14 10:21:55,872 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-39
+2026-08-14 10:21:56,474 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-40
+2026-08-14 10:21:57,079 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-41
+2026-08-14 10:21:57,679 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-42
+2026-08-14 10:21:58,277 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-43
+2026-08-14 10:21:58,880 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-44
+2026-08-14 10:21:59,475 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-45
+2026-08-14 10:22:00,001 INFO o.a.j.r.Summariser: summary +  12723 in 00:00:30 =  424.2/s Avg:    13 Min:     0 Max:   443 Err:     0 (0.00%) Active: 95 Started: 97 Finished: 2
+2026-08-14 10:22:00,001 INFO o.a.j.r.Summariser: summary =  64914 in 00:04:27 =  243.1/s Avg:     5 Min:     0 Max:   443 Err:     0 (0.00%)
+2026-08-14 10:22:00,081 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-46
+2026-08-14 10:22:00,679 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-47
+2026-08-14 10:22:01,279 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-48
+2026-08-14 10:22:01,880 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-49
+2026-08-14 10:22:02,480 INFO o.a.j.t.JMeterThread: Thread started: Bac 3 — +50 VU (tong 100) 3-50
+2026-08-14 10:22:30,003 INFO o.a.j.r.Summariser: summary +  18289 in 00:00:30 =  609.6/s Avg:    11 Min:     0 Max:  1058 Err:     0 (0.00%) Active: 100 Started: 102 Finished: 2
+2026-08-14 10:22:30,005 INFO o.a.j.r.Summariser: summary =  83203 in 00:04:57 =  280.2/s Avg:     6 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:23:00,005 INFO o.a.j.r.Summariser: summary +  18460 in 00:00:30 =  615.3/s Avg:     9 Min:     0 Max:   324 Err:     0 (0.00%) Active: 100 Started: 102 Finished: 2
+2026-08-14 10:23:00,007 INFO o.a.j.r.Summariser: summary = 101663 in 00:05:27 =  310.9/s Avg:     7 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:23:30,004 INFO o.a.j.r.Summariser: summary +  18269 in 00:00:30 =  609.0/s Avg:    11 Min:     0 Max:   530 Err:     0 (0.00%) Active: 100 Started: 102 Finished: 2
+2026-08-14 10:23:30,005 INFO o.a.j.r.Summariser: summary = 119932 in 00:05:57 =  336.0/s Avg:     7 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:23:33,086 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-1
+2026-08-14 10:23:33,396 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-2
+2026-08-14 10:23:33,696 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-3
+2026-08-14 10:23:33,990 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-4
+2026-08-14 10:23:34,285 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-5
+2026-08-14 10:23:34,591 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-6
+2026-08-14 10:23:34,893 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-7
+2026-08-14 10:23:35,188 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-8
+2026-08-14 10:23:35,492 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-9
+2026-08-14 10:23:35,789 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-10
+2026-08-14 10:23:36,093 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-11
+2026-08-14 10:23:36,395 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-12
+2026-08-14 10:23:36,688 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-13
+2026-08-14 10:23:36,990 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-14
+2026-08-14 10:23:37,289 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-15
+2026-08-14 10:23:37,587 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-16
+2026-08-14 10:23:37,887 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-17
+2026-08-14 10:23:38,187 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-18
+2026-08-14 10:23:38,486 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-19
+2026-08-14 10:23:38,793 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-20
+2026-08-14 10:23:39,088 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-21
+2026-08-14 10:23:39,390 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-22
+2026-08-14 10:23:39,691 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-23
+2026-08-14 10:23:39,992 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-24
+2026-08-14 10:23:40,287 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-25
+2026-08-14 10:23:40,591 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-26
+2026-08-14 10:23:40,894 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-27
+2026-08-14 10:23:41,191 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-28
+2026-08-14 10:23:41,489 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-29
+2026-08-14 10:23:41,788 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-30
+2026-08-14 10:23:42,091 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-31
+2026-08-14 10:23:42,391 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-32
+2026-08-14 10:23:42,691 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-33
+2026-08-14 10:23:42,988 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-34
+2026-08-14 10:23:43,292 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-35
+2026-08-14 10:23:43,590 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-36
+2026-08-14 10:23:43,893 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-37
+2026-08-14 10:23:44,194 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-38
+2026-08-14 10:23:44,493 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-39
+2026-08-14 10:23:44,790 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-40
+2026-08-14 10:23:45,095 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-41
+2026-08-14 10:23:45,392 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-42
+2026-08-14 10:23:45,691 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-43
+2026-08-14 10:23:45,994 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-44
+2026-08-14 10:23:46,286 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-45
+2026-08-14 10:23:46,594 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-46
+2026-08-14 10:23:46,891 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-47
+2026-08-14 10:23:47,194 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-48
+2026-08-14 10:23:47,494 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-49
+2026-08-14 10:23:47,793 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-50
+2026-08-14 10:23:48,092 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-51
+2026-08-14 10:23:48,390 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-52
+2026-08-14 10:23:48,690 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-53
+2026-08-14 10:23:48,987 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-54
+2026-08-14 10:23:49,291 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-55
+2026-08-14 10:23:49,591 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-56
+2026-08-14 10:23:49,891 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-57
+2026-08-14 10:23:50,192 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-58
+2026-08-14 10:23:50,486 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-59
+2026-08-14 10:23:50,792 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-60
+2026-08-14 10:23:51,090 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-61
+2026-08-14 10:23:51,390 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-62
+2026-08-14 10:23:51,690 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-63
+2026-08-14 10:23:51,986 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-64
+2026-08-14 10:23:52,292 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-65
+2026-08-14 10:23:52,588 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-66
+2026-08-14 10:23:52,891 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-67
+2026-08-14 10:23:53,195 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-68
+2026-08-14 10:23:53,490 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-69
+2026-08-14 10:23:53,785 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-70
+2026-08-14 10:23:54,091 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-71
+2026-08-14 10:23:54,389 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-72
+2026-08-14 10:23:54,691 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-73
+2026-08-14 10:23:54,990 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-74
+2026-08-14 10:23:55,295 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-75
+2026-08-14 10:23:55,593 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-76
+2026-08-14 10:23:55,886 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-77
+2026-08-14 10:23:56,191 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-78
+2026-08-14 10:23:56,490 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-79
+2026-08-14 10:23:56,791 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-80
+2026-08-14 10:23:57,091 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-81
+2026-08-14 10:23:57,392 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-82
+2026-08-14 10:23:57,689 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-83
+2026-08-14 10:23:57,992 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-84
+2026-08-14 10:23:58,294 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-85
+2026-08-14 10:23:58,591 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-86
+2026-08-14 10:23:58,892 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-87
+2026-08-14 10:23:59,193 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-88
+2026-08-14 10:23:59,488 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-89
+2026-08-14 10:23:59,789 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-90
+2026-08-14 10:24:00,001 INFO o.a.j.r.Summariser: summary +  25873 in 00:00:30 =  862.5/s Avg:    10 Min:     0 Max:   382 Err:     0 (0.00%) Active: 190 Started: 192 Finished: 2
+2026-08-14 10:24:00,001 INFO o.a.j.r.Summariser: summary = 145805 in 00:06:27 =  376.8/s Avg:     8 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:24:00,093 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-91
+2026-08-14 10:24:00,393 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-92
+2026-08-14 10:24:00,687 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-93
+2026-08-14 10:24:00,992 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-94
+2026-08-14 10:24:01,291 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-95
+2026-08-14 10:24:01,587 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-96
+2026-08-14 10:24:01,893 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-97
+2026-08-14 10:24:02,189 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-98
+2026-08-14 10:24:02,489 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-99
+2026-08-14 10:24:02,788 INFO o.a.j.t.JMeterThread: Thread started: Bac 4 — +100 VU (tong 200) 4-100
+2026-08-14 10:24:30,016 INFO o.a.j.r.Summariser: summary +  35032 in 00:00:30 = 1167.6/s Avg:    18 Min:     0 Max:   354 Err:     0 (0.00%) Active: 200 Started: 202 Finished: 2
+2026-08-14 10:24:30,027 INFO o.a.j.r.Summariser: summary = 180837 in 00:06:57 =  433.7/s Avg:    10 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:25:00,001 INFO o.a.j.r.Summariser: summary +  32616 in 00:00:30 = 1087.5/s Avg:    31 Min:     0 Max:   600 Err:     0 (0.00%) Active: 200 Started: 202 Finished: 2
+2026-08-14 10:25:00,002 INFO o.a.j.r.Summariser: summary = 213453 in 00:07:27 =  477.6/s Avg:    13 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:25:30,002 INFO o.a.j.r.Summariser: summary +  34427 in 00:00:30 = 1147.6/s Avg:    22 Min:     0 Max:   409 Err:     0 (0.00%) Active: 200 Started: 202 Finished: 2
+2026-08-14 10:25:30,004 INFO o.a.j.r.Summariser: summary = 247880 in 00:07:57 =  519.7/s Avg:    14 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:25:32,872 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-4
+2026-08-14 10:25:32,884 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-3
+2026-08-14 10:25:32,902 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-39
+2026-08-14 10:25:32,904 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-22
+2026-08-14 10:25:32,905 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-16
+2026-08-14 10:25:32,909 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-36
+2026-08-14 10:25:32,913 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-9
+2026-08-14 10:25:32,915 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-20
+2026-08-14 10:25:32,916 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-42
+2026-08-14 10:25:32,918 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-19
+2026-08-14 10:25:32,919 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-18
+2026-08-14 10:25:32,921 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-24
+2026-08-14 10:25:32,925 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-13
+2026-08-14 10:25:32,925 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-31
+2026-08-14 10:25:32,925 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-1
+2026-08-14 10:25:32,926 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-55
+2026-08-14 10:25:32,926 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-12
+2026-08-14 10:25:32,928 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-8
+2026-08-14 10:25:32,933 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-19
+2026-08-14 10:25:32,937 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-25
+2026-08-14 10:25:32,937 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-34
+2026-08-14 10:25:32,943 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-10
+2026-08-14 10:25:32,949 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-29
+2026-08-14 10:25:32,950 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-7
+2026-08-14 10:25:32,952 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-5
+2026-08-14 10:25:32,952 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-5
+2026-08-14 10:25:32,953 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-91
+2026-08-14 10:25:32,955 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-45
+2026-08-14 10:25:32,955 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-3
+2026-08-14 10:25:32,956 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-18
+2026-08-14 10:25:32,957 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-34
+2026-08-14 10:25:32,958 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-17
+2026-08-14 10:25:32,958 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-41
+2026-08-14 10:25:32,959 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-92
+2026-08-14 10:25:32,962 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-59
+2026-08-14 10:25:32,963 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-22
+2026-08-14 10:25:32,963 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-4
+2026-08-14 10:25:32,963 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-23
+2026-08-14 10:25:32,964 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-17
+2026-08-14 10:25:32,964 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-6
+2026-08-14 10:25:32,965 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-28
+2026-08-14 10:25:32,967 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-11
+2026-08-14 10:25:32,968 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-4
+2026-08-14 10:25:32,969 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-85
+2026-08-14 10:25:32,969 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-37
+2026-08-14 10:25:32,969 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-38
+2026-08-14 10:25:32,972 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-65
+2026-08-14 10:25:32,973 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-1
+2026-08-14 10:25:32,974 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-7
+2026-08-14 10:25:32,974 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-45
+2026-08-14 10:25:32,974 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-2
+2026-08-14 10:25:32,976 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-15
+2026-08-14 10:25:32,976 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-21
+2026-08-14 10:25:32,978 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-19
+2026-08-14 10:25:32,979 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-5
+2026-08-14 10:25:32,979 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-42
+2026-08-14 10:25:32,981 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-14
+2026-08-14 10:25:32,982 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-38
+2026-08-14 10:25:32,983 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-25
+2026-08-14 10:25:32,984 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-22
+2026-08-14 10:25:32,985 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-17
+2026-08-14 10:25:32,985 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-49
+2026-08-14 10:25:32,986 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-14
+2026-08-14 10:25:32,987 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-13
+2026-08-14 10:25:32,988 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-2
+2026-08-14 10:25:32,989 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-93
+2026-08-14 10:25:32,990 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-27
+2026-08-14 10:25:32,990 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-12
+2026-08-14 10:25:32,990 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-16
+2026-08-14 10:25:32,990 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-97
+2026-08-14 10:25:32,990 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-20
+2026-08-14 10:25:32,991 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-73
+2026-08-14 10:25:32,991 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-25
+2026-08-14 10:25:32,992 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-10
+2026-08-14 10:25:32,992 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-19
+2026-08-14 10:25:32,994 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-6
+2026-08-14 10:25:32,994 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-15
+2026-08-14 10:25:32,997 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-9
+2026-08-14 10:25:32,999 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-25
+2026-08-14 10:25:33,000 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-3
+2026-08-14 10:25:33,000 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-69
+2026-08-14 10:25:33,000 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-16
+2026-08-14 10:25:33,002 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-32
+2026-08-14 10:25:33,003 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-13
+2026-08-14 10:25:33,003 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-12
+2026-08-14 10:25:33,004 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-11
+2026-08-14 10:25:33,004 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-40
+2026-08-14 10:25:33,004 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-40
+2026-08-14 10:25:33,012 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-30
+2026-08-14 10:25:33,012 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-51
+2026-08-14 10:25:33,012 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-35
+2026-08-14 10:25:33,012 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-41
+2026-08-14 10:25:33,012 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-46
+2026-08-14 10:25:33,013 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-8
+2026-08-14 10:25:33,013 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-9
+2026-08-14 10:25:33,014 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-88
+2026-08-14 10:25:33,016 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-32
+2026-08-14 10:25:33,016 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-23
+2026-08-14 10:25:33,016 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-21
+2026-08-14 10:25:33,017 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-7
+2026-08-14 10:25:33,019 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-46
+2026-08-14 10:25:33,021 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-50
+2026-08-14 10:25:33,021 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-77
+2026-08-14 10:25:33,022 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-79
+2026-08-14 10:25:33,024 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-1
+2026-08-14 10:25:33,024 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-5
+2026-08-14 10:25:33,025 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-24
+2026-08-14 10:25:33,027 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-52
+2026-08-14 10:25:33,027 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-3
+2026-08-14 10:25:33,028 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-9
+2026-08-14 10:25:33,028 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-22
+2026-08-14 10:25:33,028 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-15
+2026-08-14 10:25:33,029 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-47
+2026-08-14 10:25:33,029 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-23
+2026-08-14 10:25:33,031 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-100
+2026-08-14 10:25:33,030 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-28
+2026-08-14 10:25:33,032 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-6
+2026-08-14 10:25:33,032 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-90
+2026-08-14 10:25:33,033 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-56
+2026-08-14 10:25:33,033 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-89
+2026-08-14 10:25:33,033 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-24
+2026-08-14 10:25:33,034 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-6
+2026-08-14 10:25:33,034 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-10
+2026-08-14 10:25:33,035 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-70
+2026-08-14 10:25:33,036 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-49
+2026-08-14 10:25:33,036 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-2
+2026-08-14 10:25:33,037 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-58
+2026-08-14 10:25:33,038 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-24
+2026-08-14 10:25:33,039 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-80
+2026-08-14 10:25:33,039 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-54
+2026-08-14 10:25:33,041 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-7
+2026-08-14 10:25:33,041 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-48
+2026-08-14 10:25:33,043 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-8
+2026-08-14 10:25:33,043 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Bac 1 — 25 VU 1-1
+2026-08-14 10:25:33,044 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-1
+2026-08-14 10:25:33,044 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-98
+2026-08-14 10:25:33,045 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-43
+2026-08-14 10:25:33,045 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-18
+2026-08-14 10:25:33,046 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-99
+2026-08-14 10:25:33,046 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-35
+2026-08-14 10:25:33,046 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-44
+2026-08-14 10:25:33,047 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-50
+2026-08-14 10:25:33,047 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-21
+2026-08-14 10:25:33,048 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-20
+2026-08-14 10:25:33,049 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-12
+2026-08-14 10:25:33,049 INFO o.a.j.t.JMeterThread: Thread finished: Bac 1 — 25 VU 1-15
+2026-08-14 10:25:33,049 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-18
+2026-08-14 10:25:33,050 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-64
+2026-08-14 10:25:33,051 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-23
+2026-08-14 10:25:33,051 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-60
+2026-08-14 10:25:33,051 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-26
+2026-08-14 10:25:33,052 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-39
+2026-08-14 10:25:33,052 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-20
+2026-08-14 10:25:33,053 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-17
+2026-08-14 10:25:33,053 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-96
+2026-08-14 10:25:33,053 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-11
+2026-08-14 10:25:33,054 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-43
+2026-08-14 10:25:33,055 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-48
+2026-08-14 10:25:33,055 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-44
+2026-08-14 10:25:33,055 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-37
+2026-08-14 10:25:33,056 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-78
+2026-08-14 10:25:33,058 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-14
+2026-08-14 10:25:33,058 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-13
+2026-08-14 10:25:33,058 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-86
+2026-08-14 10:25:33,059 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-66
+2026-08-14 10:25:33,060 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-29
+2026-08-14 10:25:33,060 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-67
+2026-08-14 10:25:33,061 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-4
+2026-08-14 10:25:33,068 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-27
+2026-08-14 10:25:33,068 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-33
+2026-08-14 10:25:33,069 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Bac 2 — +25 VU (tong 50) 2-11
+2026-08-14 10:25:33,069 INFO o.a.j.t.JMeterThread: Thread finished: Bac 2 — +25 VU (tong 50) 2-11
+2026-08-14 10:25:33,069 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-16
+2026-08-14 10:25:33,070 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-21
+2026-08-14 10:25:33,070 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-10
+2026-08-14 10:25:33,071 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-61
+2026-08-14 10:25:33,071 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-33
+2026-08-14 10:25:33,072 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-68
+2026-08-14 10:25:33,072 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-30
+2026-08-14 10:25:33,074 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-95
+2026-08-14 10:25:33,074 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-57
+2026-08-14 10:25:33,075 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Bac 3 — +50 VU (tong 100) 3-8
+2026-08-14 10:25:33,075 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-8
+2026-08-14 10:25:33,079 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Bac 3 — +50 VU (tong 100) 3-14
+2026-08-14 10:25:33,079 INFO o.a.j.t.JMeterThread: Thread finished: Bac 3 — +50 VU (tong 100) 3-14
+2026-08-14 10:25:33,081 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-63
+2026-08-14 10:25:33,081 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-62
+2026-08-14 10:25:33,081 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-26
+2026-08-14 10:25:33,081 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-47
+2026-08-14 10:25:33,086 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-53
+2026-08-14 10:25:33,086 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Bac 4 — +100 VU (tong 200) 4-2
+2026-08-14 10:25:33,086 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-87
+2026-08-14 10:25:33,086 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-2
+2026-08-14 10:25:33,087 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-31
+2026-08-14 10:25:33,094 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-36
+2026-08-14 10:25:33,095 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-72
+2026-08-14 10:25:33,096 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-83
+2026-08-14 10:25:33,098 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-76
+2026-08-14 10:25:33,098 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-82
+2026-08-14 10:25:33,099 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-81
+2026-08-14 10:25:33,105 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-74
+2026-08-14 10:25:33,105 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-71
+2026-08-14 10:25:33,106 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-94
+2026-08-14 10:25:33,106 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-75
+2026-08-14 10:25:33,107 INFO o.a.j.t.JMeterThread: Thread finished: Bac 4 — +100 VU (tong 200) 4-84
+2026-08-14 10:25:33,108 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-08-14 10:25:33,110 INFO o.a.j.s.FileServer: Close: data/products_import.csv
+2026-08-14 10:25:33,110 INFO o.a.j.s.FileServer: Close: data/orders.csv
+2026-08-14 10:25:33,110 INFO o.a.j.s.FileServer: Close: data/users.csv
+2026-08-14 10:25:33,110 INFO o.a.j.s.FileServer: Close: data/users_lockout.csv
+2026-08-14 10:25:33,143 INFO o.a.j.r.Summariser: summary +   3940 in 00:00:03 = 1253.6/s Avg:     4 Min:     0 Max:    39 Err:     0 (0.00%) Active: 0 Started: 202 Finished: 202
+2026-08-14 10:25:33,143 INFO o.a.j.r.Summariser: summary = 251820 in 00:08:00 =  524.5/s Avg:    14 Min:     0 Max:  1058 Err:     0 (0.00%)
+2026-08-14 10:25:33,144 INFO o.a.j.JMeter: Generating Dashboard
+2026-08-14 10:25:33,144 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
+2026-08-14 10:25:33,188 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
+2026-08-14 10:25:36,292 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
+2026-08-14 10:25:36,295 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
+2026-08-14 10:25:36,297 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
+2026-08-14 10:25:36,297 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
+2026-08-14 10:25:36,308 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
+2026-08-14 10:25:36,321 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
+2026-08-14 10:25:36,321 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
+2026-08-14 10:25:36,321 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
+2026-08-14 10:25:37,209 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
+2026-08-14 10:25:37,213 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
+2026-08-14 10:25:37,213 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
+2026-08-14 10:25:37,213 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
+2026-08-14 10:25:38,078 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
+2026-08-14 10:25:38,081 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 1762740 samples
+2026-08-14 10:25:38,081 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
+2026-08-14 10:25:38,082 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
+2026-08-14 10:25:38,082 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
+2026-08-14 10:25:38,083 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
+2026-08-14 10:25:38,083 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
+2026-08-14 10:25:38,083 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
+2026-08-14 10:25:38,086 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
+2026-08-14 10:25:38,096 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
+2026-08-14 10:25:38,096 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
+2026-08-14 10:25:38,097 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
+2026-08-14 10:25:38,098 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 3777300 samples
+2026-08-14 10:25:38,098 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 755460 samples
+2026-08-14 10:25:38,098 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 251820 samples
+2026-08-14 10:25:38,098 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 251820 samples produced in 4s 889 ms on channel 0
+2026-08-14 10:25:38,098 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
+2026-08-14 10:25:38,147 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
+2026-08-14 10:25:38,148 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
+2026-08-14 10:25:38,148 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
+2026-08-14 10:25:38,148 INFO o.a.j.r.d.JsonExporter: Checking output folder
+2026-08-14 10:25:38,149 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress/statistics.json
+2026-08-14 10:25:38,178 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
+2026-08-14 10:25:38,179 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress
+2026-08-14 10:25:38,288 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress, creating folder structure
+2026-08-14 10:25:38,290 INFO o.a.j.r.d.TemplateVisitor: Copying folder from '/opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/report-template' to '/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress', got message: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress, found non empty folder with following content [/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/stress/statistics.json], will be ignored
+2026-08-14 10:25:38,447 INFO o.a.j.JMeter: Dashboard generated

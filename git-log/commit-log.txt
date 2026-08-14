@@ -1,3 +1,99 @@
+* 08c6d57 2026-08-14 10:55:06 +0700 DuyITLOR
+|   docs: the data-growth regression, and the hole it opens in my own CI proposal
+| Comparing the two evidence sets endpoint by endpoint: at 20 VU the eightfold larger database
+| changes nothing (0.80-1.25x), at 200 VU everything degrades 2.4-2.8x, and in the spike 3.8-6.4x.
+| No endpoint in the workflow reads the products table - only step 4 writes to it. SQLite has one
+| writer for the whole file, so slower INSERTs build a queue that even the two read-only endpoints
+| queue behind. GET /api/admin/users, a SELECT over 54 unrelated rows, slows by 2.58x.
+| 
+| At 20 VU the gaps between requests are long enough for that queue to drain. At 200 VU they are
+| not. So the regression is invisible at expected load and only appears under stress.
+| 
+| That contradicts my own Task 3 proposal, which runs a three-minute Load test per PR: it would not
+| catch this. Section 4 now carries a weekly Stress run against a grown production snapshot, and
+| a sixth trade-off - this test suite pushed products from 50k to 436k rows by itself, so without
+| teardown every run is slower than the last for reasons unrelated to the code.
+| 
+* 2564e69 2026-08-14 10:55:06 +0700 DuyITLOR
+|   test: rerun all four scenarios with matching evidence screenshots
+| The first evidence set had no screenshots, and its resource CSVs for Load and Stress were
+| useless on the node columns - the sampler had latched onto the wrapping zsh process instead of
+| node. Both are fixed here, and all four runs now carry an Activity Monitor capture taken at the
+| moment that matters: Load at second 358, Stress at 421 while the 200-VU step is live, Spike at 73
+| in the middle of a 30-second shock, Soak at 91 and again at 690.
+| 
+| The earlier set is kept on purpose. Same plan, same machine, but the products table had grown
+| eightfold between them, and comparing the two is the most useful finding in the submission.
+| 
+|  README.md                                         |    113 +-
+|  ai-audit/ai-audit-report.pdf                      |    Bin 383765 -> 383765 bytes
+|  ai-audit/ai-critique.pdf                          |    Bin 59898 -> 59898 bytes
+|  bug-report/bug-report.pdf                         |    Bin 290922 -> 290922 bytes
+|  endurance/endurance-threshold.md                  |    114 +-
+|  endurance/html/soak/content/js/dashboard.js       |      4 +-
+|  endurance/html/soak/content/js/graph.js           |     32 +-
+|  .../html/soak/content/pages/CustomsGraphs.html    |      6 +-
+|  endurance/html/soak/content/pages/OverTime.html   |      6 +-
+|  .../html/soak/content/pages/ResponseTimes.html    |      6 +-
+|  endurance/html/soak/content/pages/Throughput.html |      6 +-
+|  endurance/html/soak/index.html                    |      6 +-
+|  endurance/html/soak/statistics.json               |    104 +-
+|  .../jtl/23127178_Soak_20260814-103245.jmeter.log  |    236 +
+|  endurance/jtl/23127178_Soak_20260814-103245.jtl   |  45289 +++
+|  .../23127178_Soak_20260814-103245.resources.csv   |    343 +
+|  endurance/run-log.md                              |      1 +
+|  report/main-report.md                             |    459 +-
+|  report/main-report.pdf                            |    Bin 595553 -> 688898 bytes
+|  resource-monitor/screenshots/activity-load.png    |    Bin 0 -> 693632 bytes
+|  .../screenshots/activity-soak-cuoi.png            |    Bin 0 -> 1489075 bytes
+|  resource-monitor/screenshots/activity-soak.png    |    Bin 0 -> 687548 bytes
+|  resource-monitor/screenshots/activity-spike.png   |    Bin 0 -> 4523260 bytes
+|  resource-monitor/screenshots/activity-stress.png  |    Bin 0 -> 699033 bytes
+|  results/html/load/content/js/dashboard.js         |      2 +-
+|  results/html/load/content/js/graph.js             |     30 +-
+|  .../html/load/content/pages/CustomsGraphs.html    |      6 +-
+|  results/html/load/content/pages/OverTime.html     |      6 +-
+|  .../html/load/content/pages/ResponseTimes.html    |      6 +-
+|  results/html/load/content/pages/Throughput.html   |      6 +-
+|  results/html/load/index.html                      |      6 +-
+|  results/html/load/statistics.json                 |    124 +-
+|  results/html/spike/content/js/dashboard.js        |      4 +-
+|  results/html/spike/content/js/graph.js            |     32 +-
+|  .../html/spike/content/pages/CustomsGraphs.html   |      6 +-
+|  results/html/spike/content/pages/OverTime.html    |      6 +-
+|  .../html/spike/content/pages/ResponseTimes.html   |      6 +-
+|  results/html/spike/content/pages/Throughput.html  |      6 +-
+|  results/html/spike/index.html                     |      6 +-
+|  results/html/spike/statistics.json                |    134 +-
+|  results/html/stress/content/js/dashboard.js       |      6 +-
+|  results/html/stress/content/js/graph.js           |     32 +-
+|  .../html/stress/content/pages/CustomsGraphs.html  |      6 +-
+|  results/html/stress/content/pages/OverTime.html   |      6 +-
+|  .../html/stress/content/pages/ResponseTimes.html  |      6 +-
+|  results/html/stress/content/pages/Throughput.html |      6 +-
+|  results/html/stress/index.html                    |      6 +-
+|  results/html/stress/statistics.json               |    140 +-
+|  .../jtl/23127178_Load_20260814-093756.jmeter.log  |    212 +
+|  results/jtl/23127178_Load_20260814-093756.jtl     |  16437 ++
+|  .../jtl/23127178_Spike_20260814-102710.jmeter.log |    597 +
+|  results/jtl/23127178_Spike_20260814-102710.jtl    |  37127 +++
+|  .../23127178_Stress_20260814-101731.jmeter.log    |    602 +
+|  results/jtl/23127178_Stress_20260814-101731.jtl   | 251821 +++++++++++++++++
+|  .../23127178_Load_20260814-093756.resources.csv   |    173 +
+|  .../23127178_Spike_20260814-102710.resources.csv  |    115 +
+|  .../23127178_Stress_20260814-101731.resources.csv |    229 +
+|  results/run-log.md                                |      3 +
+|  results/summary.md                                |    117 +-
+|  59 files changed, 354007 insertions(+), 745 deletions(-)
+| 
+* e98ab1d 2026-08-13 14:10:46 +0700 DuyITLOR
+|   docs: commit log as a text file (section 12)
+| Section 12 asks for the commit log in a text-based format. Exported with git log --graph --stat
+| in the same shape HW02, HW03 and HW04 used, so the four submissions stay comparable.
+| 
+|  git-log/commit-log.txt | 801 +++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 801 insertions(+)
+| 
 * 6a05835 2026-08-13 14:10:34 +0700 DuyITLOR
 |   docs: PDF exports for the four documents section 14 requires
 | Section 14 wants Markdown and PDF for the main report, the AI audit, the critique and the
