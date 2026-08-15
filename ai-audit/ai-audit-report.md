@@ -260,6 +260,28 @@
   thật, có bằng chứng, do chính người viết bắt.
 - **Commit:** `docs: retract the data-growth finding the new batch disproves`
 
+### Interaction #10 — Tool của tôi in ra một con số dẫn tới kết luận sai
+- **Task / Scenario:** Soak, batch 15/08 15:52
+- **Bước trong quy trình:** `jtl-analysis` bước 4 (chốt endurance threshold)
+- **AI tool:** Claude Code (Opus 5)
+- **Date & time:** 2026-08-15 16:10
+- **Prompt:** *(tiếp nối lượt #9 — phần đọc kết quả sau khi batch cuối chạy xong)*
+- **AI output (tóm tắt):** `soak-drift.mjs` in `Trôi RSS +228,9%` cho lượt Soak, kèm kết luận
+  "ỔN ĐỊNH" ở phần p95.
+- **AI sai / bỏ sót:**
+  13. **Tool tự viết in ra một tỉ lệ so hai trạng thái khác nhau.** `Trôi RSS` được tính bằng
+      **mẫu cuối chia mẫu đầu**, mà mẫu đầu (19,7 MB) lấy lúc process chưa warm-up xong. Ra
+      **+228,9%** — đọc như một vụ rò rỉ bộ nhớ. Sự thật: RSS leo lên ~78 MB trong 60 giây ramp-up
+      rồi **phẳng suốt 12 phút**; so nửa đầu với nửa sau chỉ **+5,0%** (74,5 → 78,3 MB).
+      Nếu tin con số tool in ra thì báo cáo sẽ kết luận "có rò rỉ" trên một hệ thống hoàn toàn ổn định.
+- **Vì sao bỏ sót:** **đặc điểm dữ liệu** — chuỗi đo có một giai đoạn warm-up ở đầu, và mọi phép so
+  "đầu với cuối" trên chuỗi như vậy đều sai. Lỗi cùng họ với #12: so hai thứ không cùng loại rồi gọi
+  kết quả là "độ trôi". Khác #12 ở chỗ lần này biến gây nhiễu nằm **bên trong chính lượt đo**, không
+  phải ở môi trường.
+- **Human review:** *(sinh viên bổ sung.)* Ghi chú: đã sửa tool để in **nửa đầu / nửa sau**, và giữ
+  lại dòng mẫu-đầu→mẫu-cuối kèm cảnh báo ngay dưới nó, để lần sau không ai đọc nhầm lần nữa.
+- **Commit:** `test(soak): compare like with like when reporting RSS drift`
+
 <!-- NEW_INTERACTION_MARKER -->
 
 ---
@@ -280,13 +302,14 @@
 | 10 | #8 | `Math.min(...array)` trong `summarize-jtl.mjs` tràn call stack với `.jtl` 264k sample — chạy qua bình thường ở lượt Load 16k | đặc điểm dữ liệu (chỉ lộ ở file lớn) | thay bằng `reduce` |
 | 11 | #8 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
 | 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà nhanh hơn 10 lần; biến thật là `load_1m`. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
+| 13 | #10 | `soak-drift.mjs` tính "trôi RSS" bằng mẫu-cuối / mẫu-đầu, mà mẫu đầu lấy trước warm-up → in **+228,9%**, đọc như rò rỉ. Thực tế nửa-đầu/nửa-sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so nửa đầu với nửa sau; giữ dòng cũ kèm cảnh báo |
 
-**Nhận xét xuyên suốt:** 9 trong 12 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
+**Nhận xét xuyên suốt:** 10 trong 13 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
-có chạy không" thì cả 9 lỗi này đều lọt.
+có chạy không" thì cả 10 lỗi này đều lọt.
 
-**Chi phí thật của 12 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
+**Chi phí thật của 13 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
 phút chạy lại. Nếu không đọc `.jtl` giữa lượt mà chờ đến khi viết báo cáo mới đọc, thì cái phải
 làm lại là **cả bốn lượt cộng phần phân tích**.
 

@@ -135,8 +135,21 @@ if (existsSync(resPath)) {
     console.log(`  node RSS   : ${first.rss} → ${last.rss} MB   (đỉnh ${maxRss} MB)`);
     console.log(`  node CPU   : đỉnh ${maxCpu}%   ← trần của MỘT luồng JS là ~100%`);
     console.log(`  JMeter CPU : đỉnh ${maxJCpu}%   ·  JMeter RSS đỉnh ${maxJRss} MB`);
-    const rssDrift = first.rss ? ((last.rss - first.rss) / first.rss) * 100 : 0;
-    console.log(`  Trôi RSS   : ${rssDrift >= 0 ? '+' : ''}${n1(rssDrift)}%`);
+    // KHÔNG so mẫu đầu với mẫu cuối. Mẫu đầu được lấy lúc process chưa warm-up xong (RSS
+    // 19,7MB ở lượt 15/08), nên phép so đó cho ra "+228,9%" và đọc như một vụ rò rỉ — trong khi
+    // RSS thật đi ngang suốt 12 phút. So nửa đầu với nửa sau mới là so cùng loại trạng thái.
+    const mid = Math.floor(pts.length / 2);
+    const meanOf = (a) => a.reduce((s, x) => s + x, 0) / a.length;
+    const h1 = meanOf(pts.slice(0, mid).map((p) => p.rss));
+    const h2 = meanOf(pts.slice(mid).map((p) => p.rss));
+    const drift2 = ((h2 / h1) - 1) * 100;
+    console.log(`  RSS nua dau : ${n1(h1)} MB  ·  nua sau: ${n1(h2)} MB  →  ${drift2 >= 0 ? '+' : ''}${n1(drift2)}%`);
+    console.log(`  (mau dau→cuoi la ${n1(first.rss)}→${n1(last.rss)} MB, nhung mau dau lay truoc khi warm-up`);
+    console.log(`   xong nen ti le do KHONG dung de ket luan ro ri — dung con so nua-dau/nua-sau o tren.)`);
+    const verdict = Math.abs(drift2) <= 20
+      ? '  → RSS di ngang. Khong thay dau hieu ro ri trong 12 phut.'
+      : '  → RSS troi that. Can soak >=60 phut de xac nhan.';
+    console.log(verdict);
     if (maxJCpu > maxCpu) {
       console.log('\n  [LUU Y] JMeter ăn CPU nhiều hơn backend → một phần latency đo được là chi phí');
       console.log('          của load generator, không phải của server. Phải nói rõ trong báo cáo.');

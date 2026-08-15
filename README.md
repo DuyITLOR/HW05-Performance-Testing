@@ -3,10 +3,11 @@
 - **Sinh viên:** Lê Nhựt Duy — **MSSV:** 23127178
 - **Môn:** Kiểm thử phần mềm (QA/QC) — **Bài:** HW05-AI Performance Testing
 
-> **Trạng thái:** Task 1, 2, 3 hoàn tất — 4 lượt JMeter (**370.851 sample**, 0% error), endurance
-> threshold chốt bằng số, 2 bug xác nhận bằng request thật, **12 lỗi của AI ghi đầy đủ** — trong đó
-> có một kết luận nhân quả sai mà chính bài này **tự bác bỏ bằng số đo** (§2.8 của báo cáo).
-> **Còn thiếu:** ảnh Activity Monitor, ảnh spec máy, video demo, GitHub Issues — xem [§9](#9-việc-còn-lại).
+> **Trạng thái:** Task 1, 2, 3 hoàn tất — 4 lượt JMeter (**358.661 sample**, 0% error) kèm **5 ảnh
+> bằng chứng** khớp timestamp, endurance threshold chốt bằng số, 2 bug xác nhận bằng request thật,
+> **13 lỗi của AI ghi đầy đủ** — trong đó một kết luận nhân quả sai mà bài này **tự bác bỏ bằng ba
+> điểm dữ liệu** (§2.8), và một con số do chính tool của tôi in ra sai (§2.7).
+> **Còn thiếu:** video demo, số GitHub Issue, Human review — xem [§9](#9-việc-còn-lại).
 > Quy trình làm bài: [docs/PLAYBOOK.md](docs/PLAYBOOK.md) (trong repo, không kèm bản nộp).
 
 ## Liên kết
@@ -33,11 +34,11 @@ nhóm 05. Bằng chứng chống trùng: [docs/endpoint-selection.md](docs/endpo
 
 | Bước | Endpoint | Nhóm §5 | p95 ở Stress (200 VU) |
 |---|---|---|---|
-| 1 | `POST /api/login` (admin) | **auth-heavy** | 7 ms |
-| 2 | `GET /api/admin/orders` | **read-heavy** | 6 ms |
-| 3 | `GET /api/admin/users` | **read-heavy** | 5 ms |
-| 4 | `POST /api/admin/import-products` | **transactional** | **9 ms** ← đắt nhất, endpoint ghi duy nhất |
-| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | 5 ms |
+| 1 | `POST /api/login` (admin) | **auth-heavy** | **24 ms** ← đắt nhất ở Stress |
+| 2 | `GET /api/admin/orders` | **read-heavy** | 17 ms |
+| 3 | `GET /api/admin/users` | **read-heavy** | 13 ms |
+| 4 | `POST /api/admin/import-products` | **transactional** | **22 ms** — endpoint ghi duy nhất |
+| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | 14 ms |
 | 6 | `POST /api/login` (mật khẩu sai) | **auth-heavy** | 4 ms — nhánh phủ account-lockout |
 
 Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, chỉ khác tham số tải —
@@ -53,44 +54,47 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 |---|---|
 | Scenario đã chạy | **4** — Load · Stress · Spike · Soak (endurance) |
 | Endpoint group được phủ | **3** — auth-heavy · read-heavy · transactional |
-| Tổng sample | **370.851** |
+| Tổng sample | **358.661** |
 | Error rate | **0%** ở cả 4 lượt |
-| Điều kiện khi đo | `products` **830.139 dòng** · `load_1m` tb **2,2–3,8** trên máy 12 lõi |
-| **Endurance threshold** | **62,8 req/s** ổn định 12 phút · p95 **6 ms** · trôi p95 **+0%** · trần bộ nhớ **83,5 MB** |
-| Tải cao nhất chịu được | **564,4 req/s** ở 200 VU, p95 **7 ms**, 0% error — `node` CPU đỉnh **98,4%**, sát trần một lõi |
-| Hồi phục sau spike | **không cần hồi phục** — 212 VU dội trong 5s mà p95 đứng nguyên 5–7 ms |
-| Bug chức năng | **2** xác nhận (+1 ứng viên đã loại sau khi kiểm) |
-| Lỗi của AI đã bắt và sửa | **12** (9 trong số đó không làm test plan báo lỗi) |
+| Điều kiện khi đo | `products` ~900.000 dòng · `load_1m` tb **4,4–6,0** trên máy 12 lõi |
+| **Endurance threshold** | **62,8 req/s** ổn định 12 phút · p95 **8 ms** · trôi p95 **+0%** · RSS đi ngang **+5,0%** · trần **83,1 MB** |
+| Tải cao nhất chịu được | **539,7 req/s** ở 200 VU, p95 **18 ms**, 0% error — nhưng `node` CPU đỉnh **97,7%**, sát trần một lõi, và max **3691 ms** |
+| Hồi phục sau spike | **không cần hồi phục** — 212 VU dội trong 5s mà p95 đứng nguyên 7–8 ms |
+| Bug chức năng | **2** xác nhận (+1 ứng viên đã loại kèm bảng kiểm chứng) |
+| Lỗi của AI đã bắt và sửa | **13** (10 trong số đó không làm test plan báo lỗi) |
+| Ảnh bằng chứng | **5** ảnh khớp timestamp + 1 ảnh bug |
 
 ### Bốn lượt chạy
 
 | Scenario | Sample | Peak VU | Thời lượng | RPS | Error % | avg | p50 | p90 | **p95** | p99 | max |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| **Load** | 16.395 | 22 | 359,4s | 45,6 | 0% | 2,9 | 2 | 6 | **7** | 10 | 104 |
-| **Stress** | 270.848 | 200 | 479,8s | **564,4** | 0% | 3,1 | 2 | 5 | **7** | 29 | 363 |
-| **Spike** | 38.388 | 212 | 239,8s | 160,1 | 0% | 2,6 | 2 | 5 | **6** | 13 | 51 |
-| **Soak** | 45.220 | 22 | 719,6s | 62,8 | 0% | 2,7 | 2 | 5 | **6** | 11 | 230 |
+| **Load** | 16.343 | 22 | 359,7s | 45,4 | 0% | 3,7 | 3 | 7 | **8** | 12 | 84 |
+| **Stress** | 258.992 | 200 | 479,9s | **539,7** | 0% | 9,6 | 2 | 8 | **18** | 124 | **3691** |
+| **Spike** | 38.160 | 212 | 239,7s | 159,2 | 0% | 3,1 | 2 | 6 | **7** | 20 | 152 |
+| **Soak** | 45.166 | 22 | 719,6s | 62,8 | 0% | 3,6 | 3 | 7 | **8** | 12 | 192 |
 
 Đơn vị: **ms**. Mốc thời gian từng lượt: [results/run-log.md](results/run-log.md) ·
 [endurance/run-log.md](endurance/run-log.md).
 
-> **Phát hiện đáng đọc nhất — một kết luận của tôi bị chính tôi bác bỏ (§2.8):**
+> **Phát hiện đáng đọc nhất — một kết luận của tôi, bị chính tôi bác bỏ (§2.8):**
 >
-> Bản báo cáo trước có một mục mang tên *"phát hiện quan trọng nhất của bài"*: so hai batch, thấy p95
-> chênh 2,4–6,4 lần, kết luận **kích thước dữ liệu** là nguyên nhân, kèm cơ chế nghe rất hợp lý về
-> SQLite một writer. Batch chạy lại đã bác bỏ nó:
+> Bản báo cáo trước có mục *"phát hiện quan trọng nhất của bài"*: so hai batch, thấy p95 chênh
+> 2,4–6,4 lần, kết luận **kích thước dữ liệu** là nguyên nhân. Điểm dữ liệu thứ ba đã phá vỡ nó:
 >
-> | | Batch 13/08 | Batch 15/08 |
-> |---|---|---|
-> | `products` trong DB | ~50.000 | **830.139** (gấp 16 lần) |
-> | `load_1m` tb (Stress) | **5,2** | **3,1** |
-> | p95 Stress | 40–107 ms | **7 ms** |
+> | Batch | `products` | `load_1m` (Stress) | p95 Stress |
+> |---|---|---|---|
+> | 13/08 | ~50.000 | 5,2 | 26 ms |
+> | 15/08 14:26 | ~830.000 | **3,1** | **7 ms** |
+> | 15/08 15:37 *(bộ nộp)* | ~900.000 | **5,7** | **18 ms** |
 >
-> Dữ liệu nhiều hơn **16 lần** mà nhanh hơn **~10 lần**. Biến thật là **tải nền của máy**, nhất quán
-> trên cả 4 lượt. Sai ở chỗ: so hai lượt khác nhau ở nhiều biến cùng lúc rồi quy hết cho một biến.
+> Dữ liệu tăng đơn điệu 50k → 830k → 900k, nhưng p95 đi 26 → 7 → 18. Không theo dữ liệu. Theo
+> `load_1m` thì cùng chiều cả ba điểm. **Biến áp đảo là tải nền của máy**, không phải dữ liệu.
 >
-> §2.8 giữ lại dưới dạng **mục thu hồi** kèm bằng chứng, vì đó là một lỗi đọc metric thật do chính
-> người viết bắt — đúng thứ Task 2 chấm.
+> Để so sánh: `load_1m` chênh 1,8 lần làm p95 chênh **2,6 lần**, còn tăng VU **gấp 10 lần** chỉ làm
+> p95 chênh 2,25 lần. Nhiễu môi trường lớn hơn tín hiệu chủ động tạo ra.
+>
+> §2.8 giữ lại dưới dạng **mục thu hồi** kèm bằng chứng — đó là lỗi đọc metric thật do chính người
+> viết bắt, đúng thứ Task 2 chấm.
 
 ---
 
@@ -101,11 +105,11 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 
 | No. | Tiêu chí | Điểm tối đa | Điểm tự chấm | Căn cứ |
 |-----|----------|-------------|--------------|--------|
-| 1 | Task 1 — Load testing | 20 | | 16.395 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **7ms**, 0% error · data-driven từ 4 file CSV · listener **Summary Report** (không lặp loại) · p95 tách theo từng endpoint, `import-products` lộ ra là endpoint đắt nhất |
-| 2 | Task 1 — Stress testing | 20 | | **270.848 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy chứ không chỉ biết có gãy · **564,4 RPS** · listener **Aggregate Report** · không kết luận "SUT chịu tải tốt" từ p95 7ms mà đối chiếu CPU: `node` **19,9% → 98,4%** khi VU tăng 10 lần → server đã sát trần **một lõi**, giữ được p95 bằng cách dùng thêm CPU chứ không phải còn dư sức |
-| 3 | Task 1 — Spike testing | 20 | | 38.388 sample · 10 VU nền + 200 VU trong 5s, có nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · bảng p95 theo cửa sổ 10s cho thấy server **hấp thụ trọn cú sốc**: VU 12→212, sample/10s tăng **21 lần**, p95 đứng nguyên 5–7ms · **ba lượt Spike cho ba kết quả khác nhau** (47ms · 65ms · 6ms) → dùng chính điều đó để chỉ ra spike test là loại test nhạy nhất với tải nền |
-| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: đọc p95 mà bỏ CPU (p95 6→7ms trong khi CPU 19,9→98,4%) · average 3,1ms khi p99 gấp **9,4 lần** và max gấp **117 lần** · "0% error" trong khi 99,3% bước 5 trả 400 · kết luận đúng vì lý do sai ở rò rỉ · ngưỡng AI tự đề xuất rộng gấp **7 lần** giá trị đo được nên không bắt được hồi quy nào · và **lỗi nặng nhất là lỗi của chính tôi ở lượt trước** (§2.8), bị bác bỏ bằng `load_1m`. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **3 đề xuất AI không nêu mà tôi bổ sung** |
-| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off**, mỗi cái nói rõ cái phải trả · trade-off quan trọng nhất có **số đo hậu thuẫn**: §2.8 cho thấy nhiễu từ máy chạy tạo chênh lệch **10 lần** ở p95 trong khi tăng VU 10 lần chỉ làm p95 đi từ 6 lên 7ms — tức **nhiễu lớn hơn tín hiệu một bậc**, nên baseline phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
+| 1 | Task 1 — Load testing | 20 | | 16.343 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **8ms**, 0% error · data-driven 4 file CSV · listener **Summary Report** · p95 tách theo endpoint → `import-products` lộ ra đắt nhất (10ms) · **ảnh `activity-load.png`** bắt `node` ở 13,4% CPU |
+| 2 | Task 1 — Stress testing | 20 | | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
+| 3 | Task 1 — Spike testing | 20 | | 38.160 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · phát hiện thêm: p95 **tăng lúc tải RÚT** (12ms) — chi phí tear-down 200 socket · **ba lượt Spike cho ba kết quả** (47/65/7ms) → dùng chính điều đó chứng minh spike test nhạy nhất với tải nền |
+| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
+| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
 | 6 | Agent Skills | 10 | | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Chờ video demo skill.** |
 | | **Tổng** | **100** | | |
 
@@ -206,13 +210,13 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 | [report/main-report.md](report/main-report.md) + PDF | **Đạt** — số liệu 4 lượt, human review 10 lỗi, Task 2 (6 lỗi đọc metric), Task 3, 4 giới hạn |
 | [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — 8 lượt tương tác, prompt nguyên văn, bảng tổng hợp 10 lỗi |
 | [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **298 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
-| [bug-report/bug-report.md](bug-report/bug-report.md) | **Đạt** — 2 bug xác nhận + 1 ứng viên đã loại kèm bảng kiểm chứng + `verify-bugs.sh` chạy lại được |
+| [bug-report/bug-report.md](bug-report/bug-report.md) + ảnh | **Đạt** — 2 bug xác nhận + 1 ứng viên đã loại kèm bảng kiểm chứng + `verify-bugs.sh` chạy lại được |
 | 4 test plan `.jmx` đúng tên `{MSSV}_{Scenario}_{YYYYMMDD}` | **Đạt** |
-| 4 raw `.jtl` đầy đủ + 4 HTML dashboard | **Đạt** — 370.851 sample (+ 4 lượt batch 13/08 giữ lại cho §2.8) |
-| [endurance/endurance-threshold.md](endurance/endurance-threshold.md) | **Đạt** — 62,8 RPS · p95 6ms · trần 83,5 MB · trôi **+0%** |
+| 4 raw `.jtl` đầy đủ + 4 HTML dashboard | **Đạt** — 358.661 sample (+ 8 lượt của 2 batch trước, giữ cho §2.8) |
+| [endurance/endurance-threshold.md](endurance/endurance-threshold.md) | **Đạt** — 62,8 RPS · p95 8ms · trần 83,1 MB · trôi p95 **+0%**, RSS **+5,0%** |
 | [resource-monitor/hardware-report.md](resource-monitor/hardware-report.md) | **Đạt** — hostname `Le-Nhut-Duy.local` khớp HW trước |
-| Ảnh Activity Monitor (JMeter + monitor **cùng khung**) | **Thiếu** — xem §9 |
-| Ảnh spec phần cứng | **Thiếu** |
+| Ảnh Activity Monitor (JMeter + monitor **cùng khung**) | **Đạt** — 4 ảnh, mỗi ảnh khớp lượt chạy trong `run-log.md` |
+| Ảnh spec phần cứng | **Đạt** — `hardware-spec.png`, screenfetch với hostname `Le-Nhut-Duy` |
 | Video demo ≥6 phút, unlisted, tiếng Việt | **Thiếu** |
 | GitHub Issues cho 2 bug | **Thiếu** → lệnh có sẵn trong bug-report §4 |
 | Task 3 — flow chart + trade-off | **Đạt** — main-report §4 |
@@ -220,28 +224,27 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ## 9. Việc còn lại
 
-1. **Ảnh Activity Monitor cho 4 lượt + ảnh spec máy.** Lần chụp đầu đã bị **xoá bỏ**: `screencapture`
-   chụp toàn màn hình nên bắt được cửa sổ đang ở trước (VS Code của project khác, Mission Control)
-   chứ không phải JMeter + Activity Monitor — vô giá trị làm bằng chứng §6, và làm lộ nội dung
-   không liên quan. Cách chụp đúng: giới hạn vùng chụp theo đúng hai cửa sổ cần thiết
-   (`screencapture -R`), và **phải chụp trong lúc lượt chạy đang diễn ra** nên cần chạy lại 4 lượt.
-2. **Video ≥6 phút**, unlisted, giọng mình — kịch bản 3 clip đã chia timeline trong
-   [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Nhớ kể **một chỗ AI làm sai mà mình
-   sửa**: có 10 chỗ để chọn.
-3. **2 GitHub Issue** cho BUG-P1/P2 — lệnh `gh issue create` có sẵn trong bug-report §4.
-4. **Điền phần "Human review"** trong AI Audit — mọi chỗ ghi *(sinh viên bổ sung)*.
-5. **Chấm điểm tự đánh giá** ở §3 → đuôi tên file zip.
+Chạy `bash tools/package.sh <điểm> --check` để soát. Còn **3 mục**, tất cả cần sinh viên:
+
+1. **Video ≥6 phút**, unlisted, giọng mình → dán link vào README và main-report.
+   Kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Chuyện đáng kể nhất: mở bảng
+   ba batch ở §2.8, giải thích vì sao kết luận đầu tiên về nguyên nhân là sai.
+2. **2 GitHub Issue** cho BUG-P1/P2 — lệnh `gh issue create` có trong
+   [bug-report §4](bug-report/bug-report.md), ảnh bằng chứng đã có sẵn.
+3. **Human review** trong [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — 10 lượt, mỗi
+   lượt có dòng *(sinh viên bổ sung)*. Và **điền cột điểm** ở §3 của file này.
 
 ## 10. Năm điều quyết định cách đọc mọi con số của bài này
 
-1. **Tải nền của máy là biến áp đảo** — và đây là bài học đắt nhất của bài. `load_1m` chênh 1,7 lần
-   tạo ra chênh lệch **10 lần** ở p95, lớn hơn hiệu ứng của việc tăng VU gấp 10 lần. Mọi con số dưới
-   đây chỉ có nghĩa kèm điều kiện `load_1m` ≈ 2,2–3,8. Xem [§2.8](report/main-report.md).
-2. **Load generator và SUT cùng một máy.** Ở Stress, JMeter CPU đỉnh 106,2% và `node` 98,4% — xấp xỉ
-   nhau, nên một phần latency đo được là chi phí của load generator.
-3. **Mật khẩu lưu plaintext** ([`server.js:46`](../eshop-sut/backend/server.js#L46)) — login không
-   tốn CPU băm, nên p95 7ms của nó **không** đại diện cho hệ thống băm mật khẩu đúng cách.
+1. **Tải nền của máy là biến áp đảo** — bài học đắt nhất, và có ba điểm dữ liệu: `load_1m` 5,2/3,1/5,7
+   → p95 Stress 26/7/18 ms. Chênh 1,8 lần tải nền tạo chênh **2,6 lần** p95, còn tăng VU **gấp 10
+   lần** chỉ tạo chênh 2,25 lần. Mọi con số chỉ có nghĩa kèm điều kiện `load_1m` ≈ 4,4–6,0.
+   Xem [§2.8](report/main-report.md).
+2. **Load generator và SUT cùng một máy.** JMeter CPU đỉnh 118–183%, nhiều hơn `node` ở ba trong bốn
+   lượt.
+3. **Mật khẩu lưu plaintext** ([`server.js:46`](../eshop-sut/backend/server.js#L46)) — login không tốn
+   CPU băm, nên p95 24ms của nó **không** đại diện cho hệ thống băm mật khẩu đúng cách.
 4. **Lockout kích hoạt sau 2 lần sai, không phải 3** (`login_attempts + 2`, ngưỡng 3 —
-   [`server.js:54`](../eshop-sut/backend/server.js#L54)). Mọi `403` đo được là **hành vi chức năng**.
-5. **Bước 5 chỉ ghi thật 400 lần mỗi lượt**; 99,3% sample ở Stress trả 400 do state machine FR-10
-   chặn trước lệnh `UPDATE`. Tín hiệu ghi nặng nằm ở **bước 4**.
+   [`server.js:54`](../eshop-sut/backend/server.js#L54)). Mọi `403` là **hành vi chức năng**.
+5. **Bước 5 chỉ ghi thật 400 lần mỗi lượt**; 99,2% sample ở Stress trả 400 do FR-10 chặn trước lệnh
+   `UPDATE`. Tín hiệu ghi nặng nằm ở **bước 4**.

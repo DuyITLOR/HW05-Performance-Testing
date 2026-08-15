@@ -24,7 +24,7 @@ kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · 0 lỗ
 | **Thực tế** | Không có middleware `authenticateToken` → **không cần token**, và đọc được đơn hàng của **bất kỳ** người dùng nào chỉ bằng cách đổi `:id` |
 | **Nguyên nhân** | [`server.js:344`](../../eshop-sut/backend/server.js#L344) — thiếu `authenticateToken`, trong khi mọi route order khác đều có |
 | **Loại** | bảo mật (IDOR) + lệch đặc tả |
-| **Ảnh** | `screenshots/bug-p1-orders-idor.png` |
+| **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — ảnh chụp toàn bộ output `verify-bugs.sh`, gồm cả ba khối |
 | **GitHub Issue** | *(sinh viên mở — xem mục 4)* |
 
 **Bằng chứng** (chạy lại được bằng `bash bug-report/verify-bugs.sh`):
@@ -58,7 +58,7 @@ vốn công khai" mà là **một route bị bỏ sót**, vì route order ngay b
 | **Đặc tả nói** | Không đề cập. `api_specification.md` §5 chỉ có `POST /api/apply-coupon` (dòng 154) và `GET /api/coupons` (dòng 166) |
 | **Thực tế** | Route tồn tại, cần token, **ghi thật vào bảng `coupon_usage`** ([`server.js:444`](../../eshop-sut/backend/server.js#L444)) |
 | **Loại** | tài liệu thiếu — ảnh hưởng trực tiếp tới việc chọn phạm vi kiểm thử: không ai test được endpoint mình không biết là có |
-| **Ảnh** | `screenshots/bug-p2-coupon-usage.png` |
+| **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — cùng ảnh, khối thứ hai |
 | **GitHub Issue** | *(sinh viên mở)* |
 
 **Bằng chứng:**
@@ -70,7 +70,7 @@ vốn công khai" mà là **một route bị bỏ sót**, vì route order ngay b
   444:app.post("/api/coupon-usage", authenticateToken, (req, res) => {
 -- goi thu that:
   response      : {"message":"Usage recorded"}
-  coupon_usage  : 0 → 1 dòng      ← endpoint có ghi DB thật
+  coupon_usage  : 4 → 5 dòng      ← endpoint có ghi DB thật
 ```
 
 Đáng lưu ý thêm: endpoint này ghi `coupon_usage` mà **không kiểm** coupon có tồn tại hay
@@ -117,9 +117,9 @@ trong [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
 
 | Ứng viên | Vì sao KHÔNG phải bug |
 |---|---|
-| `PUT /api/admin/orders/:id/status` trả **400** cho phần lớn request trong lượt dài | Đúng đặc tả FR-10: một order chỉ chuyển tiếp một lần cho mỗi trạng thái ([`server.js:537-551`](../../eshop-sut/backend/server.js#L537)). Con số "18,25% error" ở lượt chạy thứ hai là lỗi của **test plan của tôi**, không phải của SUT |
+| `PUT /api/admin/orders/:id/status` trả **400** cho phần lớn request trong lượt dài | Đúng đặc tả FR-10: một order chỉ chuyển tiếp một lần cho mỗi trạng thái ([`server.js:537-551`](../../eshop-sut/backend/server.js#L537)). Con số "18,25% error" ở một lượt chạy trước là lỗi của **test plan của tôi**, không phải của SUT |
 | Hàng loạt `403` ở lượt chạy đầu | Account lockout hoạt động đúng như code. Nguyên nhân thật: `users.csv` của tôi chứa 2 dòng mật khẩu sai và luồng chính đọc chính file đó → tự khoá tài khoản của mình |
-| `GET /api/admin/orders` chậm hơn các GET khác (p95 23ms vs 19ms ở Stress) | Đúng như thiết kế: JOIN `orders` × `users`, không phân trang ([`server.js:510`](../../eshop-sut/backend/server.js#L510)). Chậm **hơn** không có nghĩa là **sai** — và 23ms còn cách rất xa mọi ngưỡng đã đặt |
+| `GET /api/admin/orders` chậm hơn `GET /api/admin/users` (p95 17ms vs 13ms ở Stress) | Đúng như thiết kế: JOIN `orders` × `users`, không phân trang ([`server.js:510`](../../eshop-sut/backend/server.js#L510)). Chậm **hơn** không có nghĩa là **sai** — và 17ms còn cách rất xa mọi ngưỡng đã đặt |
 
 ---
 
@@ -130,7 +130,7 @@ Không mở Issue mới, chỉ ghi vì chúng **thay đổi cách đọc kết q
 | Defect | Vị trí | Ảnh hưởng tới bài đo |
 |---|---|---|
 | `login_attempts` cộng **2** thay vì 1 → lockout sau **2** lần sai, không phải 3 | [`server.js:54`](../../eshop-sut/backend/server.js#L54) | Mọi `403` trong lượt chạy gần như luôn là lockout — **hành vi chức năng**. Phải tách khỏi error rate |
-| Mật khẩu lưu **plaintext**, so sánh bằng `===` | [`server.js:46`](../../eshop-sut/backend/server.js#L46) | **Đây là giới hạn quan trọng nhất của toàn bộ bài đo.** Không có bcrypt/argon2 nên login không tốn CPU băm. p95 40ms của `POST /api/login` ở mức 200 VU **không** đại diện cho một hệ thống băm mật khẩu đúng cách — ở đó login thường là endpoint đắt nhất, không phải rẻ nhất |
+| Mật khẩu lưu **plaintext**, so sánh bằng `===` | [`server.js:46`](../../eshop-sut/backend/server.js#L46) | **Đây là giới hạn quan trọng nhất của toàn bộ bài đo.** Không có bcrypt/argon2 nên login không tốn CPU băm. p95 24ms của `POST /api/login` ở mức 200 VU **không** đại diện cho một hệ thống băm mật khẩu đúng cách — ở đó login thường là endpoint đắt nhất, không phải rẻ nhất |
 | Không có rate limiting ở bất kỳ route nào | toàn bộ `server.js` | Mọi 4xx đến từ credential/token/body, **không** phải throttling |
 
 ---
@@ -141,7 +141,7 @@ Không mở Issue mới, chỉ ghi vì chúng **thay đổi cách đọc kết q
 bash bug-report/verify-bugs.sh          # chạy lại toàn bộ bằng chứng ở mục 1 và 2
 ```
 
-1. Chụp ảnh terminal khi chạy script trên → `screenshots/bug-p1-orders-idor.png`, `bug-p2-coupon-usage.png`.
+1. ~~Chụp ảnh terminal khi chạy script trên~~ — **xong**: [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png)
 2. Mở 2 GitHub Issue, mỗi cái kèm ảnh:
 
 ```bash

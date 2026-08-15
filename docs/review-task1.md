@@ -5,7 +5,7 @@
 >
 > Task 2 / Task 3 / các mục §5–§15: xem [`TASKS.md`](../TASKS.md).
 
-**Tình trạng: 6/9 ý xong · 3 ý chưa làm.**
+**Tình trạng: 8/9 ý xong · 1 ý chưa làm (video).**
 
 | Ý | Yêu cầu | Trạng thái |
 |---|---|---|
@@ -14,10 +14,10 @@
 | 3 | Use three different report views | **Xong** |
 | 4 | Name each test plan | **Xong** |
 | 5 | Review and fix (human review) | **Xong** |
-| 6 | Run as completely as possible, with evidence | **Hở** — thiếu 5 ảnh |
+| 6 | Run as completely as possible, with evidence | **Xong** |
 | 7 | Determine the endurance threshold | **Xong** |
 | 8 | Record a demo video | **Chưa** |
-| 9 | Report issues | Nội dung xong · **chưa mở Issue** |
+| 9 | Report issues | Nội dung + ảnh xong · **chưa mở Issue** |
 
 ---
 
@@ -224,8 +224,9 @@ grep -c "^### Interaction" ai-audit/ai-audit-report.md    # 8 lượt
 | HTML report folder | **Có** — 4 folder | `results/html/{load,stress,spike}`, `endurance/html/soak` |
 | Reset lockout + **ghi thủ tục** | **Có** | [`§2.6`](../report/main-report.md) · `tools/reset-lockout.mjs`, `tools/reset-orders.mjs`, chạy tự động đầu mỗi lượt |
 | **Bảng spec** phần cứng | **Có** | [`resource-monitor/hardware-report.md`](../resource-monitor/hardware-report.md) |
-| **Ảnh screenfetch** | **THIẾU** | — |
-| **Ảnh tool + monitor mỗi lượt** | **1/4** | chỉ `activity-load.png` |
+| **Ảnh screenfetch** | **Có** | `hardware-spec.png` — hostname `Le-Nhut-Duy`, M2 Pro, 16384MiB |
+| **Ảnh tool + monitor mỗi lượt** | **4/4** | Load 13,4% · **Stress 91,7%** · Spike 34,9% · Soak 16,3% CPU |
+| Ảnh bug | **Có** | `bug-report/screenshots/bug-evidence-verify-bugs.png` |
 
 Ngoài yêu cầu: bằng chứng tài nguyên **dạng số** có đầy đủ — `results/resources/*.csv`, lấy mẫu 2
 giây/lần cho cả `node` **và** JMeter. Cột JMeter là chỗ phát hiện nút cổ chai nằm ở load generator.
@@ -264,13 +265,13 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 
 | Chỉ số | Giá trị |
 |---|---|
-| Thời lượng | **719,6s** (12 phút) · 45.220 sample |
+| Thời lượng | **719,6s** (12 phút) · 45.166 sample |
 | **Max stable RPS** | **62,8 req/s** |
-| p95 | **6 ms** · p99 11 ms |
+| p95 | **8 ms** · p99 12 ms |
 | Trôi p95 (5 phút đầu → cuối) | **+0%** |
-| RSS `node` đầu → cuối | 19,3 → 29,0 MB |
-| **Trần bộ nhớ** | **83,5 MB** |
-| CPU `node` đỉnh | 22,1% |
+| RSS nửa đầu → nửa sau | 74,5 → 78,3 MB (**+5,0%**, đi ngang) |
+| **Trần bộ nhớ** | **83,1 MB** |
+| CPU `node` đỉnh | 23,6% |
 
 Điểm mạnh khi review: **định nghĩa "ổn định" được chốt TRƯỚC khi chạy** (error < 1% và p95 không
 tăng quá 20%), nên không thể chọn ngưỡng sau khi thấy kết quả.
