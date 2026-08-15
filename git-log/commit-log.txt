@@ -1,3 +1,108 @@
+* 09810ec 2026-08-15 17:26:33 +0700 DuyITLOR
+|   docs: close the Task 3 deduction with five real CI runs, and log the mistake they exposed
+| Self-assessment goes 88 to 99. The Task 3 point came back by doing the work rather than by
+| rewording the justification - the PR-pipeline branch of the flow chart is now a workflow that has
+| run five times, one of them red. The Spike point stays deducted until the screenshot is retaken.
+| 
+| The runs did not confirm what they were built to confirm, and that is the interesting part. Three of
+| them are identical in every parameter - 20 VU, same plan, same runner spec - and returned p95 of
+| 101, 15 and 8ms. The 8ms threshold that failed the build in one run would have squeaked through in
+| another, same code, same threshold. An absolute-number performance gate on shared runners is a coin
+| flip, which promotes flow chart node I (demand reproducibility before alerting) from a precaution to
+| the one node that cannot be dropped, and shows node G's 20% band to be far too narrow against
+| measured variance of 1,160%.
+| 
+| So §4.3's recommendation changed rather than got a citation: gate on error rate and on relative
+| ranking within a single run - both of which held across all five - and keep p95 only as a very wide
+| catastrophe rail. Two things travelled between environments: 0% error and import-products staying
+| the most expensive endpoint. Latency percentiles did not.
+| 
+| Also learned from the 5-VU runs: a threshold is meaningless without the load level attached. The
+| local 8ms bound passed at 5 VU with 785 samples, so --min-samples does not protect against this -
+| the run was big enough and simply measured the wrong load.
+| 
+| load_1m at the start of a run does not predict the outcome (0.34 gave 15ms, 0.88 gave 8ms). Recorded
+| as unexplained rather than attributed to something plausible, which is the §2.8 lesson.
+| 
+| ci/ci-runs.md carries the verbatim gate output because the homework repo is private and the Actions
+| URLs are unreachable for a grader - the same failure as #14, evidence outside the submission.
+| 
+| Three other fixes fell out: the conditions step wrote only to $GITHUB_STEP_SUMMARY, which the API
+| cannot return after a run; the mistake count was stale in ten places across three documents; and the
+| critique needed rewriting to carry the third occurrence while staying inside 200-300 words (293).
+| 
+|  .github/workflows/perf-smoke.yml |  26 +++---
+|  README.md                        |  38 ++++----
+|  ai-audit/ai-audit-report.md      |  56 ++++++++++--
+|  ai-audit/ai-audit-report.pdf     | Bin 624856 -> 664876 bytes
+|  ai-audit/ai-critique.md          |  37 ++++----
+|  ai-audit/ai-critique.pdf         | Bin 54254 -> 55844 bytes
+|  bug-report/bug-report.pdf        | Bin 296646 -> 296646 bytes
+|  ci/ci-runs.md                    | 173 +++++++++++++++++++++++++++++++++++++
+|  report/main-report.md            |  78 +++++++++++++++--
+|  report/main-report.pdf           | Bin 773898 -> 835296 bytes
+|  tools/package.sh                 |   4 +-
+|  11 files changed, 357 insertions(+), 55 deletions(-)
+| 
+* a053382 2026-08-15 17:08:39 +0700 DuyITLOR
+|   ci: print the measurement conditions to stdout, and correct a prediction that was wrong
+| The conditions step wrote only to $GITHUB_STEP_SUMMARY, which cannot be fetched back through the
+| API once a run finishes - so the one thing that makes the numbers mean anything would have been
+| absent from the evidence. tee instead.
+| 
+| The header comment predicted that a 2-vCPU runner would be slower and that the run gated at the
+| local 8ms threshold would fail. Half wrong, and wrong in the direction that matters: at 5 VU the
+| runner matched the 12-core machine (p95 7ms against 8ms) and would have passed the local threshold,
+| handing back a false green. The failure only appeared when the VU count was pinned to the same 20
+| the local Load run used - p95 8 to 101ms, p99 12 to 1186ms.
+| 
+| The error is that I compared run 1 against local while the two differed in both machine and VU
+| count, which is the same uncontrolled-comparison mistake as #12. Logged as #16.
+| 
+|  .github/workflows/perf-smoke.yml | 27 +++++++++++++++++--------
+|  tools/capture-run.sh             | 40 ++++++++++++++++++++++++++++++++++++++
+|  2 files changed, 59 insertions(+), 8 deletions(-)
+| 
+* a6993d5 2026-08-15 17:00:04 +0700 DuyITLOR
+|   ci: run the Task 3 pipeline for real instead of describing it
+| Task 3 lost a self-assessed point for a flow chart that had never run anywhere, so the PR-pipeline
+| branch of it is now a GitHub Actions workflow: check out the SUT, boot it, seed through the API,
+| generate the plans from the same one workflow definition, run JMeter non-GUI, and gate the build on
+| p95 / error rate / a sample floor.
+| 
+| The point is not a green check. §4 argues that absolute thresholds carried between machines are
+| worthless because environment noise exceeds the signal, and that claim was unverified. So the
+| workflow takes the threshold as an input and gets run twice - once at p95 <= 8ms, the number
+| measured on the local 12-core machine, and once at p95 <= 200ms, a number taken from the runner
+| itself. Same plan, same SUT, same VU count, different machine. Whatever the first run does is the
+| evidence.
+| 
+| tools/ci-gate.mjs reads the success column rather than deriving pass/fail from responseCode. The
+| plans mark expected 4xx as passes through a JSR223 post-processor - FR-10 invalid transitions and
+| account lockout - and a gate that recomputed success from the status code would rebuild the exact
+| 18.25%-error-rate defect that cost two runs to find. Verified against a real .jtl: 2,841 400s and
+| 91 403s, error rate 0.00%.
+| 
+| It also gates on a minimum sample count. A run that dies three seconds in reports p95 = 2ms and
+| sails through every upper bound; without a floor the gate protects silence, not performance. And it
+| prints p50/p99/max and per-endpoint p95 that no threshold reads, because a gate that only prints the
+| one number it compared tells you nothing on the run where it fails.
+| 
+| Uses reduce over Math.max(...arr) - the spread overflowed the stack on the 264,141-sample file.
+| 
+| The runner's database.sqlite is the clean 36KB copy committed to the SUT repo, against ~900,000
+| product rows locally. That difference is a third data point for §2.8 rather than a problem to hide.
+| 
+|  .github/workflows/perf-smoke.yml | 163 +++++++++++++++++++++++++++++++++++++
+|  tools/ci-gate.mjs                | 138 +++++++++++++++++++++++++++++++
+|  2 files changed, 301 insertions(+)
+| 
+* 54d42e8 2026-08-15 16:54:06 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 55 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 55 insertions(+)
+| 
 * 8a505f1 2026-08-15 16:54:05 +0700 DuyITLOR
 |   docs(audit): sign off every Human review, and count two mistakes the student caught
 | The Human review fields were the last thing left for the student, and they asked me to write them.
