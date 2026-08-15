@@ -16,6 +16,9 @@ vì thế là **ba chương của báo cáo**, còn bằng chứng thì nằm th
 
 ## Task 1 — AI-assisted test design and execution (60 điểm)
 
+> Bảng trace chi tiết từng ý, có ô tick để tự review: [`docs/review-task1.md`](docs/review-task1.md)
+> *(file nội bộ, không nộp)*
+
 | Yêu cầu của đề | Nơi đáp ứng |
 |---|---|
 | Ba test plan **Load, Stress, Spike** | [`test-plans/`](test-plans/) — `23127178_{Load,Stress,Spike}_20260813.jmx` (+ `Soak` cho endurance §6) |
