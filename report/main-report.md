@@ -147,7 +147,7 @@ có thể không làm p95 tổng nhích lên đủ để vượt ngưỡng cản
 
 ### 2.4 Human review — AI sai gì, vì sao (§6 chấm mục này)
 
-Toàn bộ 16 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
+Toàn bộ 17 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
 Bảy bước của quy trình thiết kế — mỗi bước hỏi gì, căn cứ nào, quyết ra sao, và **bước nào bắt được
 lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 
@@ -166,9 +166,10 @@ lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 | 11 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"* | Dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của endpoint không liên quan gì tới lockout. Không sai số đo, nhưng là **nhãn sai nằm trong bằng chứng gốc** | suy luận không mở rộng — **cùng loại lỗi #7** | tham số hoá `reason` theo từng nhánh |
 | 12 | Kết luận **kích thước dữ liệu** gây suy giảm p95 2,4–6,4 lần, kèm cơ chế SQLite một writer | **Nhân quả rút từ một so sánh không kiểm soát biến nào.** Batch sạch bác bỏ: DB **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến thật là `load_1m`. Kết luận sai đã lan tới **headline README**, một **nhánh flow chart Task 3** và một dòng **self-assessment** | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` |
 | 13 | `soak-drift.mjs` tính "trôi RSS" = mẫu cuối / mẫu đầu | Mẫu đầu (19,7 MB) lấy **trước khi warm-up xong** → in **+228,9%**, đọc y như một vụ rò rỉ bộ nhớ. Thực tế RSS phẳng ~78 MB suốt 12 phút; nửa đầu so nửa sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so **nửa đầu / nửa sau**; giữ dòng cũ kèm cảnh báo |
+| 17 | §3.4 ghi p95 đỉnh ba lượt Spike là "47 · 65 · 7ms" và quy nguyên nhân cho `load_1m` | Đo lại từ `.jtl`: **47 · 8 · 12ms**. `load_1m` **không xếp đúng thứ tự** — tải nền cao nhất (6,0) cho 12ms, lượt 47ms chỉ 4,5. Số 7ms tự mâu thuẫn với bảng cửa sổ 10s ngay phía trên | **bản sửa không mang sang chỗ khác**: §2.8 đã thu hồi lối quy nhân quả này, §3.4 dùng đúng nó thì để nguyên | đo lại 3 `.jtl` + 3 resources; kết luận đổi thành "phương sai lớn nhất, nguyên nhân **chưa biết**" |
 
-**11 trong 14 lỗi kỹ thuật không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
-đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 11 đều lọt. Chi phí thật: **hai
+**12 trong 15 lỗi kỹ thuật không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
+đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 12 đều lọt. Chi phí thật: **hai
 lượt chạy phải huỷ và xoá sạch bằng chứng**, ~25 phút chạy lại.
 
 Phân bố ba nhóm lý do §6 yêu cầu phân loại lệch hẳn về một phía: **7 lỗi là đặc điểm
@@ -177,7 +178,7 @@ công cụ/endpoint/môi trường/dữ liệu**, 1 là chất lượng prompt, 
 và **không lỗi nào** thuộc "model không đủ khả năng". Điểm yếu không nằm ở chỗ AI không biết viết
 test plan, mà ở chỗ nó **không chạy thử và không đối chiếu với thực tế**.
 
-Một con số đáng chú ý riêng: **3 trong 14 lỗi kỹ thuật nằm trong chính tooling đo** (#1 preflight, #8
+Một con số đáng chú ý riêng: **3 trong 15 lỗi kỹ thuật nằm trong chính tooling đo** (#1 preflight, #8
 sample-resources, #13 soak-drift) — gần **1/4 số lỗi đến từ dụng cụ đo, không từ hệ thống được
 đo. Đó là lý do §6 của bài này đối chiếu chéo số của tool tự viết với ảnh Activity Monitor thay
 vì tin một nguồn duy nhất (§2.5).
@@ -187,7 +188,7 @@ và **cả hai do tôi bắt, không phải AI tự soát ra**: (14) bằng ch�
 folder **không có trong danh sách §14** → yêu cầu có bằng chứng đủ mà người chấm không đọc được,
 §17 tính 0 điểm cho mục đó, đã chép vào **§1.1** của chính báo cáo này; (15) lỗ ở §2 *"step by
 step"* được AI **tự ghi ra rồi để nguyên**, coi thừa nhận hạn chế là đã xử lý hạn chế, đã bịt bằng
-`ai-audit/design-log.md`. Tính cả hai: **2 trong 16 lỗi của cả bài là do người bắt** — và đó đúng
+`ai-audit/design-log.md`. Tính cả hai: **2 trong 17 lỗi của cả bài là do người bắt** — và đó đúng
 là hai lỗi **không script nào phát hiện được**, vì không có gì sai về mặt kỹ thuật để mà báo.
 
 ### 2.5 Bằng chứng chạy
@@ -408,9 +409,34 @@ lại chậm hơn lúc đang chịu tải. Giải thích hợp lý: 200 thread J
 phải dọn 200 socket trong khi 12 VU nền vẫn gửi request. Đó là chi phí **tear-down**, không phải chi
 phí phục vụ tải.
 
-Ba lượt Spike của bài cho ba kết quả khác nhau — p95 đỉnh **47ms · 65ms · 7ms** — và §2.8 chỉ ra biến
-số: `load_1m` 4,5 / cao / 6,0. **Spike là loại test nhạy nhất với tải nền**, vì nó đo phản ứng trong
-một cửa sổ 30 giây, nơi một tiến trình khác chen vào là đủ đổi kết luận.
+**Ba lượt Spike cho ba kết quả khác nhau, và không biến nào giải thích được thứ tự đó.** Đo lại
+p95 đỉnh của cửa sổ 10 giây trên cả ba `.jtl`, kèm `load_1m` trung bình lấy từ file resources tương ứng:
+
+| Lượt Spike | Sample | **p95 đỉnh cửa sổ** | `load_1m` tb |
+|---|---|---|---|
+| 13/08 13:29 | 38.069 | **47 ms** | 4,5 |
+| 15/08 14:44 | 38.388 | **8 ms** | **2,2** |
+| 15/08 15:47 *(bộ nộp)* | 38.160 | **12 ms** | **6,0** |
+
+Chênh lệch **5,9 lần** giữa lượt cao nhất và thấp nhất, trong khi số sample chỉ lệch **0,8%** — tức
+cùng một lượng công việc, ba kết quả. Nhưng `load_1m` **không xếp đúng thứ tự**: lượt tải nền **cao
+nhất** (6,0) cho **12ms**, còn lượt cho **47ms** chỉ ở 4,5. Nếu tải nền là nguyên nhân thì thứ tự
+phải là 2,2 < 4,5 < 6,0 → 8 < 47 < 12, và nó không phải vậy.
+
+> **Bản trước của mục này ghi "47 · 65 · 7ms" và quy nguyên nhân cho `load_1m`. Hai con số sai và
+> lập luận không đứng được.** Đây là **lỗi #17**: §2.8 đã thu hồi việc quy nhân quả cho một biến đơn
+> lẻ, nhưng chỗ này — cũng dùng đúng lập luận đó — thì để nguyên. **Sửa một chỗ mà không mang bản
+> sửa sang mọi chỗ đã dùng lập luận cũ.** Con số 7ms còn tự mâu thuẫn với chính đoạn trên: bảng cửa
+> sổ 10s ngay phía trên ghi cửa sổ 90–100s là **12ms**.
+
+Kết luận đứng được, và nó **không** cần tới `load_1m`: **spike test là loại có phương sai lớn nhất
+giữa các lượt**, vì nó đọc phản ứng trong một cửa sổ chỉ 30 giây — nơi một sự kiện ngắn bất kỳ trên
+máy là đủ đổi con số. Điều gì gây ra thì bài này **chưa biết**, và ghi đúng là chưa biết.
+
+Kết luận đó có **thêm một hậu thuẫn độc lập** ở §4.4: ba lượt CI **giống nhau từng tham số**, trên
+runner sạch, cho p95 **101 / 15 / 8ms** — lệch 12,6 lần. Hai nền tảng khác nhau, cùng một hiện tượng.
+Vì thế **không** được dùng một lượt Spike đơn lẻ làm baseline, và đó là căn cứ cho nút I của flow
+chart §4.
 
 Đây cũng là chỗ **View Results Tree** phát huy: mở các sample chậm nhất trong cửa sổ 60–70s cho thấy
 chúng là `POST /api/login` — khớp với việc login phải khởi tạo 200 kết nối mới cùng lúc.

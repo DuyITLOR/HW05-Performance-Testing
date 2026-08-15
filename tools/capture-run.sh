@@ -181,8 +181,12 @@ for S in "${SCENARIOS[@]}"; do
     echo "  Cửa sổ sốc rộng ~30s và CPU trong đó KHÔNG phẳng → chụp thêm 2 mốc, GIỮ CẢ BA."
     echo "  (Mẹo: Activity Monitor → View → Update Frequency → Very often (1s), nếu không cột"
     echo "   %CPU chỉ đổi mỗi 5 giây và ảnh dễ bắt trượt đỉnh.)"
+    # Mốc lấy từ chính file resources của lượt Spike đã chạy: giây 64 → 46,9% · giây 72 → 72,3% ·
+    # giây 96 → 14,5%. Nhánh sốc sống từ giây 60 đến 90 (delay 60 + duration 30), nên cả ba mốc
+    # phải nằm gọn trong khoảng đó. Giây 88 sát mép quá — đổi thành 78 và 84, cụm quanh chỗ CPU
+    # cao nhất. Ảnh cũ bắt 34,9% gần như chắc chắn vì chụp sau giây 90, lúc CPU đã sụp về ~14%.
     PREV=$AT
-    for NEXT in 80 88; do
+    for NEXT in 78 84; do
       GAP=$((NEXT - PREV))
       EXTRA="$SHOTS/activity-spike-t${NEXT}.png"
       for ((t = 0; t < GAP; t += 2)); do

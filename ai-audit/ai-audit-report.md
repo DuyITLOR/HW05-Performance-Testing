@@ -400,7 +400,7 @@
   sai mà không có gì báo lỗi": tool tự viết in ra một tỉ lệ có đơn vị hợp lý, đọc như rò rỉ bộ nhớ
   trên một hệ thống **hoàn toàn ổn định** (~78 MB phẳng suốt 12 phút, nửa đầu so nửa sau chỉ
   **+5,0%**). Tôi rút ra: **output của tool tự viết phải bị nghi ngờ đúng như output của SUT** — cả
-  bài có 14 lỗi kỹ thuật thì **3 lỗi nằm trong tooling đo** (#1, #8, #13), tức ~1/5 lỗi đến từ dụng cụ
+  bài có 15 lỗi kỹ thuật thì **3 lỗi nằm trong tooling đo** (#1, #8, #13), tức ~1/5 lỗi đến từ dụng cụ
   đo chứ không từ hệ thống được đo. Đã sửa tool in **nửa đầu / nửa sau**, giữ lại dòng
   mẫu-đầu→mẫu-cuối kèm cảnh báo ngay dưới nó.
 - **Commit:** `test(soak): compare like with like when reporting RSS drift`
@@ -519,8 +519,10 @@
 | 13 | #10 | `soak-drift.mjs` tính "trôi RSS" bằng mẫu-cuối / mẫu-đầu, mà mẫu đầu lấy trước warm-up → in **+228,9%**, đọc như rò rỉ. Thực tế nửa-đầu/nửa-sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so nửa đầu với nửa sau; giữ dòng cũ kèm cảnh báo |
 | 16 | #12 | Hai kết luận về lượt CI, rút từ **một** lượt mỗi kết luận: "runner 2 vCPU chậm hơn máy 12 lõi" (ở 5 VU nó nhanh **bằng**) và "CI chậm hơn local **12,6 lần**" (lượt sau cho **8ms**, đúng bằng local). Cả hai đã **viết vào chú thích workflow** trước khi có điểm dữ liệu thứ ba | phương pháp: nhân quả từ so sánh không kiểm soát biến — **lần thứ ba**, sau #9 và #12 | chạy thêm 2 lượt cùng 20 VU → phương sai **12,6 lần** giữa các lượt y hệt nhau; sửa chú thích + đổi hẳn đề xuất §4.3 |
 
-*(Số 14–15 nằm ở bảng "lỗi bản nộp" ngay dưới. Lỗi #16 là lỗi **kỹ thuật** nhưng phát hiện muộn
-nhất — lúc chạy CI thật — nên nó ở bảng này.)*
+| 17 | #12 | §3.4 ghi "ba lượt Spike cho p95 đỉnh **47 · 65 · 7ms**" rồi quy nguyên nhân cho `load_1m`. Đo lại từ `.jtl`: **47 · 8 · 12ms** — hai số sai; và `load_1m` **không xếp đúng thứ tự** (tải nền cao nhất 6,0 cho 12ms, lượt 47ms chỉ 4,5). Số 7ms còn tự mâu thuẫn với bảng cửa sổ 10s ngay phía trên (90–100s = 12ms) | **bản sửa không được mang sang chỗ khác**: §2.8 đã thu hồi việc quy nhân quả cho một biến đơn lẻ, nhưng §3.4 dùng đúng lập luận đó thì để nguyên — cùng họ #7/#11, đảo chiều | đo lại cả 3 `.jtl` + 3 file resources, ghi bảng thật; kết luận đổi thành "spike có phương sai lớn nhất, nguyên nhân **chưa biết**", hậu thuẫn bằng 3 lượt CI ở §4.4 |
+
+*(Số 14–15 nằm ở bảng "lỗi bản nộp" ngay dưới. Lỗi #16 và #17 là lỗi **kỹ thuật** nhưng phát hiện
+muộn nhất — lúc chạy CI thật và lúc soát lại số liệu Spike — nên chúng ở bảng này.)*
 
 **Hai lỗi nữa, cố ý KHÔNG đánh số vào bảng trên**, vì chúng không làm sai một con số nào — chúng
 làm sai **bản nộp**, tức một loại thiệt hại khác:
@@ -530,11 +532,11 @@ làm sai **bản nộp**, tức một loại thiệt hại khác:
 | 14 | #11 | Bằng chứng §5 (bảng đăng ký endpoint của nhóm) chỉ nằm trong `docs/`, mà `docs/` **không có trong danh sách §14** → yêu cầu có bằng chứng đủ nhưng người chấm không đọc được, §17 tính **0 điểm** cho mục đó | **sinh viên** | chép bảng vào `report/main-report.md §1.1`; ship thêm `docs/endpoint-selection.md` |
 | 15 | #11 | Lỗ ở §2 *"step by step"* được AI **tự ghi ra rồi để nguyên** — coi việc thừa nhận hạn chế là đã xử lý hạn chế | **sinh viên** | `ai-audit/design-log.md` ghi 7 bước quy trình, kèm câu ranh giới với prompt của sinh viên |
 
-Tính cả hai thì con số đáng nói nhất của phụ lục này là: **2 trong 16 lỗi là do người bắt, không
+Tính cả hai thì con số đáng nói nhất của phụ lục này là: **2 trong 17 lỗi là do người bắt, không
 phải do AI tự soát ra** — và cả hai đều là loại lỗi mà **không script nào phát hiện được**, vì
 không có gì sai về mặt kỹ thuật để mà báo.
 
-**Nhận xét xuyên suốt:** 11 trong 14 lỗi kỹ thuật **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
+**Nhận xét xuyên suốt:** 12 trong 15 lỗi kỹ thuật **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
 có chạy không" thì cả 10 lỗi này đều lọt.
