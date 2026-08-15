@@ -2,16 +2,25 @@
 # Continuous Performance Testing — hiện thực nhánh "PR pipeline" của flow chart Task 3.
 #
 # Báo cáo §4 lập luận rằng ngưỡng hiệu năng TUYỆT ĐỐI mang từ máy này sang máy khác là vô nghĩa,
-# vì nhiễu môi trường lớn hơn tín hiệu. Workflow này tồn tại để **kiểm lập luận đó bằng một lượt
-# CI thật** thay vì để nó là suy đoán trên giấy: chạy hai lần với hai bộ ngưỡng —
+# vì nhiễu môi trường lớn hơn tín hiệu. Workflow này tồn tại để **kiểm lập luận đó bằng lượt CI
+# thật** thay vì để nó là suy đoán trên giấy.
 #
-#   Lần 1: p95 ≤ 8ms   ← ngưỡng lấy từ số đo LOCAL (MacBook 12 lõi, p95 Load = 8ms)
-#   Lần 2: p95 ≤ 200ms ← ngưỡng lấy từ chính runner này
+# KẾT QUẢ THẬT (3 lượt, ghi lại ở ci/ci-runs.md) — và nó không giống dự đoán ban đầu:
 #
-# Nếu lần 1 fail thì đó không phải sự cố của workflow, đó là **kết quả**: cùng test plan, cùng
-# SUT, cùng số VU, chỉ khác máy chạy.
+#   Lượt 1   5 VU · ngưỡng 200ms  → PASS, p95 **7ms**   (local 20 VU: 8ms)
+#   Lượt 2  20 VU · ngưỡng   8ms  → FAIL, p95 **101ms**  ← ngưỡng của local, chạy trên runner
+#   Lượt 3  20 VU · ngưỡng 200ms  → PASS, p95 ~100ms     ← ngưỡng của runner, cùng tải lượt 2
 #
-# Chạy tay:  gh workflow run perf-smoke.yml -f p95_ms=8
+# Dự đoán ban đầu viết ở đây là "runner 2 vCPU sẽ chậm hơn nên lượt ngưỡng-8ms fail". Sai một nửa:
+# ở **5 VU** runner nhanh **bằng** máy 12 lõi (7 vs 8ms) — ngưỡng 8ms đã **PASS**, tức cho tín hiệu
+# xanh giả. Chỉ khi ép **cùng 20 VU** như lượt local thì mới lộ: p95 8 → 101ms (**12,6 lần**),
+# p99 12 → 1186ms (**99 lần**). Sai chỗ nào: so lượt 1 với local trong khi hai lượt khác nhau CẢ
+# máy CẢ số VU — đúng họ lỗi #12 của bài này. Ghi thành lỗi #16 trong ai-audit.
+#
+# Bài học đi vào §4: ngưỡng phải **đi kèm mức tải**. Một smoke test nhỏ hơn thiết kế sẽ **đi qua**
+# đúng cái ngưỡng mà nó lẽ ra phải chặn.
+#
+# Chạy tay:  gh workflow run perf-smoke.yml -f p95_ms=8 -f threads=20
 # ============================================================================
 name: perf-smoke
 
@@ -119,7 +128,9 @@ jobs:
             echo "| Node | $(node -v) · Java $(java -version 2>&1 | head -1 | grep -oE '\"[^\"]+\"') |"
             echo "| \`products\` trong DB | **$(curl -fsS http://localhost:3000/api/products | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).length))')** dòng |"
             echo "| Ngưỡng p95 áp dụng | **${{ inputs.p95_ms || 200 }} ms** · VU ${{ inputs.threads || 5 }} · ${{ inputs.duration || 60 }}s |"
-          } >> "$GITHUB_STEP_SUMMARY"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          # tee, không chỉ >> : job summary KHÔNG lấy lại được qua API sau khi run xong, nên nếu chỉ
+          # ghi vào đó thì điều kiện đo biến mất khỏi bằng chứng. In ra stdout để nó nằm trong log.
 
       - name: Seed dữ liệu test + sinh test plan
         run: |

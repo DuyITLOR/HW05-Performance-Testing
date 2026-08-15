@@ -166,6 +166,46 @@ for S in "${SCENARIOS[@]}"; do
     echo ""
   fi
 
+  # ── Spike: chụp THÊM hai mốc nữa trong cửa sổ sốc ──────────────────────────
+  # Lượt Spike đầu tiên chụp đúng một ảnh ở giây 72 và bắt `node` ở 34,9%, trong khi đỉnh thật của
+  # lượt là 81,6%. Cửa sổ sốc rộng ~30 giây mà CPU trong đó KHÔNG phẳng: nó lên theo ramp 5s, đạt
+  # đỉnh, rồi tụt khi các VU bắt đầu chờ think-time lệch pha nhau. Một ảnh trong cửa sổ 30 giây là
+  # một lát cắt may rủi.
+  #
+  # Cách sửa không phải "chụp lại cho tới khi ra số đẹp" — đó là chọn bằng chứng. Cách sửa là chụp
+  # **cả ba mốc và giữ cả ba**: ảnh ở giây 72 vẫn là ảnh chính (§6 cần một ảnh), hai ảnh kia đi kèm
+  # để thấy CPU biến thiên thế nào trong chính cửa sổ sốc. Ba ảnh nói được nhiều hơn một, và không
+  # có ảnh nào bị loại.
+  if [ "$S" = "Spike" ]; then
+    echo ""
+    echo "  Cửa sổ sốc rộng ~30s và CPU trong đó KHÔNG phẳng → chụp thêm 2 mốc, GIỮ CẢ BA."
+    echo "  (Mẹo: Activity Monitor → View → Update Frequency → Very often (1s), nếu không cột"
+    echo "   %CPU chỉ đổi mỗi 5 giây và ảnh dễ bắt trượt đỉnh.)"
+    PREV=$AT
+    for NEXT in 80 88; do
+      GAP=$((NEXT - PREV))
+      EXTRA="$SHOTS/activity-spike-t${NEXT}.png"
+      for ((t = 0; t < GAP; t += 2)); do
+        printf "\r  Còn %2ds tới mốc giây %s…   " "$((GAP - t))" "$NEXT"
+        sleep 2
+      done
+      printf "\r%-70s\r" " "
+      if [ "$AUTO" = "1" ]; then
+        screencapture -x "$EXTRA"
+        echo "  [OK] Đã chụp mốc giây $NEXT: $EXTRA"
+      else
+        printf '\a'
+        echo "  ┌────────────────────────────────────────────────────────────┐"
+        printf '  │  CHỤP LẦN NỮA (giây %-3s):  Cmd+Shift+4                     │\n' "$NEXT"
+        echo "  └────────────────────────────────────────────────────────────┘"
+        echo "  Lưu thành: $EXTRA"
+        echo ""
+      fi
+      PREV=$NEXT
+    done
+    echo "  Xong 3 mốc. Giữ cả ba — đừng xoá ảnh có số thấp, chính chỗ biến thiên là bằng chứng."
+  fi
+
   # Soak: thêm một ảnh ở cuối để so RSS đầu/cuối.
   if [ "$S" = "Soak" ]; then
     SECOND_AT=$((TOTAL - 30))
