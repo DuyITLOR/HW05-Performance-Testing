@@ -16,7 +16,7 @@
 |---|---|
 | **Repo bài làm (HW05)** | https://github.com/DuyITLOR/HW05-Performance-Testing |
 | **SUT (hệ thống được kiểm thử)** | https://github.com/ttbhanh/eshop-sut |
-| **GitHub Issues** | *(chờ mở — xem §9)* |
+| **GitHub Issues** | [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289) — cả hai có ảnh nhúng sẵn |
 | **Video demo (≥6 phút, unlisted)** | *(chờ quay — kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md))* |
 | **Bản đồ yêu cầu → file** | [TASKS.md](TASKS.md) — từng yêu cầu Task 1/2/3 nằm ở đâu |
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
@@ -224,14 +224,12 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ## 9. Việc còn lại
 
-Chạy `bash tools/package.sh <điểm> --check` để soát. Còn **3 mục**, tất cả cần sinh viên:
+Chạy `bash tools/package.sh <điểm> --check` để soát. Còn **2 mục**, cả hai cần sinh viên:
 
 1. **Video ≥6 phút**, unlisted, giọng mình → dán link vào README và main-report.
    Kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Chuyện đáng kể nhất: mở bảng
    ba batch ở §2.8, giải thích vì sao kết luận đầu tiên về nguyên nhân là sai.
-2. **2 GitHub Issue** cho BUG-P1/P2 — lệnh `gh issue create` có trong
-   [bug-report §4](bug-report/bug-report.md), ảnh bằng chứng đã có sẵn.
-3. **Human review** trong [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — 10 lượt, mỗi
+2. **Human review** trong [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — 10 lượt, mỗi
    lượt có dòng *(sinh viên bổ sung)*. Và **điền cột điểm** ở §3 của file này.
 
 ## 10. Năm điều quyết định cách đọc mọi con số của bài này

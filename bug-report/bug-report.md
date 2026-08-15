@@ -8,7 +8,7 @@
 > regressions) on your GitHub Issues page with screenshots. Logging performance issues such as
 > high latency or elevated error rate is encouraged but not penalised if absent."*
 
-**Tóm tắt:** 2 bug chức năng đã xác nhận bằng request thật · 1 ứng viên đã **bị loại sau khi
+**Tóm tắt:** 2 bug chức năng đã xác nhận bằng request thật và **đã mở Issue #288, #289** · 1 ứng viên đã **bị loại sau khi
 kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · 0 lỗi hiệu năng (4 lượt chạy đều 0% error).
 
 ---
@@ -25,7 +25,7 @@ kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · 0 lỗ
 | **Nguyên nhân** | [`server.js:344`](../../eshop-sut/backend/server.js#L344) — thiếu `authenticateToken`, trong khi mọi route order khác đều có |
 | **Loại** | bảo mật (IDOR) + lệch đặc tả |
 | **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — ảnh chụp toàn bộ output `verify-bugs.sh`, gồm cả ba khối |
-| **GitHub Issue** | *(sinh viên mở — xem mục 4)* |
+| **GitHub Issue** | [**#288**](https://github.com/DuyITLOR/group05_eshop/issues/288) — có ảnh nhúng sẵn |
 
 **Bằng chứng** (chạy lại được bằng `bash bug-report/verify-bugs.sh`):
 
@@ -59,7 +59,7 @@ vốn công khai" mà là **một route bị bỏ sót**, vì route order ngay b
 | **Thực tế** | Route tồn tại, cần token, **ghi thật vào bảng `coupon_usage`** ([`server.js:444`](../../eshop-sut/backend/server.js#L444)) |
 | **Loại** | tài liệu thiếu — ảnh hưởng trực tiếp tới việc chọn phạm vi kiểm thử: không ai test được endpoint mình không biết là có |
 | **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — cùng ảnh, khối thứ hai |
-| **GitHub Issue** | *(sinh viên mở)* |
+| **GitHub Issue** | [**#289**](https://github.com/DuyITLOR/group05_eshop/issues/289) — có ảnh nhúng sẵn |
 
 **Bằng chứng:**
 
@@ -135,28 +135,26 @@ Không mở Issue mới, chỉ ghi vì chúng **thay đổi cách đọc kết q
 
 ---
 
-## 4. Việc còn lại của sinh viên
+## 4. GitHub Issues — đã mở
+
+| Issue | Bug | Label |
+|---|---|---|
+| [**#288**](https://github.com/DuyITLOR/group05_eshop/issues/288) | BUG-P1 — IDOR ở `GET /api/orders/:id` | `security`, `performance-testing` |
+| [**#289**](https://github.com/DuyITLOR/group05_eshop/issues/289) | BUG-P2 — `coupon-usage` không có trong tài liệu | `documentation`, `performance-testing` |
+
+Cả hai issue **có ảnh nhúng sẵn**, không phải kéo-thả tay. Ảnh nằm trên branh
+[`evidence/23127178-hw05`](https://github.com/DuyITLOR/group05_eshop/tree/evidence/23127178-hw05/docs/bug-evidence/23127178-HW05)
+của repo SUT, nhúng bằng raw URL — cùng cách HW03 và HW04 đã dùng.
+
+Tạo lại được bằng:
 
 ```bash
-bash bug-report/verify-bugs.sh          # chạy lại toàn bộ bằng chứng ở mục 1 và 2
+DRY_RUN=1 bash bug-report/create-github-issues.sh   # xem trước
+bash bug-report/create-github-issues.sh              # tạo thật (chỉ chạy một lần)
 ```
 
-1. ~~Chụp ảnh terminal khi chạy script trên~~ — **xong**: [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png)
-2. Mở 2 GitHub Issue, mỗi cái kèm ảnh:
-
-```bash
-gh issue create --repo DuyITLOR/group05_eshop \
-  --title "BUG-P1: GET /api/orders/:id doc duoc don hang cua nguoi khac, khong can token" \
-  --body "$(sed -n '/^### BUG-P1/,/^### BUG-P2/p' bug-report/bug-report.md)"
-
-gh issue create --repo DuyITLOR/group05_eshop \
-  --title "BUG-P2: POST /api/coupon-usage khong co trong api_specification.md" \
-  --body "$(sed -n '/^### BUG-P2/,/^---/p' bug-report/bug-report.md)"
-```
-
-3. Điền số Issue vào bảng ở mục 1.
-
----
+Nội dung issue nằm ở [`issue-p1.md`](issue-p1.md) và [`issue-p2.md`](issue-p2.md) — sửa được như tài
+liệu bình thường, script chỉ chèn ảnh vào chỗ `__IMAGE__` rồi gửi lên.
 
 ## 5. Vấn đề hiệu năng: **không có**
 
