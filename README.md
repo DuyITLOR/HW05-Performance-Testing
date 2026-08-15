@@ -90,7 +90,9 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 > | 15/08 15:37 *(bộ nộp)* | ~900.000 | **5,7** | **18 ms** |
 >
 > Dữ liệu tăng đơn điệu 50k → 830k → 900k, nhưng p95 đi 26 → 7 → 18. Không theo dữ liệu. Theo
-> `load_1m` thì cùng chiều cả ba điểm. **Biến áp đảo là tải nền của máy**, không phải dữ liệu.
+> `load_1m` thì cùng chiều cả ba điểm. **Tương quan mạnh nhất là tải nền của máy**, không phải dữ liệu
+> — và cố ý **không** gọi là nguyên nhân: ba điểm dữ liệu, không có lượt nào giữ mọi biến khác cố định,
+> và §3.4 cho thấy `load_1m` **không** xếp đúng thứ tự 4 lượt Spike.
 >
 > Để so sánh: `load_1m` chênh 1,8 lần làm p95 chênh **2,6 lần**, còn tăng VU **gấp 10 lần** chỉ làm
 > p95 chênh 2,25 lần. Nhiễu môi trường lớn hơn tín hiệu chủ động tạo ra.
@@ -131,7 +133,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 |-----|----------|-------------|--------------|--------|
 | 1 | Task 1 — Load testing | 20 | **20** | 16.343 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **8ms**, 0% error · data-driven 4 file CSV · listener **Summary Report** · p95 tách theo endpoint → `import-products` lộ ra đắt nhất (10ms) · **ảnh `activity-load.png`** bắt `node` ở 13,4% CPU |
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
-| 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · một "phát hiện" của bản trước (p95 tăng lúc tải **rút**, 12ms) **không lặp lại** ở lượt nộp (8ms) → giữ cả hai cột và hạ nó xuống thành **quan sát chưa tái hiện được** · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
+| 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: **lượt được nộp không suy giảm** khi sốc dội vào (sample/10s tăng 20 lần, p95 5–7ms) — phát biểu cố ý giới hạn ở **một lượt**, vì một lượt Spike khác có p95 đỉnh **47ms** · một "phát hiện" của bản trước (p95 tăng lúc tải **rút**, 12ms) **không lặp lại** ở lượt nộp (8ms) → giữ cả hai cột và hạ nó xuống thành **quan sát chưa tái hiện được** · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
 | 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
 | 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
 | 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Điểm 10 có điều kiện:** §7 đòi demo skill trong video, nên dòng này chỉ đạt 10 **sau khi** video có đoạn dùng skill end-to-end trên một endpoint group. Chưa có video thì dòng này là **5**. |
@@ -263,7 +265,7 @@ chứng dựng mà §11 phạt · **cột điểm §3** đã điền ·
 
 ## 10. Năm điều quyết định cách đọc mọi con số của bài này
 
-1. **Tải nền của máy là biến áp đảo** — bài học đắt nhất, và có ba điểm dữ liệu: `load_1m` 5,2/3,1/5,7
+1. **Tải nền của máy là biến tương quan mạnh nhất** (không phải nguyên nhân đã chứng minh) — bài học đắt nhất, và có ba điểm dữ liệu: `load_1m` 5,2/3,1/5,7
    → p95 Stress 26/7/18 ms. Chênh 1,8 lần tải nền tạo chênh **2,6 lần** p95, còn tăng VU **gấp 10
    lần** chỉ tạo chênh 2,25 lần. Mọi con số chỉ có nghĩa kèm điều kiện `load_1m` ≈ 4,4–6,0.
    Xem [§2.8](report/main-report.md).

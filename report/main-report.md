@@ -168,7 +168,7 @@ lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 | 9 | Khẳng định `import-products` báo sai số dòng insert | **Bác bỏ khi chạy thử**: 5/5, 60/60, 2/3 đều đúng. Đã lan vào 5 file | phương pháp: suy luận từ code trình bày như sự thật đã kiểm | giữ ở mục "đã loại" kèm bảng kiểm chứng |
 | 10 | `Math.min(...array)` trong summarizer | Tràn call stack với `.jtl` **264.141** sample; chạy qua bình thường ở file 16k | đặc điểm dữ liệu | thay bằng `reduce` |
 | 11 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"* | Dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của endpoint không liên quan gì tới lockout. Không sai số đo, nhưng là **nhãn sai nằm trong bằng chứng gốc** | suy luận không mở rộng — **cùng loại lỗi #7** | tham số hoá `reason` theo từng nhánh |
-| 12 | Kết luận **kích thước dữ liệu** gây suy giảm p95 2,4–6,4 lần, kèm cơ chế SQLite một writer | **Nhân quả rút từ một so sánh không kiểm soát biến nào.** Batch sạch bác bỏ: DB **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến thật là `load_1m`. Kết luận sai đã lan tới **headline README**, một **nhánh flow chart Task 3** và một dòng **self-assessment** | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` |
+| 12 | Kết luận **kích thước dữ liệu** gây suy giảm p95 2,4–6,4 lần, kèm cơ chế SQLite một writer | **Nhân quả rút từ một so sánh không kiểm soát biến nào.** Batch sạch bác bỏ: DB **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến tương quan mạnh nhất là `load_1m` — **cũng không được gọi là nguyên nhân**, vì §3.4 cho thấy nó không xếp đúng thứ tự 4 lượt Spike. Kết luận sai đã lan tới **headline README**, một **nhánh flow chart Task 3** và một dòng **self-assessment** | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` |
 | 13 | `soak-drift.mjs` tính "trôi RSS" = mẫu cuối / mẫu đầu | Mẫu đầu (19,7 MB) lấy **trước khi warm-up xong** → in **+228,9%**, đọc y như một vụ rò rỉ bộ nhớ. Thực tế RSS phẳng ~78 MB suốt 12 phút; nửa đầu so nửa sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so **nửa đầu / nửa sau**; giữ dòng cũ kèm cảnh báo |
 | 17 | §3.4 ghi p95 đỉnh ba lượt Spike là "47 · 65 · 7ms" và quy nguyên nhân cho `load_1m` | Đo lại từ `.jtl`: **47 · 8 · 12ms**. `load_1m` **không xếp đúng thứ tự** — tải nền cao nhất (6,0) cho 12ms, lượt 47ms chỉ 4,5. Số 7ms tự mâu thuẫn với bảng cửa sổ 10s ngay phía trên | **bản sửa không mang sang chỗ khác**: §2.8 đã thu hồi lối quy nhân quả này, §3.4 dùng đúng nó thì để nguyên | đo lại 3 `.jtl` + 3 resources; kết luận đổi thành "phương sai lớn nhất, nguyên nhân **chưa biết**" |
 
@@ -352,9 +352,20 @@ Mức độ lan của lỗi: kết luận đó từng là **headline của READM
 
 **Kết luận thay thế, kiểm chứng được bằng ba cặp số ở bảng trên:**
 
-> Trên máy cá nhân dùng chung với công việc khác, **tải nền là biến áp đảo**. `load_1m` chênh 1,8 lần
-> (3,1 → 5,7) làm p95 chênh **2,6 lần**. Để so sánh: tăng số VU **gấp 10 lần** (20 → 200) chỉ làm
-> p95 đi từ 8 lên 18 ms, tức **2,25 lần**. Nhiễu môi trường lớn hơn tín hiệu mình chủ động tạo ra.
+> Trên máy cá nhân dùng chung với công việc khác, `load_1m` là **biến tương quan mạnh nhất trong ba
+> điểm dữ liệu này** — chưa đủ để gọi là nguyên nhân. Nó chênh 1,8 lần (3,1 → 5,7) trong khi p95 chênh
+> **2,6 lần**; để so sánh, tăng số VU **gấp 10 lần** (20 → 200) chỉ làm p95 đi từ 8 lên 18 ms, tức
+> **2,25 lần**. Điều nói được: **nhiễu môi trường lớn hơn tín hiệu mình chủ động tạo ra.**
+
+**Vì sao không gọi `load_1m` là nguyên nhân, dù rất muốn.** Ba điểm dữ liệu, không có lượt nào **giữ
+mọi biến khác cố định rồi chỉ đổi tải nền** — tức vẫn là *tương quan*, đúng loại lập luận mà mục này
+đang thu hồi. Và có bằng chứng ngược ngay trong bài: ở [§3.4](#34-đo-hồi-phục-sau-cú-sốc-spike),
+bốn lượt Spike có `load_1m` 4,5 / 2,2 / 6,0 / 3,3 nhưng p95 đỉnh **47 / 8 / 12 / 9 ms** — **không xếp
+đúng thứ tự**. Nếu tải nền là nguyên nhân chi phối thì thứ tự đó phải đúng. Nó không đúng.
+
+Phát biểu chịu được chất vấn: **tải nền đủ lớn để làm mọi so sánh giữa hai lượt trở nên vô nghĩa
+nếu không kiểm soát nó** — và thế là đủ cho mọi kết luận bài này cần. Nguyên nhân đầy đủ thì **chưa
+biết**, và cách kiểm là chạy lại cùng cấu hình ở nhiều mức `load_1m` khác nhau, việc bài này chưa làm.
 
 Hệ quả trực tiếp cho Task 3 — xem §4.3, mục *"Nhiễu áp đảo tín hiệu"*.
 
@@ -403,7 +414,7 @@ Không lỗi nào do đọc sai con số; tất cả do đọc **thiếu** con s
 
 1. **Chạy `node` với cluster / nhiều worker.** Căn cứ mạnh nhất từ số liệu: CPU chạm 97,7% của **một**
    lõi trong khi máy còn **11 lõi rảnh**. Trần hiện tại là trần một-luồng, không phải trần phần cứng.
-2. **Kiểm soát tải nền khi đo.** §2.8: biến áp đảo. Không có nó thì mọi so sánh giữa hai lượt đều vô
+2. **Kiểm soát tải nền khi đo.** §2.8: tương quan mạnh nhất đo được. Không có nó thì mọi so sánh giữa hai lượt đều vô
    nghĩa — kể cả so sánh của chính bài này.
 3. **Dọn dữ liệu test sau mỗi lượt.** Bộ test tự đẩy `products` từ 5 dòng lên ~900.000. Để một biến
    trôi không kiểm soát qua các lượt là lỗi thiết kế của bộ test.
@@ -424,11 +435,14 @@ kèm cột cuối là cùng cửa sổ đó ở lượt 15:47 để đối chi�
 | **80–90** | **212** | **10.121** | **7** | 18 | *7 / 15* |
 | 90–100 | 12 | 482 | **8** | 14 | *12 / 52* |
 | 100–110 | 12 | 501 | **6** | 8 | *6 / 10* |
-| 100–110 | 12 | 488 | **6** | 10 |
 
-**Server hấp thụ trọn cú sốc.** VU nhảy từ 12 lên **212 trong 5 giây**, sample/10s tăng từ 500 lên
-**10.239** (gấp **20 lần**), mà p95 đứng nguyên 7–8ms. Dấu hiệu duy nhất là p99 nhích lên 46ms ở cửa
-sổ đầu rồi về 15.
+**Trong lượt được nộp, không quan sát thấy suy giảm nào khi cú sốc dội vào.** VU nhảy từ 12 lên
+**212 trong 5 giây**, sample/10s tăng từ ~500 lên **10.231** (gấp **20 lần**), mà p95 **giảm** nhẹ
+xuống 5–7ms so với 7–8ms lúc nền. Không có 5xx, không timeout.
+
+**Phát biểu này cố ý bị giới hạn ở một lượt.** Nói "server hấp thụ trọn cú sốc" là một phát biểu về
+**hệ thống**, và bốn lượt Spike không cho phép nói thế: một lượt có p95 đỉnh cửa sổ **47ms** (bảng
+dưới). Cái đo được là *lượt này không suy giảm*, không phải *hệ thống luôn hấp thụ được*.
 
 **Một "phát hiện" của bản báo cáo trước, và nó không lặp lại được.** Ở lượt 15:47, cửa sổ **90–100s**
 — lúc **tải rút đi** — cho p95 **12ms** và p99 **52ms**, cao hơn cả lúc đang chịu 212 VU. Báo cáo gọi
@@ -636,7 +650,7 @@ Nhiễu đến **trong lúc** đo. Bài này **không có** dữ liệu lấy m�
 chỉ ra thủ phạm, nên đây là **chưa biết**, không phải đã giải thích — đúng bài học của §2.8, chỗ mà
 một cơ chế nghe hợp lý đã được nhận làm nguyên nhân.
 
-**Hai thứ ổn định qua cả 5 lượt**, và đây là phần dùng được:
+**Hai thứ ổn định qua cả 6 lượt**, và đây là phần dùng được:
 
 1. **Error rate 0%** ở mọi lượt, kể cả lượt p95 vọt lên 101ms, và hình dạng phân bố mã trả về giữ
    nguyên (`200` ~79% · `400` FR-10 ~18% · `403` lockout ~3%).
@@ -719,6 +733,6 @@ Năm giới hạn, xếp theo mức ảnh hưởng tới kết luận:
 
 | Đổi gì | Vì sao |
 |---|---|
-| Đóng mọi ứng dụng khác, ghi `load_1m` trước/sau, chỉ so lượt có tải nền tương đương | §2.8 — biến áp đảo, và tôi đã suýt công bố một kết luận sai vì bỏ qua nó |
+| Đóng mọi ứng dụng khác, ghi `load_1m` trước/sau, chỉ so lượt có tải nền tương đương | §2.8 — tương quan mạnh nhất đo được, và tôi đã suýt công bố một kết luận **nhân quả** sai vì bỏ qua nó |
 | Restore snapshot DB trước mỗi lượt | `products` trôi từ 5 lên 830.139 dòng **do chính bộ test**; không cô lập được biến này thì không trả lời được câu hỏi về kích thước dữ liệu |
 | Tách load generator sang máy khác | JMeter và `node` tiêu CPU xấp xỉ nhau ở Stress, nên không tách được chi phí của hai bên |
