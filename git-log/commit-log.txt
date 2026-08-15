@@ -1,3 +1,43 @@
+* 95a0d80 2026-08-15 23:20:34 +0700 DuyITLOR
+|   docs: pull three conclusions back to what the data supports
+| The reviewer's sharpest point is that several conclusions are stated more strongly than the evidence
+| carries, and it lands because the submission already contradicted itself: §2.8 called background load
+| 'bien ap dao' - the dominant variable - while §3.4 showed load_1m does not order the four Spike runs
+| at all. 4.5 / 2.2 / 6.0 / 3.3 against peak-window p95 of 47 / 8 / 12 / 9 ms. If it were the dominant
+| cause that ordering would hold.
+| 
+| So load_1m is now the strongest correlate across three data points, explicitly not a cause, with the
+| counter-evidence from §3.4 cited in §2.8 itself rather than left in a different section for a reader
+| to notice. The claim that survives is enough for everything the report needs: background load is large
+| enough to make any two-run comparison meaningless unless it is controlled. The full cause is unknown,
+| and the way to test it is stated - same configuration at several load_1m levels, which was not run.
+| 
+| 'Server hap thu tron cu soc' was a claim about the system drawn from one run. Narrowed to what was
+| measured: the submitted run showed no degradation, p95 dropping to 5-7ms from a 7-8ms baseline while
+| throughput rose 20x. One of the four Spike runs peaked at 47ms, so absorption is a property of this
+| run, not a demonstrated property of the SUT.
+| 
+| 'Van de hieu nang: khong co' likewise became: no timeouts and no 5xx, but node at 97.7% of one core
+| and a stretching tail - which is a saturation signal, not a clean bill of health.
+| 
+| Also fixed: a leftover row from the previous 10-second window table survived the replacement, so §3.4
+| listed 100-110s twice with different sample counts. That is the kind of defect the whole
+| number-syncing exercise exists to catch, and it was mine.
+| 
+|  README.md                    |   8 +++++---
+|  ai-audit/ai-audit-report.pdf | Bin 677856 -> 677856 bytes
+|  ai-audit/ai-critique.pdf     | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf    | Bin 349229 -> 349229 bytes
+|  report/main-report.md        |  36 +++++++++++++++++++++++++-----------
+|  report/main-report.pdf       | Bin 971333 -> 984497 bytes
+|  6 files changed, 30 insertions(+), 14 deletions(-)
+| 
+* a94d278 2026-08-15 23:06:46 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 49 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 49 insertions(+)
+| 
 * b4187bd 2026-08-15 23:06:44 +0700 DuyITLOR
 |   docs: fix the four factual defects in the second review, skip the rest with reasons
 | The reviewer read raw files, not just prose - their count of step 5 at Stress (400 responses of 200,
