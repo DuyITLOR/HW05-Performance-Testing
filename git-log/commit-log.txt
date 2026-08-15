@@ -1,3 +1,52 @@
+* b4187bd 2026-08-15 23:06:44 +0700 DuyITLOR
+|   docs: fix the four factual defects in the second review, skip the rest with reasons
+| The reviewer read raw files, not just prose - their count of step 5 at Stress (400 responses of 200,
+| 51,301 of 400) matches the .jtl exactly. Four findings were real:
+| 
+| bug-report §5 was still describing the 13/08 batch: 550 req/s, p95 26ms, login 40ms, node CPU 19.7%,
+| JMeter 60.9%. Replaced with the submitted batch in a table, and the conclusion rewritten. 'Stress
+| chua cham gioi han SUT' was weaker than the data - node sat at 97.7% of one core, which is the
+| architectural ceiling for a single JS thread, with p99 at 124ms and max at 3,691ms. But no tier above
+| 200 VU was run, so the breaking point is not located either. Both 'has not reached the limit' and
+| 'found the breaking point' overstate what was measured.
+| 
+| The same section said '0% error' with no statement of the convention behind it, which makes the
+| number meaningless: the plans mark FR-10's 400 and lockout's 401/403 as successes. Spelled out with
+| the actual split, plus the consequence the reviewer identified - 539.7 req/s is HTTP workflow
+| throughput, not completed order-transition transactions. Real write load comes from step 4's
+| import-products, not step 5. No business-throughput figure is claimed because none was counted.
+| 
+| hardware-report.md listed 'JMeter | chua cai' after four scenarios had been run with it. Now 5.6.3,
+| with the Java that actually ran it recorded as aarch64 - which matters because the system default on
+| this machine is Temurin 8 x86_64 under Rosetta, and mistake #1 was preflight reporting Java OK with
+| an empty value.
+| 
+| §4.4 named the implemented branch but never listed what was left out, so a reader could take the
+| whole 15-node model as built. Added a status table: trigger filtering, reduced-plan runs, the
+| threshold gate with exit 1, and artifact upload on failure all ran; per-endpoint baseline comparison,
+| the two-baselines-per-job ratio, reproducibility gating, the weekly Stress schedule and PR comments
+| did not. The part §4.4 proves is mandatory - comparing against a baseline - is exactly the part not
+| yet built, and saying so is the point.
+| 
+| Not doing: a stepped soak at 40/60/80 VU to find a true endurance maximum, and re-running Stress to
+| save a screenshot a few seconds earlier. Both create a fresh batch needing screenshots, run logs,
+| manifest and cross-document sync, which is how the stale numbers above got there in the first place.
+| 
+|  ai-audit/ai-audit-report.pdf        | Bin 677856 -> 677856 bytes
+|  ai-audit/ai-critique.pdf            | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.md            |  50 ++++++++++++++++++++++++++++------
+|  bug-report/bug-report.pdf           | Bin 296646 -> 349229 bytes
+|  report/main-report.md               |  20 ++++++++++++++
+|  report/main-report.pdf              | Bin 934522 -> 971333 bytes
+|  resource-monitor/hardware-report.md |  14 ++++++++--
+|  7 files changed, 74 insertions(+), 10 deletions(-)
+| 
+* 8d2603f 2026-08-15 22:49:26 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 70 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 70 insertions(+)
+| 
 * b772704 2026-08-15 22:49:25 +0700 DuyITLOR
 |   docs: clear out stale state the external review caught, and stamp the screenshots
 | An outside review read the packaged submission and found real defects. Working through them:
