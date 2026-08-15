@@ -108,7 +108,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 >
 > - ~~**Task 3 −1:** flow chart là thiết kế trên giấy, chưa lần nào chạy thật trong pipeline CI.~~
 >   → **Đã bịt.** Nhánh "PR pipeline" thành GitHub Actions thật
->   ([`.github/workflows/perf-smoke.yml`](.github/workflows/perf-smoke.yml)) và **đã chạy 5 lượt**,
+>   ([`.github/workflows/perf-smoke.yml`](.github/workflows/perf-smoke.yml)) và **đã chạy 6 lượt**,
 >   trong đó **một lượt build ĐỎ thật** vì vượt ngưỡng. Bằng chứng: [`ci/ci-runs.md`](ci/ci-runs.md).
 >   Kết quả còn **sửa lại chính §4.3**: ba lượt cùng cấu hình cho p95 **101 / 15 / 8 ms**, nên ngưỡng
 >   p95 tuyệt đối bị bỏ hẳn, thay bằng error rate + so tương đối trong cùng lượt (§4.4).

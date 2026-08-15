@@ -73,7 +73,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 | Giải thích **từng** nhánh | [`§4.2`](report/main-report.md) — 8 nhánh | — |
 | **Trade-off** (chi phí, báo động giả) | [`§4.3`](report/main-report.md) — **7 trade-off**, mỗi cái nói rõ *cái phải trả* | — |
 | Liên kết về số liệu thật của bài | [`§2.8`](report/main-report.md) và [`§3.4`](report/main-report.md) | `npm run summary` |
-| **Đã chạy thật, không chỉ vẽ** | [`§4.4`](report/main-report.md) + [`ci/ci-runs.md`](ci/ci-runs.md) — **5 lượt CI**, **1 lượt build ĐỎ**; kết quả **sửa lại chính §4.3** | `gh run list --workflow=perf-smoke.yml` · `verify-all.sh` mục 8 · cổng chạy ngoài CI được: `node tools/ci-gate.mjs <jtl> --p95 8` |
+| **Đã chạy thật, không chỉ vẽ** | [`§4.4`](report/main-report.md) + [`ci/ci-runs.md`](ci/ci-runs.md) — **6 lượt CI**, **1 lượt build ĐỎ**; kết quả **sửa lại chính §4.3** | `gh run list --workflow=perf-smoke.yml` · `verify-all.sh` mục 8 · cổng chạy ngoài CI được: `node tools/ci-gate.mjs <jtl> --p95 8` |
 
 ## Các mục còn lại của đề
 

@@ -1,4 +1,4 @@
-# Continuous Performance Testing — 5 lượt CI thật
+# Continuous Performance Testing — 6 lượt CI thật
 
 - **Sinh viên:** Lê Nhựt Duy — **MSSV:** 23127178
 - **Workflow:** [`.github/workflows/perf-smoke.yml`](../.github/workflows/perf-smoke.yml)
@@ -13,12 +13,12 @@ API → sinh test plan từ **cùng một** định nghĩa workflow → JMeter n
 định build đỏ/xanh** → lưu `.jtl` + dashboard làm artifact.
 
 Mục đích **không** phải lấy một dấu tích xanh. §4 lập luận rằng ngưỡng hiệu năng **tuyệt đối** là vô
-nghĩa vì nhiễu môi trường lớn hơn tín hiệu — và trước hôm nay đó là **suy đoán trên giấy**. 5 lượt
+nghĩa vì nhiễu môi trường lớn hơn tín hiệu — và trước hôm nay đó là **suy đoán trên giấy**. 6 lượt
 dưới đây là phép kiểm nó.
 
 ---
 
-## 1. Năm lượt, kết quả
+## 1. Sáu lượt, kết quả
 
 Runner mọi lượt: `Linux x86_64` · **2 vCPU** · RAM 7 GB · `ubuntu-24.04` · Node v20.20.2 · Java
 17.0.20 · JMeter 5.6.3 · DB **5 dòng `products`** (bản `database.sqlite` sạch trong repo SUT).
@@ -31,6 +31,18 @@ Test plan: **cùng file** `23127178_Load_*.jmx` sinh từ `tools/gen-test-plans.
 | 3 | `31878808200` | push | 5 | 200 ms | 779 | **8** | 223 | 395 | 0% | 0,49 | **PASS** |
 | 4 | `31878937737` | tay | **20** | 200 ms | 2.646 | **15** | 918 | 2.296 | 0% | 0,34 | **PASS** |
 | 5 | `31879092139` | tay | **20** | 200 ms | 2.763 | **8** | 32 | 720 | 0% | 0,88 | **PASS** |
+| 6 | `31879549205` | push | 5 | 200 ms | 779 | **8** | 223* | 395* | 0% | *(chưa đọc)* | **PASS** |
+
+\* Lượt 6 cho **đúng 779 sample và p95 8ms** — trùng khít lượt 3, cùng 5 VU. Hai lượt 5 VU cho kết
+quả y hệt nhau, trong khi ba lượt 20 VU lệch 12,6 lần: **phương sai bật lên theo mức tải**, không có
+sẵn ở mọi mức.
+
+**Một điều chưa giải thích được về lượt 6:** nó do `push` kích hoạt, nhưng đối chiếu
+`git diff --name-only` của push đó thì **không file nào khớp** danh sách `paths` của workflow
+(`test-plans/**`, `tools/gen-test-plans.py`, `tools/ci-gate.mjs`, `.github/workflows/perf-smoke.yml`).
+Giả thuyết chưa kiểm: `concurrency: group: perf-smoke` xếp hàng nên lượt này là lượt bị hoãn từ một
+push trước. Ghi là **chưa biết** — đúng nguyên tắc của §2.8, không nhận một cơ chế nghe hợp lý làm
+nguyên nhân khi chưa kiểm.
 
 Đối chiếu local (MacBook 12 lõi, batch nộp): **20 VU · p95 8ms · p99 12 · max 84 · 0% error.**
 
@@ -77,9 +89,9 @@ chiều. Nghĩa là nhiễu đến **trong lúc** đo (máy ảo dùng chung h�
 **không có** dữ liệu lấy mẫu tài nguyên xuyên lượt trên CI để chỉ ra thủ phạm. Ghi nhận là **chưa
 biết**, không đoán.
 
-### 2.4 Điều duy nhất ổn định qua cả 5 lượt: **error rate 0%**
+### 2.4 Điều duy nhất ổn định qua cả 6 lượt: **error rate 0%**
 
-Cả 5 lượt đều 0% error, kể cả lượt p95 vọt lên 101ms, và phân bố mã trả về giữ nguyên hình dạng
+Cả 6 lượt đều 0% error, kể cả lượt p95 vọt lên 101ms, và phân bố mã trả về giữ nguyên hình dạng
 (`200` chiếm ~79%, `400` của FR-10 ~18%, `403` lockout ~3%). Vậy **error rate mang được qua môi
 trường, còn phân vị độ trễ thì không**. Đó là một kết luận dùng được: cổng CI nên chặn bằng error
 rate và bằng **so sánh tương đối trong cùng một lượt**, không bằng ngưỡng p95 tuyệt đối.

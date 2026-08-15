@@ -566,11 +566,11 @@ cùng lúc với job của người khác. Nên baseline **không thể** là "p
 | **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **9,4 lần** avg. Nhưng p95 cũng không bắt được đuôi: max **363ms** trong khi p95 7ms, gấp **52 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load 3,4× → Stress 9,4×), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
 | **Perf test tự làm hỏng điều kiện đo của nó** | Chính bộ test này đã đẩy `products` từ ~50k lên 436k dòng. Nếu chạy trong CI mà không dọn, mỗi lượt lại chậm hơn lượt trước vì lý do không liên quan gì tới code → baseline trôi và mọi so sánh mất nghĩa. Bắt buộc: teardown dọn dữ liệu, hoặc restore snapshot DB trước mỗi lượt |
 
-### 4.4 Đã chạy thật trong CI — 5 lượt, và kết quả sửa lại chính §4.3
+### 4.4 Đã chạy thật trong CI — 6 lượt, và kết quả sửa lại chính §4.3
 
 Mọi thứ ở §4.1–4.3 là **thiết kế trên giấy**, nên nhánh "PR pipeline" được hiện thực thành GitHub
 Actions thật ([`.github/workflows/perf-smoke.yml`](../.github/workflows/perf-smoke.yml)) và **chạy
-5 lượt**: checkout SUT → khởi động → seed qua API → sinh test plan từ cùng một định nghĩa → JMeter
+6 lượt**: checkout SUT → khởi động → seed qua API → sinh test plan từ cùng một định nghĩa → JMeter
 non-GUI → **cổng ngưỡng quyết định build đỏ/xanh** ([`tools/ci-gate.mjs`](../tools/ci-gate.mjs)).
 Bằng chứng đầy đủ, output nguyên văn: [`ci/ci-runs.md`](../ci/ci-runs.md).
 
