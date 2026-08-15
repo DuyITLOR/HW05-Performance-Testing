@@ -1,3 +1,73 @@
+* b772704 2026-08-15 22:49:25 +0700 DuyITLOR
+|   docs: clear out stale state the external review caught, and stamp the screenshots
+| An outside review read the packaged submission and found real defects. Working through them:
+| 
+| §2.5 was the worst. Its evidence table still cited .jtl files from the 20260814 batch that had been
+| deleted, and the prose read 'Anh Activity Monitor: chua co' while five screenshots sit in the
+| directory. The main report contradicted its own evidence folder. Rewritten against the runs actually
+| submitted, with the CPU figure each screenshot reads in the last column.
+| 
+| §4.3 was arguing Task 3 from superseded numbers: background load causing a 10x p95 spread and 10x VU
+| moving p95 only 6 to 7ms, against the submitted batch's 2.6x and 8-to-18ms. Same for p99/avg 9.4x and
+| max 363ms, now 13.0x and 3,691ms recomputed from the .jtl. A proposal resting on numbers that no
+| longer match the data it cites is worse than one with no numbers.
+| 
+| 'Max stable RPS 62.8' overclaimed and the same file said so two sections later - Stress reached 539.7
+| req/s at 0% error. Renamed to the rate that was verified sustainable, with an explicit note that
+| finding a maximum means stepping sustained load until the stability criterion breaks. Fixed in the
+| threshold doc, the report, review-task1 and soak-drift.mjs's own output.
+| 
+| README's §14 checklist was frozen several rounds back: 10 mistakes, 6 Task 2 errors, 8 interactions,
+| 298 words, Issues 'Thieu'. §6 said four limitations over five numbered items. Task 3 in one place
+| said 5 CI runs.
+| 
+| Two of the review's points were about integrity rather than staleness, and both stand:
+| 
+|   - Agent Skills was self-scored 10/10 with 'Cho video demo skill' sitting in its own justification
+|     column. The total is now marked conditional - 100 only once the video exists, 90 without it, and
+|     0 under §17 either way if it is missing.
+|   - README linked docs/PLAYBOOK.md and docs/kich-ban-video-demo.md, neither of which package.sh
+|     ships, so a grader clicking them inside the zip gets nothing. Now plain text, not links, and the
+|     packaged tree is checked for dead relative links.
+| 
+| The sharpest point was that the screenshot validator keyed on mtime, which cp -R resets, so running
+| it inside the zip would flag every genuine screenshot as fake. tools/stamp-screenshots.mjs writes a
+| manifest holding sha256 plus captured_at plus the matching run and offset, and verify-all.sh reads
+| that instead. The hash is what gives it weight; a recorded time alone is one JSON edit away from
+| meaningless.
+| 
+| The manifest immediately earned itself: activity-stress.png saves a few seconds after the Stress run
+| ends, because Cmd+Shift+4 writes the file on mouse release. The frame is genuine - it reads node at
+| 91.7%, which only happens at the 200 VU tier - and that is now stated in §2.5 rather than left
+| sitting on the boundary where the old check passed it by rounding.
+| 
+| 37 PASS, 1 FAIL. The FAIL is the video.
+| 
+|  README.md                                  |  29 ++++----
+|  TASKS.md                                   |   2 +-
+|  ai-audit/ai-audit-report.md                |   2 +-
+|  ai-audit/ai-audit-report.pdf               | Bin 677859 -> 677856 bytes
+|  ai-audit/ai-critique.pdf                   | Bin 55844 -> 55844 bytes
+|  ai-audit/design-log.md                     |   4 +-
+|  bug-report/bug-report.pdf                  | Bin 296646 -> 296646 bytes
+|  docs/review-task1.md                       |   8 +--
+|  endurance/endurance-threshold.md           |   7 +-
+|  package.json                               |   3 +-
+|  report/main-report.md                      |  52 ++++++++++-----
+|  report/main-report.pdf                     | Bin 902018 -> 934522 bytes
+|  resource-monitor/screenshots/manifest.json |  62 +++++++++++++++++
+|  tools/package.sh                           |   1 +
+|  tools/soak-drift.mjs                       |   5 +-
+|  tools/stamp-screenshots.mjs                |  96 +++++++++++++++++++++++++++
+|  tools/verify-all.sh                        |  38 ++++++++++-
+|  17 files changed, 266 insertions(+), 43 deletions(-)
+| 
+* b477b9b 2026-08-15 22:35:44 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 28 ++++++++++++++++++++++++++++
+|  1 file changed, 28 insertions(+)
+| 
 * 70b2c0c 2026-08-15 22:35:42 +0700 DuyITLOR
 |   docs(ci): a sixth run appeared, and I cannot say what triggered it
 | gh run list shows six perf-smoke runs where ci/ci-runs.md documented five. The sixth is a 5-VU
