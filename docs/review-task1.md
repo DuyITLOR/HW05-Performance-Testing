@@ -5,11 +5,11 @@
 >
 > Task 2 / Task 3 / các mục §5–§15: xem [`TASKS.md`](../TASKS.md).
 
-**Tình trạng: 5/9 ý xong · 1 ý hở phần quy trình · 3 ý chưa làm.**
+**Tình trạng: 6/9 ý xong · 3 ý chưa làm.**
 
 | Ý | Yêu cầu | Trạng thái |
 |---|---|---|
-| 1 | Design and generate with AI | Nội dung xong · **hở "step by step"** |
+| 1 | Design and generate with AI | **Xong** — nhật ký 7 bước ở `ai-audit/design-log.md`; còn 1 việc của sinh viên |
 | 2 | Make the workflow data-driven | **Xong** |
 | 3 | Use three different report views | **Xong** |
 | 4 | Name each test plan | **Xong** |
@@ -60,16 +60,37 @@ sed -n '/### 2.1 Tham số/,/### 2.2/p' report/main-report.md
 - [ ] Đọc §2.1, đồng ý với từng con số (20 VU · ramp 60s · think 1–3s/iteration…)
 - [ ] Mở 1 file `.jmx` trong JMeter GUI, xác nhận 6 sampler đúng thứ tự
 
-### ⚠️ Chỗ hở — cần bạn, tôi không tự vá được
+### Bằng chứng "step by step" — [`ai-audit/design-log.md`](../ai-audit/design-log.md)
 
-Đề đòi *"step by step, **not** with a single generic prompt"*.
+Đề đòi *"step by step, **not** with a single generic prompt"*. Nhật ký ghi đủ 7 bước, mỗi bước:
+hỏi gì · căn cứ nào · quyết ra sao · thay đổi cụ thể nào trong file.
 
-Quy trình 7 bước **có thật**: [`.claude/skills/perf-test-plan/SKILL.md`](../.claude/skills/perf-test-plan/SKILL.md), và mỗi lượt trong AI Audit đều có trường *"Bước trong quy trình"*. Nhưng **prompt nguyên văn của bạn** trong audit là câu ngắn — *"hãy thực hiện toàn bộ giùm tui"*, *"giờ tui phải làm j"*. Người chấm đọc đúng phần prompt sẽ thấy nó gần "một prompt gộp" hơn là 7 bước.
+| Bước | Nội dung | Bắt được lỗi |
+|---|---|---|
+| 1 | Nạp 5 đặc điểm SUT trước khi chốt tham số | — (4/5 về sau gây lỗi nếu bỏ qua) |
+| 2 | Chốt tham số, mỗi con số một lý do | — |
+| 3 | Sinh `.jmx` bằng script để 3 plan **không thể** lệch workflow | — |
+| 4 | Assertion kiểm cả mã lỗi lẫn nội dung | — |
+| 5 | Human review theo checklist 8 mục | **1 lỗi** |
+| 6 | Smoke test 20–40s trước lượt 6 phút | **2 lỗi** |
+| 7 | Đọc kết quả trước khi tin nó | **3 lỗi** (+4 lỗi tooling) |
 
-Hai cách vá:
+Con số đắt nhất trong nhật ký: **7/10 lỗi không làm test plan báo lỗi.** Không có bước 5–6–7 thì cả
+7 lỗi đó đi thẳng vào báo cáo.
 
-- [ ] **Cách rẻ** — điền trường **Human review** trong 8 lượt của [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md). Mỗi lượt vài dòng: bạn đã kiểm gì, quyết gì, sửa gì. Việc này biến audit từ *"AI làm, tôi xem"* thành *"tôi dẫn từng bước"*.
-- [ ] **Cách chắc hơn** — hỏi AI thêm vài lượt **tách bước** cho một scenario, ghi vào audit: hỏi riêng "chọn ramp-up cho Stress, giải thích" → "assertion nào cho bước 4" → "listener nào cho Spike, vì sao". ~15 phút, cho ra chuỗi prompt đúng hình dạng đề mô tả.
+- [ ] Đọc `design-log.md`, đối chiếu với `.jmx` xem các quyết định có khớp file thật không
+
+### ⚠️ Còn một việc chỉ bạn làm được
+
+`design-log.md` chứng minh **quy trình** đi từng bước. Nhưng `ai-audit-report.md` ghi **prompt
+nguyên văn của bạn**, và những prompt đó ngắn — *"hãy thực hiện toàn bộ giùm tui"*. Hai file cố ý
+tách nhau: trộn lại thành "sinh viên đã hỏi 7 câu" là bịa, và §11 cấm đúng điều đó.
+
+Chỗ khép lại khoảng cách này là **trường Human review** trong 8 lượt audit — nó cho thấy **bạn**
+quyết gì ở mỗi bước, không phải AI. Tôi cố ý để trống, không viết thay.
+
+- [ ] Điền Human review cho 8 lượt trong [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md) — mỗi lượt vài dòng: kiểm gì, thấy gì, quyết gì
+- [ ] *(tuỳ chọn, chắc hơn)* hỏi AI thêm vài lượt tách bước cho một scenario và ghi vào audit — ~15 phút
 
 ---
 

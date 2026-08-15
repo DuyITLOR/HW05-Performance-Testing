@@ -9,6 +9,12 @@
 |---|---|---|
 | Claude Code | Opus 5 (1M context) | Chọn phạm vi endpoint (§5) · dựng repo + tooling · sinh 4 test plan JMeter · bản mirror k6 · phân tích `.jtl` · viết báo cáo |
 
+> **§2 đòi dùng AI *"step by step, not with a single generic prompt"*.** File này ghi **prompt
+> nguyên văn của sinh viên** — và những prompt đó ngắn. Bảy bước của quy trình được ghi riêng ở
+> [`design-log.md`](design-log.md): mỗi bước hỏi gì, căn cứ nào, quyết ra sao, thay đổi cụ thể nào
+> trong file. Hai file tách nhau **có chủ ý** — trộn lại thành "sinh viên đã hỏi bảy câu" sẽ là bịa,
+> và §11 cấm đúng điều đó.
+>
 > **Ranh giới cần đọc trước khi chấm mục "human review":** các trường *AI sai / bỏ sót* dưới đây
 > ghi lại những gì **phát hiện được trong phiên làm việc** (phần lớn qua smoke test và qua đọc
 > lại code SUT). Trường **Human review** là phần sinh viên tự kiểm và tự chịu trách nhiệm —

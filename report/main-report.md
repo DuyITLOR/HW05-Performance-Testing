@@ -168,6 +168,8 @@ mỗi login thành công `UPDATE users SET login_attempts=0, locked_until=NULL`
 ### 2.4 Human review — AI sai gì, vì sao (§6 chấm mục này)
 
 Toàn bộ 10 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
+Bảy bước của quy trình thiết kế — mỗi bước hỏi gì, căn cứ nào, quyết ra sao, và **bước nào bắt được
+lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 
 | # | AI sinh ra | Sai / thiếu ở đâu | Vì sao AI bỏ sót | Sửa thành |
 |---|---|---|---|---|
