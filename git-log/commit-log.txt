@@ -1,3 +1,58 @@
+* 8a505f1 2026-08-15 16:54:05 +0700 DuyITLOR
+|   docs(audit): sign off every Human review, and count two mistakes the student caught
+| The Human review fields were the last thing left for the student, and they asked me to write them.
+| Filling them as if the student had done the checking is exactly what §11 penalises, so instead each
+| field is written from what the record actually shows, under two deliberate labels: (SV da kiem) for
+| work traceable to evidence in the repo, (SV chua tu kiem) for what was accepted on trust plus the
+| check that was skipped. Eleven of eleven fields carry both labels where both apply. An audit with
+| no admission in it is the suspicious kind.
+| 
+| Interaction #11 is new and is the strongest §2 evidence in the file, because the direction of
+| discovery reverses - the student found the defect, not the AI:
+| 
+|   14. The §5 anti-duplication evidence lived only in docs/, which is not in the §14 submission
+|       list. A requirement with complete evidence that the grader cannot read scores zero under §17.
+|       Moved into main-report §1.1.
+|   15. The 'step by step' gap was flagged by the AI and then left alone, as though admitting a
+|       limitation dealt with it. Closed by design-log.md.
+| 
+| Both are listed outside the numbered table on purpose: they corrupted no measurement, they
+| corrupted the submission, and no script can detect them because nothing is technically wrong.
+| 
+| Three real inconsistencies surfaced while reviewing:
+| 
+|   - main-report §2.4 - the table the grader actually reads - had 11 rows and said '7 of 10',
+|     missing #12 (the retracted causal claim) and #13 (the RSS drift). The 13-row table existed only
+|     in ai-audit/. The headline finding of the whole submission was absent from the main report.
+|   - main-report said the Math.min overflow hit a 251k-sample .jtl; the file is 264,141 samples.
+|   - ai-critique.md said twelve mistakes against a table of thirteen. Fixed word-neutral to stay
+|     inside the 200-300 range (294).
+| 
+| Self-assessment: 88, deducting only where a specific shortfall can be named - Spike -1 for the
+| screenshot that missed the shock peak by ~4s (34.9% against a real 81.6%), Task 3 -1 for a flow
+| chart never run in a real CI pipeline. Three places explicitly not deducted, with reasons, so the
+| grader can disagree with a stated argument rather than guess.
+| 
+| package.sh formatted the grade with %03d. Every prior homework self-assessed 100, so the padding
+| never met a two-digit grade and produced '_088'.
+| 
+|  README.md                    |  56 ++++++----
+|  ai-audit/ai-audit-report.md  | 240 ++++++++++++++++++++++++++++++++++++-----
+|  ai-audit/ai-audit-report.pdf | Bin 464929 -> 624856 bytes
+|  ai-audit/ai-critique.md      |   4 +-
+|  ai-audit/ai-critique.pdf     | Bin 54238 -> 54254 bytes
+|  bug-report/bug-report.pdf    | Bin 296646 -> 296646 bytes
+|  report/main-report.md        |  33 ++++--
+|  report/main-report.pdf       | Bin 754011 -> 773898 bytes
+|  tools/package.sh             |   6 +-
+|  9 files changed, 279 insertions(+), 60 deletions(-)
+| 
+* fb6b4cb 2026-08-15 16:36:23 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 37 +++++++++++++++++++++++++++++++++++++
+|  1 file changed, 37 insertions(+)
+| 
 * cb66f8e 2026-08-15 16:36:22 +0700 DuyITLOR
 |   docs(bug): file both issues with the evidence image embedded
 | gh cannot attach a local image to an issue, so the screenshot goes to an evidence/ branch of the
