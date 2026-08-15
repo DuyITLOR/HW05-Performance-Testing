@@ -14,7 +14,7 @@
 | 3 | Use three different report views | **Xong** |
 | 4 | Name each test plan | **Xong** |
 | 5 | Review and fix (human review) | **Xong** |
-| 6 | Run as completely as possible, with evidence | **Hở nặng** |
+| 6 | Run as completely as possible, with evidence | **Hở** — thiếu 5 ảnh |
 | 7 | Determine the endurance threshold | **Xong** |
 | 8 | Record a demo video | **Chưa** |
 | 9 | Report issues | Nội dung xong · **chưa mở Issue** |
@@ -230,17 +230,15 @@ grep -c "^### Interaction" ai-audit/ai-audit-report.md    # 8 lượt
 Ngoài yêu cầu: bằng chứng tài nguyên **dạng số** có đầy đủ — `results/resources/*.csv`, lấy mẫu 2
 giây/lần cho cả `node` **và** JMeter. Cột JMeter là chỗ phát hiện nút cổ chai nằm ở load generator.
 
-### ⚠️ Vấn đề 3 batch
+### Hai batch đang giữ, và vì sao
 
-| Batch | Lượt có | Vai trò |
-|---|---|---|
-| A — 13/08 | đủ 4 | Dùng cho §2.8 (so DB nhỏ vs lớn) — **giữ** |
-| B — 14/08 sáng | đủ 4 | **Số liệu chính của báo cáo** trích batch này |
-| C — 14/08 đêm | chỉ Load + Stress | Batch dở dang; `activity-load.png` thuộc batch này |
+| Batch | Vai trò |
+|---|---|
+| **15/08** (4 lượt) | **Bộ số liệu chính** của báo cáo |
+| 13/08 (4 lượt) | Giữ để so sánh ở §2.8 — nơi việc so hai batch đã **bác bỏ** một kết luận của chính báo cáo |
 
-Hệ quả: `npm run summary` lấy lượt mới nhất mỗi scenario → trộn C với B, ra số **không khớp** báo
-cáo. Và ảnh Load duy nhất thuộc batch C, không thuộc batch báo cáo trích. Không vá được bằng sửa
-văn bản.
+Batch 14/08 đã xoá (đã bị 15/08 thay thế). `run-log.md` chỉ còn 2 batch, `npm run summary` lấy lượt
+mới nhất mỗi scenario nên số liệu khớp báo cáo.
 
 ### Việc còn lại
 
@@ -266,19 +264,20 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 
 | Chỉ số | Giá trị |
 |---|---|
-| Thời lượng | **725s** (12 phút) · 45.288 sample |
-| **Max stable RPS** | **62,9 req/s** |
-| p95 | **6 ms** · p99 16 ms |
+| Thời lượng | **719,6s** (12 phút) · 45.220 sample |
+| **Max stable RPS** | **62,8 req/s** |
+| p95 | **6 ms** · p99 11 ms |
 | Trôi p95 (5 phút đầu → cuối) | **+0%** |
-| RSS `node` đầu → cuối | 16,9 → 33,9 MB |
-| **Trần bộ nhớ** | **80,8 MB** |
-| CPU `node` đỉnh | 20,7% |
+| RSS `node` đầu → cuối | 19,3 → 29,0 MB |
+| **Trần bộ nhớ** | **83,5 MB** |
+| CPU `node` đỉnh | 22,1% |
 
 Điểm mạnh khi review: **định nghĩa "ổn định" được chốt TRƯỚC khi chạy** (error < 1% và p95 không
 tăng quá 20%), nên không thể chọn ngưỡng sau khi thấy kết quả.
 
-Điểm trung thực đáng giữ: mục 6 của file đó nói rõ 62,9 RPS **không** phải năng lực tối đa của
-backend — `node` CPU mới 20,7%; con số này do 20 VU và think-time quyết định.
+Điểm trung thực đáng giữ: mục 6 nói rõ 62,8 RPS **không** phải năng lực tối đa — `node` CPU lúc đó
+mới 22,1%, còn ở lượt Stress cùng backend chịu 564 req/s với CPU 98,4%. Và mục đó cũng ghi rằng con số
+này chỉ có nghĩa **kèm điều kiện `load_1m` ≈ 3,8**, sau bài học §2.8.
 
 ### Tự kiểm
 

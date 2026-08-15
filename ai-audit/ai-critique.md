@@ -10,20 +10,20 @@
 
 ## Critique
 
-AI sai bảy lần trong bài này, và điều đáng nói là **kiểu sai**: năm trong bảy lỗi không làm test
-plan báo lỗi. Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard trông chuyên nghiệp — chỉ con số
-là sai. Lỗi tệ nhất: AI đặt Uniform Random Timer ở scope thread group mà không tính rằng JMeter
-chèn timer trước *từng* sampler, nên think-time thành 5–15 giây một iteration thay vì 1–3 giây;
-"load test 20 VU" thực chất đo mức tải nhẹ hơn năm lần thiết kế. Lỗi thứ hai: AI để hai dòng mật
-khẩu sai trong chính file dữ liệu của luồng chính, khiến luồng tự khoá tài khoản của mình. Và một
-lỗi lặp lại: AI hiểu đúng rằng assertion không xoá được cờ Fail của 4xx, sửa cho nhánh lockout,
-rồi quên áp cho bước 5 — báo 18,25% error trên hệ thống đang hoàn toàn khoẻ.
+AI sai mười hai lần, nhưng chỉ một lỗi nghiêm trọng. Mười một lỗi kia là kỹ thuật: think-time nhân
+năm lần vì timer sai scope, dữ liệu test tự khoá tài khoản của chính nó, 4xx hợp lệ bị tính thành
+lỗi hiệu năng. Chúng lộ ra ngay khi đọc `.jtl`.
 
-Vì sao nó không tự bắt được? Vì nó không có vòng phản hồi từ thực tế. Nó tối ưu cho plan *trông
-đúng*, không phải plan *đo đúng*, và cả ba lỗi trên chỉ lộ ra khi đối chiếu `.jtl` với kỳ vọng.
-Nó cũng không biết những thứ chỉ nằm trong code SUT: lockout kích hoạt sau hai lần sai, state
-machine FR-10 chỉ cho chuyển tiếp một lần.
+Lỗi thứ mười hai khác hẳn: AI so hai lượt chạy cách nhau hai ngày, thấy p95 chênh vài lần, rồi kết
+luận **kích thước dữ liệu** là nguyên nhân — kèm cơ chế nghe rất thuyết phục về SQLite một writer.
+Nó gọi đó là "phát hiện quan trọng nhất của bài", đưa lên headline README, dựng một nhánh flow chart
+Task 3 dựa trên nó. Lượt chạy sạch hôm sau bác bỏ: database lớn hơn mười sáu lần mà nhanh hơn mười
+lần. Biến thật là tải nền của máy, nằm sẵn ở cột `load_1m` mà AI đã tự ghi ra nhưng không đọc.
 
-Nguyên tắc rút ra: chạy thử ngắn và **đọc log thô trước khi tin bất kỳ con số nào**. Tôi huỷ hai
-lượt chạy và xoá sạch bằng chứng của chúng — số liệu đã biết là sai thì không được xuất hiện ở
-đâu. AI dựng khung rất nhanh; quyết định con số nào đáng tin vẫn là việc của người làm.
+Vì sao nó không tự bắt được? Vì cơ chế nó viện ra **đúng về lý thuyết**. SQLite thật sự có một
+writer. Nhưng cơ chế đúng không chứng minh được nó là nguyên nhân của con số đang xét — AI không phân
+biệt hai việc đó, và không có phản xạ hỏi "hai lượt này còn khác nhau ở đâu nữa".
+
+Nguyên tắc rút ra: nghi ngờ mạnh nhất phải dành cho những kết luận **nghe hay nhất**. Lỗi kỹ thuật
+tự lộ ra khi chạy; một giải thích nhân quả sai thì sống rất lâu, vì nó thoả mãn người đọc. Bài này
+giữ mục đó lại dưới dạng thu hồi thay vì xoá — vì chỗ đó mới là chỗ học được nhiều nhất.

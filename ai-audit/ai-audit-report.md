@@ -228,6 +228,38 @@
   liệu thì việc ghi lại vì sao nó sai có giá trị hơn là làm như chưa từng có nó.
 - **Commit:** `docs(bug): verify each finding, and retract the one that failed verification`
 
+### Interaction #9 — Batch sạch bác bỏ phát hiện của chính lượt trước
+- **Task / Scenario:** cả 4 scenario, batch 15/08
+- **Bước trong quy trình:** `jtl-analysis` bước 2 (soát lỗi đọc metric) — lần này soát chính mình
+- **AI tool:** Claude Code (Opus 5)
+- **Date & time:** 2026-08-15 15:05
+- **Prompt:**
+  ```
+  làm đi
+  ```
+  *(tiếp nối "okay sửa cho tui đi" — chạy lại batch sạch để `.jmx` khớp `.jtl` sau khi sửa lỗi #11)*
+- **AI output (tóm tắt):** Batch 15/08 cho p95 Stress **7ms** — trong khi batch 14/08 cho **70ms** với
+  cùng test plan. Kiểm `load_1m` trong file resources thì thấy nguyên nhân, và nó không phải nguyên
+  nhân đã viết trong báo cáo.
+- **AI sai / bỏ sót:**
+  12. **Kết luận nhân quả từ một so sánh không kiểm soát biến nào.** Báo cáo từng có mục §2.8 mang tên
+      *"phát hiện quan trọng nhất của bài"*: so hai batch, thấy p95 chênh 2,4–6,4 lần, kết luận
+      **kích thước dữ liệu** là nguyên nhân, kèm cơ chế nghe rất hợp lý (SQLite một writer). Batch
+      15/08 bác bỏ: database **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến
+      thật là `load_1m` — batch 13/08 chạy khi máy gánh 1,3–2 lần tải nền, nhất quán trên cả 4 lượt.
+      Lúc đo vẫn có 4 container Docker, VS Code và một tiến trình AI agent chạy song song.
+      Kết luận sai đó đã lan tới: **headline README**, **một nhánh flow chart Task 3**, và một dòng
+      **self-assessment** khoe rằng bài tự chỉ ra lỗ hổng của chính nó bằng số đo.
+- **Vì sao bỏ sót:** **phương pháp** — cùng loại lỗi #9 nhưng nặng hơn. Ở #9 tôi trình bày một suy
+  luận từ code như sự thật đã kiểm. Ở đây tôi có **dữ liệu thật**, nhưng dữ liệu đó đến từ hai lượt
+  chạy khác nhau ở **nhiều biến cùng lúc**, và tôi quy toàn bộ chênh lệch cho một biến tôi thấy thú
+  vị. Một cơ chế đúng về lý thuyết (SQLite một writer) không chứng minh được nó là nguyên nhân của
+  con số cụ thể này — hai việc khác nhau, và tôi đã trộn.
+- **Human review:** *(sinh viên bổ sung.)* Ghi chú: §2.8 được **viết lại thành mục thu hồi** chứ không
+  xoá đi, vì bản thân việc bác bỏ nó là nội dung có giá trị nhất cho Task 2 — nó là một lỗi đọc metric
+  thật, có bằng chứng, do chính người viết bắt.
+- **Commit:** `docs: retract the data-growth finding the new batch disproves`
+
 <!-- NEW_INTERACTION_MARKER -->
 
 ---
@@ -246,14 +278,15 @@
 | 8 | #7 | `sample-resources.sh` bám vào tiến trình `zsh` bao ngoài thay vì `node` → ghi RSS 0,5MB / CPU 0% suốt lượt chạy | đặc điểm môi trường | lọc theo token đầu command line phải là `node` |
 | 9 | #8 | Khẳng định `import-products` báo sai số dòng insert — **bác bỏ** khi chạy thử (5/5, 60/60, 2/3 đều đúng). Đã lan vào 5 file | phương pháp: suy luận từ code trình bày như sự thật đã kiểm | giữ lại ở mục "đã loại" kèm bảng kiểm chứng; sửa lý do không assert theo `inserted` |
 | 10 | #8 | `Math.min(...array)` trong `summarize-jtl.mjs` tràn call stack với `.jtl` 264k sample — chạy qua bình thường ở lượt Load 16k | đặc điểm dữ liệu (chỉ lộ ở file lớn) | thay bằng `reduce` |
-| 11 | #9 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
+| 11 | #8 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
+| 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà nhanh hơn 10 lần; biến thật là `load_1m`. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
 
-**Nhận xét xuyên suốt:** 8 trong 11 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
+**Nhận xét xuyên suốt:** 9 trong 12 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
-có chạy không" thì cả 8 lỗi này đều lọt.
+có chạy không" thì cả 9 lỗi này đều lọt.
 
-**Chi phí thật của 11 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
+**Chi phí thật của 12 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
 phút chạy lại. Nếu không đọc `.jtl` giữa lượt mà chờ đến khi viết báo cáo mới đọc, thì cái phải
 làm lại là **cả bốn lượt cộng phần phân tích**.
 

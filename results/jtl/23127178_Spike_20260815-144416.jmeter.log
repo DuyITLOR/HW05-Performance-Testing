@@ -1,0 +1,595 @@
+2026-08-15 14:44:17,534 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-08-15 14:44:17,547 INFO o.a.j.JMeter: Loading user properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/user.properties
+2026-08-15 14:44:17,548 INFO o.a.j.JMeter: Loading system properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/system.properties
+2026-08-15 14:44:17,548 INFO o.a.j.JMeter: Loading additional properties from: tools/jmeter-user.properties
+2026-08-15 14:44:17,548 INFO o.a.j.JMeter: Setting JMeter property: student.id=23127178
+2026-08-15 14:44:17,548 INFO o.a.j.JMeter: Setting JMeter property: scenario=Spike
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: Version 5.6.3
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: java.version=21.0.12
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: os.name=Mac OS X
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: os.arch=aarch64
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: os.version=26.1
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: file.encoding=UTF-8
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: java.awt.headless=true
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: Max memory     =1073741824
+2026-08-15 14:44:17,551 INFO o.a.j.JMeter: Available Processors =12
+2026-08-15 14:44:17,557 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-08-15 14:44:17,557 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-08-15 14:44:17,557 INFO o.a.j.JMeter: JMeterHome=/opt/homebrew/Cellar/jmeter/5.6.3/libexec
+2026-08-15 14:44:17,557 INFO o.a.j.JMeter: user.dir  =/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing
+2026-08-15 14:44:17,557 INFO o.a.j.JMeter: PWD       =/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing
+2026-08-15 14:44:17,560 INFO o.a.j.JMeter: IP: 127.0.0.1 Name: Le-Nhut-Duy.local FullName: localhost
+2026-08-15 14:44:17,567 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike'
+2026-08-15 14:44:17,568 INFO o.a.j.s.FileServer: Default base='/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing'
+2026-08-15 14:44:17,569 INFO o.a.j.s.FileServer: Set new base='/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/test-plans'
+2026-08-15 14:44:17,657 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-08-15 14:44:17,674 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-08-15 14:44:17,675 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-08-15 14:44:17,676 INFO o.a.j.s.SaveService: Loading file: test-plans/23127178_Spike_20260813.jmx
+2026-08-15 14:44:17,710 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-15 14:44:17,710 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-15 14:44:17,710 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-15 14:44:17,710 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-08-15 14:44:17,711 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-08-15 14:44:17,711 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-08-15 14:44:17,742 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-08-15 14:44:17,744 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
+2026-08-15 14:44:17,744 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: results/jtl/23127178_Spike_20260815-144416.jtl
+2026-08-15 14:44:17,744 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: /opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/reportgenerator.properties
+2026-08-15 14:44:17,745 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
+2026-08-15 14:44:17,747 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
+2026-08-15 14:44:17,747 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
+2026-08-15 14:44:17,747 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
+2026-08-15 14:44:17,747 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
+2026-08-15 14:44:17,748 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
+2026-08-15 14:44:17,748 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
+2026-08-15 14:44:17,748 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
+2026-08-15 14:44:17,748 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
+2026-08-15 14:44:17,748 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
+2026-08-15 14:44:17,749 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,749 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
+2026-08-15 14:44:17,750 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
+2026-08-15 14:44:17,751 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
+2026-08-15 14:44:17,751 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
+2026-08-15 14:44:17,756 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-08-15 14:44:17,757 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-08-15 14:44:17,757 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-08-15 14:44:17,758 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-08-15 14:44:17,759 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-08-15 14:44:17,775 INFO o.a.j.r.ClassFinder: Will scan jar /opt/homebrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-08-15 14:44:17,922 INFO o.a.j.JMeter: Running test (1786779857922)
+2026-08-15 14:44:17,932 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Nen — 10 VU chay xuyen luot
+2026-08-15 14:44:17,932 INFO o.a.j.e.StandardJMeterEngine: Starting 10 threads for group Nen — 10 VU chay xuyen luot.
+2026-08-15 14:44:17,933 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-15 14:44:17,933 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=10 ramp-up=10 delayedStart=false
+2026-08-15 14:44:17,940 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-08-15 14:44:17,940 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 2 : Cu soc — 200 VU trong 5s
+2026-08-15 14:44:17,940 INFO o.a.j.e.StandardJMeterEngine: Starting 200 threads for group Cu soc — 200 VU trong 5s.
+2026-08-15 14:44:17,940 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-15 14:44:17,940 INFO o.a.j.t.ThreadGroup: Starting thread group... number=2 threads=200 ramp-up=5 delayedStart=false
+2026-08-15 14:44:17,943 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-1
+2026-08-15 14:44:17,943 INFO o.a.j.s.FileServer: Stored: data/orders.csv
+2026-08-15 14:44:17,951 INFO o.a.j.s.FileServer: Stored: data/products_import.csv
+2026-08-15 14:44:17,951 INFO o.a.j.s.FileServer: Stored: data/users.csv
+2026-08-15 14:44:17,993 INFO o.a.j.t.ThreadGroup: Started thread group number 2
+2026-08-15 14:44:17,993 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 3 : TG-lockout — nhanh account-lockout (2 VU)
+2026-08-15 14:44:17,993 INFO o.a.j.e.StandardJMeterEngine: Starting 2 threads for group TG-lockout — nhanh account-lockout (2 VU).
+2026-08-15 14:44:17,993 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-08-15 14:44:17,993 INFO o.a.j.t.ThreadGroup: Starting thread group... number=3 threads=2 ramp-up=1 delayedStart=false
+2026-08-15 14:44:17,993 INFO o.a.j.t.ThreadGroup: Started thread group number 3
+2026-08-15 14:44:17,993 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-08-15 14:44:18,106 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = Le-Nhut-Duy.local
+2026-08-15 14:44:18,109 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2026-08-15 14:44:18,109 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-08-15 14:44:18,109 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-08-15 14:44:18,109 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-08-15 14:44:18,109 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-08-15 14:44:18,944 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-2
+2026-08-15 14:44:19,611 INFO o.a.j.u.JsseSSLManager: Using default SSL protocol: TLS
+2026-08-15 14:44:19,611 INFO o.a.j.u.JsseSSLManager: SSL session context: per-thread
+2026-08-15 14:44:19,946 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-3
+2026-08-15 14:44:20,942 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-4
+2026-08-15 14:44:21,943 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-5
+2026-08-15 14:44:22,943 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-6
+2026-08-15 14:44:23,942 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-7
+2026-08-15 14:44:24,941 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-8
+2026-08-15 14:44:25,937 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-9
+2026-08-15 14:44:26,940 INFO o.a.j.t.JMeterThread: Thread started: Nen — 10 VU chay xuyen luot 1-10
+2026-08-15 14:44:27,993 INFO o.a.j.t.JMeterThread: Thread started: TG-lockout — nhanh account-lockout (2 VU) 3-1
+2026-08-15 14:44:27,994 INFO o.a.j.s.FileServer: Stored: data/users_lockout.csv
+2026-08-15 14:44:28,501 INFO o.a.j.t.JMeterThread: Thread started: TG-lockout — nhanh account-lockout (2 VU) 3-2
+2026-08-15 14:44:30,024 INFO o.a.j.r.Summariser: summary +    368 in 00:00:12 =   30.4/s Avg:     3 Min:     1 Max:    18 Err:     0 (0.00%) Active: 12 Started: 12 Finished: 0
+2026-08-15 14:45:00,024 INFO o.a.j.r.Summariser: summary +   1472 in 00:00:30 =   49.1/s Avg:     3 Min:     0 Max:    17 Err:     0 (0.00%) Active: 12 Started: 12 Finished: 0
+2026-08-15 14:45:00,025 INFO o.a.j.r.Summariser: summary =   1840 in 00:00:42 =   43.7/s Avg:     3 Min:     0 Max:    18 Err:     0 (0.00%)
+2026-08-15 14:45:17,943 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-1
+2026-08-15 14:45:17,970 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-2
+2026-08-15 14:45:17,998 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-3
+2026-08-15 14:45:18,016 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-4
+2026-08-15 14:45:18,044 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-5
+2026-08-15 14:45:18,069 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-6
+2026-08-15 14:45:18,094 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-7
+2026-08-15 14:45:18,116 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-8
+2026-08-15 14:45:18,146 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-9
+2026-08-15 14:45:18,173 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-10
+2026-08-15 14:45:18,193 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-11
+2026-08-15 14:45:18,225 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-12
+2026-08-15 14:45:18,244 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-13
+2026-08-15 14:45:18,274 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-14
+2026-08-15 14:45:18,299 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-15
+2026-08-15 14:45:18,319 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-16
+2026-08-15 14:45:18,343 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-17
+2026-08-15 14:45:18,373 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-18
+2026-08-15 14:45:18,391 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-19
+2026-08-15 14:45:18,423 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-20
+2026-08-15 14:45:18,450 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-21
+2026-08-15 14:45:18,472 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-22
+2026-08-15 14:45:18,499 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-23
+2026-08-15 14:45:18,523 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-24
+2026-08-15 14:45:18,549 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-25
+2026-08-15 14:45:18,573 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-26
+2026-08-15 14:45:18,599 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-27
+2026-08-15 14:45:18,619 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-28
+2026-08-15 14:45:18,646 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-29
+2026-08-15 14:45:18,674 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-30
+2026-08-15 14:45:18,697 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-31
+2026-08-15 14:45:18,718 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-32
+2026-08-15 14:45:18,743 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-33
+2026-08-15 14:45:18,768 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-34
+2026-08-15 14:45:18,793 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-35
+2026-08-15 14:45:18,818 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-36
+2026-08-15 14:45:18,841 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-37
+2026-08-15 14:45:18,867 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-38
+2026-08-15 14:45:18,896 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-39
+2026-08-15 14:45:18,919 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-40
+2026-08-15 14:45:18,945 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-41
+2026-08-15 14:45:18,966 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-42
+2026-08-15 14:45:18,999 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-43
+2026-08-15 14:45:19,025 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-44
+2026-08-15 14:45:19,048 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-45
+2026-08-15 14:45:19,073 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-46
+2026-08-15 14:45:19,097 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-47
+2026-08-15 14:45:19,122 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-48
+2026-08-15 14:45:19,143 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-49
+2026-08-15 14:45:19,171 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-50
+2026-08-15 14:45:19,194 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-51
+2026-08-15 14:45:19,224 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-52
+2026-08-15 14:45:19,244 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-53
+2026-08-15 14:45:19,270 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-54
+2026-08-15 14:45:19,293 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-55
+2026-08-15 14:45:19,326 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-56
+2026-08-15 14:45:19,347 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-57
+2026-08-15 14:45:19,368 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-58
+2026-08-15 14:45:19,392 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-59
+2026-08-15 14:45:19,420 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-60
+2026-08-15 14:45:19,442 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-61
+2026-08-15 14:45:19,474 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-62
+2026-08-15 14:45:19,495 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-63
+2026-08-15 14:45:19,524 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-64
+2026-08-15 14:45:19,548 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-65
+2026-08-15 14:45:19,573 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-66
+2026-08-15 14:45:19,594 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-67
+2026-08-15 14:45:19,618 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-68
+2026-08-15 14:45:19,647 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-69
+2026-08-15 14:45:19,672 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-70
+2026-08-15 14:45:19,696 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-71
+2026-08-15 14:45:19,723 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-72
+2026-08-15 14:45:19,744 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-73
+2026-08-15 14:45:19,766 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-74
+2026-08-15 14:45:19,796 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-75
+2026-08-15 14:45:19,819 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-76
+2026-08-15 14:45:19,841 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-77
+2026-08-15 14:45:19,865 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-78
+2026-08-15 14:45:19,891 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-79
+2026-08-15 14:45:19,921 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-80
+2026-08-15 14:45:19,944 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-81
+2026-08-15 14:45:19,972 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-82
+2026-08-15 14:45:19,999 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-83
+2026-08-15 14:45:20,022 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-84
+2026-08-15 14:45:20,046 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-85
+2026-08-15 14:45:20,071 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-86
+2026-08-15 14:45:20,094 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-87
+2026-08-15 14:45:20,121 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-88
+2026-08-15 14:45:20,144 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-89
+2026-08-15 14:45:20,173 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-90
+2026-08-15 14:45:20,194 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-91
+2026-08-15 14:45:20,218 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-92
+2026-08-15 14:45:20,242 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-93
+2026-08-15 14:45:20,271 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-94
+2026-08-15 14:45:20,293 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-95
+2026-08-15 14:45:20,318 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-96
+2026-08-15 14:45:20,342 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-97
+2026-08-15 14:45:20,371 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-98
+2026-08-15 14:45:20,396 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-99
+2026-08-15 14:45:20,421 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-100
+2026-08-15 14:45:20,443 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-101
+2026-08-15 14:45:20,470 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-102
+2026-08-15 14:45:20,498 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-103
+2026-08-15 14:45:20,525 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-104
+2026-08-15 14:45:20,544 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-105
+2026-08-15 14:45:20,569 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-106
+2026-08-15 14:45:20,595 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-107
+2026-08-15 14:45:20,623 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-108
+2026-08-15 14:45:20,646 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-109
+2026-08-15 14:45:20,674 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-110
+2026-08-15 14:45:20,694 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-111
+2026-08-15 14:45:20,722 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-112
+2026-08-15 14:45:20,744 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-113
+2026-08-15 14:45:20,772 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-114
+2026-08-15 14:45:20,793 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-115
+2026-08-15 14:45:20,821 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-116
+2026-08-15 14:45:20,842 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-117
+2026-08-15 14:45:20,871 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-118
+2026-08-15 14:45:20,890 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-119
+2026-08-15 14:45:20,920 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-120
+2026-08-15 14:45:20,944 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-121
+2026-08-15 14:45:20,970 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-122
+2026-08-15 14:45:20,996 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-123
+2026-08-15 14:45:21,016 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-124
+2026-08-15 14:45:21,041 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-125
+2026-08-15 14:45:21,074 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-126
+2026-08-15 14:45:21,093 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-127
+2026-08-15 14:45:21,125 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-128
+2026-08-15 14:45:21,142 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-129
+2026-08-15 14:45:21,174 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-130
+2026-08-15 14:45:21,196 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-131
+2026-08-15 14:45:21,217 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-132
+2026-08-15 14:45:21,249 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-133
+2026-08-15 14:45:21,271 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-134
+2026-08-15 14:45:21,294 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-135
+2026-08-15 14:45:21,320 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-136
+2026-08-15 14:45:21,344 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-137
+2026-08-15 14:45:21,370 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-138
+2026-08-15 14:45:21,396 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-139
+2026-08-15 14:45:21,421 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-140
+2026-08-15 14:45:21,444 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-141
+2026-08-15 14:45:21,466 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-142
+2026-08-15 14:45:21,496 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-143
+2026-08-15 14:45:21,520 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-144
+2026-08-15 14:45:21,545 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-145
+2026-08-15 14:45:21,570 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-146
+2026-08-15 14:45:21,594 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-147
+2026-08-15 14:45:21,620 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-148
+2026-08-15 14:45:21,646 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-149
+2026-08-15 14:45:21,672 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-150
+2026-08-15 14:45:21,697 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-151
+2026-08-15 14:45:21,722 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-152
+2026-08-15 14:45:21,742 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-153
+2026-08-15 14:45:21,772 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-154
+2026-08-15 14:45:21,795 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-155
+2026-08-15 14:45:21,818 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-156
+2026-08-15 14:45:21,842 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-157
+2026-08-15 14:45:21,872 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-158
+2026-08-15 14:45:21,895 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-159
+2026-08-15 14:45:21,919 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-160
+2026-08-15 14:45:21,940 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-161
+2026-08-15 14:45:21,970 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-162
+2026-08-15 14:45:21,999 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-163
+2026-08-15 14:45:22,018 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-164
+2026-08-15 14:45:22,048 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-165
+2026-08-15 14:45:22,070 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-166
+2026-08-15 14:45:22,094 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-167
+2026-08-15 14:45:22,119 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-168
+2026-08-15 14:45:22,149 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-169
+2026-08-15 14:45:22,172 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-170
+2026-08-15 14:45:22,195 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-171
+2026-08-15 14:45:22,221 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-172
+2026-08-15 14:45:22,246 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-173
+2026-08-15 14:45:22,269 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-174
+2026-08-15 14:45:22,293 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-175
+2026-08-15 14:45:22,320 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-176
+2026-08-15 14:45:22,348 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-177
+2026-08-15 14:45:22,369 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-178
+2026-08-15 14:45:22,393 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-179
+2026-08-15 14:45:22,418 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-180
+2026-08-15 14:45:22,443 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-181
+2026-08-15 14:45:22,471 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-182
+2026-08-15 14:45:22,494 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-183
+2026-08-15 14:45:22,521 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-184
+2026-08-15 14:45:22,542 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-185
+2026-08-15 14:45:22,567 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-186
+2026-08-15 14:45:22,595 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-187
+2026-08-15 14:45:22,621 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-188
+2026-08-15 14:45:22,646 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-189
+2026-08-15 14:45:22,670 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-190
+2026-08-15 14:45:22,695 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-191
+2026-08-15 14:45:22,724 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-192
+2026-08-15 14:45:22,749 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-193
+2026-08-15 14:45:22,774 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-194
+2026-08-15 14:45:22,799 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-195
+2026-08-15 14:45:22,823 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-196
+2026-08-15 14:45:22,845 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-197
+2026-08-15 14:45:22,874 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-198
+2026-08-15 14:45:22,896 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-199
+2026-08-15 14:45:22,920 INFO o.a.j.t.JMeterThread: Thread started: Cu soc — 200 VU trong 5s 2-200
+2026-08-15 14:45:30,002 INFO o.a.j.r.Summariser: summary +  10753 in 00:00:30 =  358.7/s Avg:     2 Min:     0 Max:    31 Err:     0 (0.00%) Active: 212 Started: 212 Finished: 0
+2026-08-15 14:45:30,002 INFO o.a.j.r.Summariser: summary =  12593 in 00:01:12 =  174.7/s Avg:     2 Min:     0 Max:    31 Err:     0 (0.00%)
+2026-08-15 14:45:47,660 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-30
+2026-08-15 14:45:47,681 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-13
+2026-08-15 14:45:47,686 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-98
+2026-08-15 14:45:47,687 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-21
+2026-08-15 14:45:47,697 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-67
+2026-08-15 14:45:47,716 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-148
+2026-08-15 14:45:47,718 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-24
+2026-08-15 14:45:47,731 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-155
+2026-08-15 14:45:47,733 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-101
+2026-08-15 14:45:47,734 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-137
+2026-08-15 14:45:47,735 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-46
+2026-08-15 14:45:47,740 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-12
+2026-08-15 14:45:47,742 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-169
+2026-08-15 14:45:47,745 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-76
+2026-08-15 14:45:47,745 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-159
+2026-08-15 14:45:47,747 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-28
+2026-08-15 14:45:47,751 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-150
+2026-08-15 14:45:47,753 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-95
+2026-08-15 14:45:47,755 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-34
+2026-08-15 14:45:47,756 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-56
+2026-08-15 14:45:47,759 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-130
+2026-08-15 14:45:47,759 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-45
+2026-08-15 14:45:47,759 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-86
+2026-08-15 14:45:47,760 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-105
+2026-08-15 14:45:47,761 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-180
+2026-08-15 14:45:47,765 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-20
+2026-08-15 14:45:47,766 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-4
+2026-08-15 14:45:47,772 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-131
+2026-08-15 14:45:47,772 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-153
+2026-08-15 14:45:47,773 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-71
+2026-08-15 14:45:47,773 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-106
+2026-08-15 14:45:47,780 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-200
+2026-08-15 14:45:47,783 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-41
+2026-08-15 14:45:47,786 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-25
+2026-08-15 14:45:47,788 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-17
+2026-08-15 14:45:47,789 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-160
+2026-08-15 14:45:47,792 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-91
+2026-08-15 14:45:47,792 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-62
+2026-08-15 14:45:47,792 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-176
+2026-08-15 14:45:47,794 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-80
+2026-08-15 14:45:47,794 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-1
+2026-08-15 14:45:47,802 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-57
+2026-08-15 14:45:47,803 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-82
+2026-08-15 14:45:47,804 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-69
+2026-08-15 14:45:47,806 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-181
+2026-08-15 14:45:47,807 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-23
+2026-08-15 14:45:47,807 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-165
+2026-08-15 14:45:47,807 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-59
+2026-08-15 14:45:47,807 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-52
+2026-08-15 14:45:47,810 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-121
+2026-08-15 14:45:47,811 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-58
+2026-08-15 14:45:47,813 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-149
+2026-08-15 14:45:47,813 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-11
+2026-08-15 14:45:47,814 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-144
+2026-08-15 14:45:47,816 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-19
+2026-08-15 14:45:47,817 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-29
+2026-08-15 14:45:47,819 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-190
+2026-08-15 14:45:47,821 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-140
+2026-08-15 14:45:47,823 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-55
+2026-08-15 14:45:47,824 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-47
+2026-08-15 14:45:47,824 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-179
+2026-08-15 14:45:47,826 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-5
+2026-08-15 14:45:47,827 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-164
+2026-08-15 14:45:47,829 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-83
+2026-08-15 14:45:47,835 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-115
+2026-08-15 14:45:47,837 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-123
+2026-08-15 14:45:47,837 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-3
+2026-08-15 14:45:47,837 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-35
+2026-08-15 14:45:47,837 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-74
+2026-08-15 14:45:47,839 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-146
+2026-08-15 14:45:47,839 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-33
+2026-08-15 14:45:47,840 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-107
+2026-08-15 14:45:47,843 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-8
+2026-08-15 14:45:47,845 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-192
+2026-08-15 14:45:47,846 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-112
+2026-08-15 14:45:47,847 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-157
+2026-08-15 14:45:47,848 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-166
+2026-08-15 14:45:47,848 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-154
+2026-08-15 14:45:47,851 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-18
+2026-08-15 14:45:47,852 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-141
+2026-08-15 14:45:47,852 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-64
+2026-08-15 14:45:47,852 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-43
+2026-08-15 14:45:47,853 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-170
+2026-08-15 14:45:47,855 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-68
+2026-08-15 14:45:47,859 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-87
+2026-08-15 14:45:47,860 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-124
+2026-08-15 14:45:47,860 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-97
+2026-08-15 14:45:47,860 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-40
+2026-08-15 14:45:47,864 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-187
+2026-08-15 14:45:47,864 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-110
+2026-08-15 14:45:47,864 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-113
+2026-08-15 14:45:47,865 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-99
+2026-08-15 14:45:47,865 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-177
+2026-08-15 14:45:47,865 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-184
+2026-08-15 14:45:47,872 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-117
+2026-08-15 14:45:47,874 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-79
+2026-08-15 14:45:47,874 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-109
+2026-08-15 14:45:47,874 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-39
+2026-08-15 14:45:47,874 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-193
+2026-08-15 14:45:47,875 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-114
+2026-08-15 14:45:47,875 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-103
+2026-08-15 14:45:47,875 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-31
+2026-08-15 14:45:47,875 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-96
+2026-08-15 14:45:47,876 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-104
+2026-08-15 14:45:47,878 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-54
+2026-08-15 14:45:47,878 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-111
+2026-08-15 14:45:47,879 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-14
+2026-08-15 14:45:47,880 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-10
+2026-08-15 14:45:47,880 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-42
+2026-08-15 14:45:47,881 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-27
+2026-08-15 14:45:47,881 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-6
+2026-08-15 14:45:47,881 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-94
+2026-08-15 14:45:47,881 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-152
+2026-08-15 14:45:47,882 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-145
+2026-08-15 14:45:47,887 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-132
+2026-08-15 14:45:47,887 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-182
+2026-08-15 14:45:47,888 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-158
+2026-08-15 14:45:47,888 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-84
+2026-08-15 14:45:47,889 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-147
+2026-08-15 14:45:47,893 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-142
+2026-08-15 14:45:47,893 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-44
+2026-08-15 14:45:47,894 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-61
+2026-08-15 14:45:47,895 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-100
+2026-08-15 14:45:47,898 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-70
+2026-08-15 14:45:47,898 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-138
+2026-08-15 14:45:47,898 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-81
+2026-08-15 14:45:47,900 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-122
+2026-08-15 14:45:47,901 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-195
+2026-08-15 14:45:47,901 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-108
+2026-08-15 14:45:47,903 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-16
+2026-08-15 14:45:47,903 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-37
+2026-08-15 14:45:47,903 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-15
+2026-08-15 14:45:47,903 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-93
+2026-08-15 14:45:47,904 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-32
+2026-08-15 14:45:47,910 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-135
+2026-08-15 14:45:47,911 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-194
+2026-08-15 14:45:47,911 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-156
+2026-08-15 14:45:47,912 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-120
+2026-08-15 14:45:47,912 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-9
+2026-08-15 14:45:47,913 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-191
+2026-08-15 14:45:47,914 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-88
+2026-08-15 14:45:47,914 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-36
+2026-08-15 14:45:47,914 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-102
+2026-08-15 14:45:47,917 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-2
+2026-08-15 14:45:47,917 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-196
+2026-08-15 14:45:47,918 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-50
+2026-08-15 14:45:47,918 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-175
+2026-08-15 14:45:47,920 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-183
+2026-08-15 14:45:47,920 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-75
+2026-08-15 14:45:47,924 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-199
+2026-08-15 14:45:47,926 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-77
+2026-08-15 14:45:47,926 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-38
+2026-08-15 14:45:47,927 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-126
+2026-08-15 14:45:47,930 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-78
+2026-08-15 14:45:47,935 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-26
+2026-08-15 14:45:47,935 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-134
+2026-08-15 14:45:47,936 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-7
+2026-08-15 14:45:47,936 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-66
+2026-08-15 14:45:47,937 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-60
+2026-08-15 14:45:47,938 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-53
+2026-08-15 14:45:47,939 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-63
+2026-08-15 14:45:47,941 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-85
+2026-08-15 14:45:47,941 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-127
+2026-08-15 14:45:47,941 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-119
+2026-08-15 14:45:47,943 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-178
+2026-08-15 14:45:47,943 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-22
+2026-08-15 14:45:47,945 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-118
+2026-08-15 14:45:47,945 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-92
+2026-08-15 14:45:47,946 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-65
+2026-08-15 14:45:47,946 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-168
+2026-08-15 14:45:47,946 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-48
+2026-08-15 14:45:47,946 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-125
+2026-08-15 14:45:47,955 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-90
+2026-08-15 14:45:47,957 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-49
+2026-08-15 14:45:47,957 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-49
+2026-08-15 14:45:47,958 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-73
+2026-08-15 14:45:47,959 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-173
+2026-08-15 14:45:47,959 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-72
+2026-08-15 14:45:47,960 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-89
+2026-08-15 14:45:47,961 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-51
+2026-08-15 14:45:47,961 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-51
+2026-08-15 14:45:47,962 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-133
+2026-08-15 14:45:47,962 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-116
+2026-08-15 14:45:47,966 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-162
+2026-08-15 14:45:47,966 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-129
+2026-08-15 14:45:47,966 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-161
+2026-08-15 14:45:47,966 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-139
+2026-08-15 14:45:47,968 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-143
+2026-08-15 14:45:47,968 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-151
+2026-08-15 14:45:47,968 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-128
+2026-08-15 14:45:47,968 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-185
+2026-08-15 14:45:47,969 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-188
+2026-08-15 14:45:47,970 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-172
+2026-08-15 14:45:47,977 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-174
+2026-08-15 14:45:47,977 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-136
+2026-08-15 14:45:47,977 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-136
+2026-08-15 14:45:47,978 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-163
+2026-08-15 14:45:47,978 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-186
+2026-08-15 14:45:47,980 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-189
+2026-08-15 14:45:47,981 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-171
+2026-08-15 14:45:47,991 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-167
+2026-08-15 14:45:47,991 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-167
+2026-08-15 14:45:47,992 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-197
+2026-08-15 14:45:47,992 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-197
+2026-08-15 14:45:47,998 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Cu soc — 200 VU trong 5s 2-198
+2026-08-15 14:45:47,998 INFO o.a.j.t.JMeterThread: Thread finished: Cu soc — 200 VU trong 5s 2-198
+2026-08-15 14:46:00,030 INFO o.a.j.r.Summariser: summary +  19069 in 00:00:30 =  635.0/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%) Active: 12 Started: 212 Finished: 200
+2026-08-15 14:46:00,031 INFO o.a.j.r.Summariser: summary =  31662 in 00:01:42 =  310.1/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:46:27,489 INFO o.a.j.t.JMeterThread: Thread finished: TG-lockout — nhanh account-lockout (2 VU) 3-1
+2026-08-15 14:46:27,977 INFO o.a.j.t.JMeterThread: Thread finished: TG-lockout — nhanh account-lockout (2 VU) 3-2
+2026-08-15 14:46:30,021 INFO o.a.j.r.Summariser: summary +   1492 in 00:00:30 =   49.7/s Avg:     2 Min:     0 Max:    11 Err:     0 (0.00%) Active: 10 Started: 212 Finished: 202
+2026-08-15 14:46:30,021 INFO o.a.j.r.Summariser: summary =  33154 in 00:02:12 =  251.0/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:47:00,055 INFO o.a.j.r.Summariser: summary +   1450 in 00:00:30 =   48.3/s Avg:     2 Min:     0 Max:    16 Err:     0 (0.00%) Active: 10 Started: 212 Finished: 202
+2026-08-15 14:47:00,057 INFO o.a.j.r.Summariser: summary =  34604 in 00:02:42 =  213.4/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:47:30,025 INFO o.a.j.r.Summariser: summary +   1464 in 00:00:30 =   48.8/s Avg:     3 Min:     0 Max:    14 Err:     0 (0.00%) Active: 10 Started: 212 Finished: 202
+2026-08-15 14:47:30,026 INFO o.a.j.r.Summariser: summary =  36068 in 00:03:12 =  187.8/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:48:00,014 INFO o.a.j.r.Summariser: summary +   1460 in 00:00:30 =   48.7/s Avg:     3 Min:     0 Max:    22 Err:     0 (0.00%) Active: 10 Started: 212 Finished: 202
+2026-08-15 14:48:00,018 INFO o.a.j.r.Summariser: summary =  37528 in 00:03:42 =  169.0/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:48:17,764 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-1
+2026-08-15 14:48:17,771 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-8
+2026-08-15 14:48:17,798 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-4
+2026-08-15 14:48:17,798 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-6
+2026-08-15 14:48:17,812 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-2
+2026-08-15 14:48:17,824 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-9
+2026-08-15 14:48:17,832 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-3
+2026-08-15 14:48:17,886 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-10
+2026-08-15 14:48:17,887 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-7
+2026-08-15 14:48:17,893 INFO o.a.j.t.JMeterThread: Thread finished: Nen — 10 VU chay xuyen luot 1-5
+2026-08-15 14:48:17,893 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-08-15 14:48:17,893 INFO o.a.j.s.FileServer: Close: data/products_import.csv
+2026-08-15 14:48:17,893 INFO o.a.j.s.FileServer: Close: data/orders.csv
+2026-08-15 14:48:17,893 INFO o.a.j.s.FileServer: Close: data/users.csv
+2026-08-15 14:48:17,893 INFO o.a.j.s.FileServer: Close: data/users_lockout.csv
+2026-08-15 14:48:17,901 INFO o.a.j.r.Summariser: summary +    860 in 00:00:18 =   48.1/s Avg:     3 Min:     0 Max:    13 Err:     0 (0.00%) Active: 0 Started: 212 Finished: 212
+2026-08-15 14:48:17,901 INFO o.a.j.r.Summariser: summary =  38388 in 00:04:00 =  160.0/s Avg:     2 Min:     0 Max:    51 Err:     0 (0.00%)
+2026-08-15 14:48:17,901 INFO o.a.j.JMeter: Generating Dashboard
+2026-08-15 14:48:17,901 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
+2026-08-15 14:48:17,920 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
+2026-08-15 14:48:18,717 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
+2026-08-15 14:48:18,717 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
+2026-08-15 14:48:18,719 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
+2026-08-15 14:48:18,719 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
+2026-08-15 14:48:18,731 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
+2026-08-15 14:48:18,733 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
+2026-08-15 14:48:18,734 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
+2026-08-15 14:48:18,734 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
+2026-08-15 14:48:19,005 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
+2026-08-15 14:48:19,006 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
+2026-08-15 14:48:19,006 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
+2026-08-15 14:48:19,006 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
+2026-08-15 14:48:19,409 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
+2026-08-15 14:48:19,410 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 268716 samples
+2026-08-15 14:48:19,410 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
+2026-08-15 14:48:19,410 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
+2026-08-15 14:48:19,411 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
+2026-08-15 14:48:19,411 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
+2026-08-15 14:48:19,411 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
+2026-08-15 14:48:19,412 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
+2026-08-15 14:48:19,413 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
+2026-08-15 14:48:19,416 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
+2026-08-15 14:48:19,417 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
+2026-08-15 14:48:19,417 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
+2026-08-15 14:48:19,418 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 575820 samples
+2026-08-15 14:48:19,418 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 115164 samples
+2026-08-15 14:48:19,418 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 38388 samples
+2026-08-15 14:48:19,418 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 38388 samples produced in 1s 487 ms on channel 0
+2026-08-15 14:48:19,418 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
+2026-08-15 14:48:19,454 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
+2026-08-15 14:48:19,455 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
+2026-08-15 14:48:19,455 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
+2026-08-15 14:48:19,455 INFO o.a.j.r.d.JsonExporter: Checking output folder
+2026-08-15 14:48:19,455 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike/statistics.json
+2026-08-15 14:48:19,480 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
+2026-08-15 14:48:19,481 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike
+2026-08-15 14:48:19,560 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike, creating folder structure
+2026-08-15 14:48:19,561 INFO o.a.j.r.d.TemplateVisitor: Copying folder from '/opt/homebrew/Cellar/jmeter/5.6.3/libexec/bin/report-template' to '/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike', got message: /Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike, found non empty folder with following content [/Users/macos/Documents/HK3_Nam3/kiem_thu/HW05-Performance-Testing/results/html/spike/statistics.json], will be ignored
+2026-08-15 14:48:19,731 INFO o.a.j.JMeter: Dashboard generated

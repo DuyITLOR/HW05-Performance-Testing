@@ -44,8 +44,8 @@ vì thế là **ba chương của báo cáo**, còn bằng chứng thì nằm th
 | Yêu cầu của đề | Nơi đáp ứng |
 |---|---|
 | **AI phân tích** `.jtl` + đề xuất ngưỡng | [`report/main-report.md §3.1`](report/main-report.md) — nguyên văn, **chưa sửa** |
-| **Soát lỗi đọc metric**, kèm *"correct value from your raw `.jtl` log"* | [`report/main-report.md §3.2`](report/main-report.md) — 7 lỗi, mỗi lỗi kèm giá trị đúng **và tên file `.jtl`** |
-| Phân loại đề xuất tối ưu **feasible / hallucinated** | [`report/main-report.md §3.3`](report/main-report.md) — 6 đề xuất + **cách kiểm chứng** từng cái, + 2 đề xuất AI không nêu |
+| **Soát lỗi đọc metric**, kèm *"correct value from your raw `.jtl` log"* | [`report/main-report.md §3.2`](report/main-report.md) — 7 lỗi, mỗi lỗi kèm giá trị đúng **và tên file** · trong đó có **lỗi của chính báo cáo ở lượt trước**, bị bác bỏ ở [`§2.8`](report/main-report.md) |
+| Phân loại đề xuất tối ưu **feasible / hallucinated** | [`report/main-report.md §3.3`](report/main-report.md) — 6 đề xuất + **cách kiểm chứng** từng cái, + 3 đề xuất AI không nêu |
 | Bản tính độc lập từ raw log để đối chất | [`results/summary.md`](results/summary.md) sinh bởi [`tools/summarize-jtl.mjs`](tools/summarize-jtl.mjs) · độ trôi: [`tools/soak-drift.mjs`](tools/soak-drift.mjs) |
 | Quy trình tái dùng được | [`.claude/skills/jtl-analysis/SKILL.md`](.claude/skills/jtl-analysis/SKILL.md) |
 
@@ -57,7 +57,7 @@ vì thế là **ba chương của báo cáo**, còn bằng chứng thì nằm th
 | **Flow chart** | [`§4.1`](report/main-report.md) — mermaid 15 nút, có sẵn trong PDF |
 | Giải thích từng nhánh | [`§4.2`](report/main-report.md) |
 | **Trade-off** (chi phí, báo động giả) | [`§4.3`](report/main-report.md) — 6 trade-off, mỗi cái nói rõ *cái phải trả* |
-| Liên kết về số liệu thật của bài | [`§2.8`](report/main-report.md) chứng minh lượt Load 3 phút trong CI **không** bắt được hồi quy do dữ liệu phình → buộc thêm nhánh Stress theo lịch |
+| Liên kết về số liệu thật của bài | [`§2.8`](report/main-report.md) — nhiễu từ máy chạy tạo chênh lệch **10 lần** ở p95, lớn hơn tín hiệu một bậc → baseline phải đo lại trong cùng lượt CI, cùng runner |
 
 ## Các mục còn lại của đề
 

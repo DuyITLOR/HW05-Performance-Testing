@@ -9,11 +9,11 @@
 > **Quy tắc số liệu:** mọi con số lấy từ [`results/summary.md`](../results/summary.md), sinh tự
 > động bằng `npm run summary` đọc từ raw `.jtl`. Không con số nào đếm tay (§11).
 
-**Bộ số liệu chính của báo cáo là 4 lượt chạy ngày 14/08/2026.** Bốn lượt ngày 13/08 được **giữ
-lại có chủ đích** và dùng ở §2.8: cùng test plan, cùng máy, nhưng database nhỏ hơn 8 lần — so sánh
-hai bộ cho ra phát hiện quan trọng nhất của bài.
+**Bộ số liệu chính của báo cáo là 4 lượt chạy ngày 15/08/2026** (`run-log.md`). Bốn lượt ngày
+13/08 được **giữ lại có chủ đích** và dùng ở §2.8 — nơi việc so sánh hai bộ đã **bác bỏ** một kết
+luận mà chính tôi từng đưa ra. Đó là mục đáng đọc nhất của báo cáo này.
 
-**Ảnh Activity Monitor chưa có** — xem §2.5 để biết lần chụp đầu sai ở đâu và vì sao đã bị xoá.
+**Ảnh Activity Monitor chưa có** — xem §2.5.
 
 ---
 
@@ -104,66 +104,48 @@ Bốn lượt tuần tự, cooldown 90s. Mốc thời gian: [`results/run-log.md
 
 | Scenario | Bắt đầu (UTC) | Sample | Peak VU | Thời lượng | RPS | Error % | avg | p50 | p90 | **p95** | p99 | max |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **Load** | 02:37:57 | 16.436 | 22 | 359,4s | 45,7 | **0%** | 2,6 | 2 | 5 | **6** | 14 | 234 |
-| **Stress** | 03:17:31 | 251.820 | 200 | 479,9s | **524,8** | **0%** | 14,6 | 3 | 32 | **70** | 210 | **1058** |
-| **Spike** | 03:27:11 | 37.126 | 212 | 239,7s | 154,9 | **0%** | 8,7 | 3 | 15 | **44** | 120 | 282 |
-| **Soak** | 03:32:46 | 45.288 | 22 | 719,7s | 62,9 | **0%** | 3,0 | 2 | 5 | **6** | 16 | 365 |
+| **Load** | 07:27:05 | 16.395 | 22 | 359,4s | 45,6 | **0%** | 2,9 | 2 | 6 | **7** | 10 | 104 |
+| **Stress** | 07:34:39 | 270.848 | 200 | 479,8s | **564,4** | **0%** | 3,1 | 2 | 5 | **7** | 29 | 363 |
+| **Spike** | 07:44:16 | 38.388 | 212 | 239,8s | 160,1 | **0%** | 2,6 | 2 | 5 | **6** | 13 | 51 |
+| **Soak** | 07:49:51 | 45.220 | 22 | 719,6s | 62,8 | **0%** | 2,7 | 2 | 5 | **6** | 11 | 230 |
 
 Đơn vị: **ms**. Percentile nearest-rank từ raw `.jtl`.
 
-**Điều kiện dữ liệu của bộ số liệu này:** bảng `products` có **436.692 dòng**, file SQLite
-**33 MB** — xem §2.8, đây là biến số quan trọng nhất của toàn bộ bảng trên.
+**Điều kiện khi đo:** bảng `products` **830.139 dòng** · `load_1m` trung bình **2,2–3,8** trên máy
+12 lõi. Cả hai con số này phải khai kèm — §2.8 giải thích vì sao con số thứ hai quan trọng hơn con
+số thứ nhất.
 
-**Về "điểm gãy":** không lượt nào có error, kể cả Stress ở 200 VU. Nhưng **không** kết luận được
-là SUT còn dư sức: ở lượt Stress, `node` tiêu CPU đỉnh **108%** — đã vượt trần một lõi (libuv
-threadpool lo phần I/O của SQLite nên vượt được 100%). p95 tăng từ 6ms (20 VU) lên 70ms (200 VU),
-tức **11,7 lần** cho 10 lần số VU. Đó là dấu hiệu đã vào vùng bão hoà, chỉ chưa tới mức sinh lỗi.
+**Về "điểm gãy": không lượt nào có lỗi, nhưng Stress đã chạm trần.** Ở 200 VU / 564 req/s, `node`
+tiêu CPU đỉnh **98,4%** — tức gần hết năng lực **một** lõi, đúng trần lý thuyết của một luồng JS.
+p95 vẫn chỉ 7ms và error 0%, nghĩa là SUT bão hoà CPU **trước khi** bắt đầu sinh lỗi. Muốn thấy
+điểm gãy thật thì phải đẩy quá 200 VU, và lúc đó JMeter (đỉnh 106%) cũng đã tranh CPU với nó.
 
 ### 2.3 Kết quả theo từng endpoint
 
-**Load** (20 VU) — mọi endpoint 4–8ms:
+| Endpoint | Load 20 VU | **Stress 200 VU** | Spike 212 VU | Soak 20 VU |
+|---|---|---|---|---|
+| 1 `POST /api/login` | 5 | **7** | 6 | 5 |
+| 2 `GET /api/admin/orders` | 7 | **6** | 6 | 7 |
+| 3 `GET /api/admin/users` | 4 | **5** | 4 | 4 |
+| 4 `POST /api/admin/import-products` | **9** | **9** | **8** | **8** |
+| 5 `PUT /api/admin/orders/:id/status` | 4 | **5** | 5 | 4 |
+| 6 `POST /api/login` (lockout probe) | 4 | 4 | 5 | 4 |
 
-| Endpoint | Sample | avg | p90 | **p95** | p99 | max |
-|---|---|---|---|---|---|---|
-| 1 POST /api/login | 3.274 | 1,8 | 3 | **4** | 11 | 94 |
-| 2 GET /api/admin/orders | 3.273 | 3,4 | 5 | **6** | 15 | 171 |
-| 3 GET /api/admin/users | 3.270 | 1,9 | 3 | **4** | 10 | 96 |
-| 4 POST /api/admin/import-products | 3.265 | 4,2 | 6 | **8** | 20 | 144 |
-| 5 PUT /api/admin/orders/:id/status | 3.259 | 1,8 | 3 | **4** | 12 | 234 |
-| 6 POST /api/login (lockout probe) | 95 | 1,5 | 3 | **3** | 9 | 9 |
+p95, đơn vị **ms**. Số sample mỗi endpoint: Load ~3.260 · Stress ~54.100 · Spike ~7.660 · Soak ~9.020.
 
-**Stress** (đỉnh 200 VU):
+Ba điều đọc ra từ bảng này:
 
-| Endpoint | Sample | avg | p90 | **p95** | p99 | max |
-|---|---|---|---|---|---|---|
-| **1 POST /api/login** | 50.420 | 20,1 | 51 | **107** | 288 | **1058** |
-| 2 GET /api/admin/orders | 50.390 | 12,9 | 28 | **55** | 177 | 505 |
-| 3 GET /api/admin/users | 50.345 | 10,4 | 23 | **49** | 164 | 545 |
-| **4 POST /api/admin/import-products** | 50.307 | 18,4 | 45 | **82** | 235 | 652 |
-| 5 PUT /api/admin/orders/:id/status | 50.262 | 11,1 | 24 | **53** | 175 | 539 |
-| 6 POST /api/login (lockout probe) | 96 | 2,0 | 3 | **5** | 33 | 33 |
+**1. `import-products` là endpoint đắt nhất ở mọi mức tải** (8–9ms), và nó là endpoint **ghi** duy
+nhất chạm tới `INSERT` thật. Đúng như dự đoán ở bước 1 của thiết kế: SQLite một writer.
 
-**Spike** (đỉnh 212 VU):
+**2. p95 gần như KHÔNG tăng khi VU tăng 10 lần** (20 → 200 VU): login 5 → 7ms, orders 7 → 6ms.
+Điều này chỉ hợp lý khi nhìn cùng CPU: `node` đi từ 19,9% lên **98,4%**. Tức server hấp thụ toàn bộ
+mức tải tăng bằng cách dùng thêm CPU, chưa phải bằng cách xếp hàng. p99 mới cho thấy đuôi bắt đầu
+dãn: 10 → 29ms.
 
-| Endpoint | Sample | avg | p90 | **p95** | p99 | max |
-|---|---|---|---|---|---|---|
-| 1 POST /api/login | 7.488 | 11,4 | 19 | **64** | 176 | 282 |
-| 2 GET /api/admin/orders | 7.450 | 7,8 | 13 | **34** | 88 | 165 |
-| 3 GET /api/admin/users | 7.412 | 6,3 | 12 | **31** | 80 | 239 |
-| 4 POST /api/admin/import-products | 7.363 | 11,3 | 20 | **54** | 125 | 243 |
-| 5 PUT /api/admin/orders/:id/status | 7.316 | 6,8 | 12 | **39** | 93 | 163 |
-| 6 POST /api/login (lockout probe) | 97 | 4,0 | 4 | **14** | 96 | 96 |
-
-**Soak** (20 VU, 12 phút) — 4–9ms, xem §2.7.
-
-**Đây là chỗ p95 tổng không nói được gì.** p95 tổng của Stress là 70ms, nhưng `POST /api/login` ở
-**107ms** — cao hơn **1,53 lần**. Ba endpoint nhanh (49–55ms) pha loãng con số tổng. Một hồi quy
-nằm ở login hoàn toàn có thể không làm p95 tổng nhích lên.
-
-**Login là endpoint đắt nhất**, đáng ngạc nhiên với một endpoint tưởng là chỉ đọc. Giải thích:
-mỗi login thành công `UPDATE users SET login_attempts=0, locked_until=NULL`
-([`server.js:47`](../../eshop-sut/backend/server.js#L47)). Ở 200 VU với 50 tài khoản → trung bình
-4 VU cùng ghi vào một dòng `users`, và SQLite chỉ có **một** writer.
+**3. p95 tổng (7ms) trùng p95 của endpoint đắt nhất** ở lượt Stress — khác hẳn tình huống thường
+gặp nơi số tổng bị pha loãng. Ở đây phân phối giữa các endpoint quá gần nhau nên không có hiệu ứng
+đó. Vẫn phải xem theo endpoint mới biết điều này, chứ không suy ra được từ số tổng.
 
 ### 2.4 Human review — AI sai gì, vì sao (§6 chấm mục này)
 
@@ -213,12 +195,20 @@ sử git. Cách làm đúng: giới hạn vùng chụp theo bounds của đúng 
 Bằng chứng tài nguyên **dạng số** thì có đầy đủ và tính toán được — `results/resources/*.csv` và
 `endurance/resources/*.csv`, lấy mẫu 2 giây/lần cho cả `node` và JMeter:
 
-| Scenario | `node` RSS đầu → cuối (đỉnh) | `node` CPU đỉnh | JMeter CPU đỉnh | JMeter RSS đỉnh |
+| Scenario | `load_1m` tb | `node` CPU đỉnh | JMeter CPU đỉnh | `node` RSS (ổn định → cuối, đỉnh) |
 |---|---|---|---|---|
-| Load | 8 → 65 MB (79) | 13% | 208% | 541 MB |
-| **Stress** | 19 → 19 MB (**107**) | **108%** | 118% | 833 MB |
-| Spike | 17 → 54 MB (88) | **92%** | 169% | 689 MB |
-| Soak | 17 → 34 MB (81) | 21% | 161% | 812 MB |
+| Load | 2,9 | 19,9% | 26,6% | 38 → 66 MB (98)* |
+| **Stress** | 3,1 | **98,4%** | 106,2% | 19 → 66 MB (98) |
+| Spike | 2,2 | 76,1% | 149,3% | 19 → 63 MB (90) |
+| Soak | 3,8 | 22,1% | 139,2% | 19 → 29 MB (84) |
+
+\* **Một cảnh báo về cách đọc cột RSS.** Hai mẫu đầu của lượt Load ghi 927,5 MB rồi 499,6 MB, sau
+đó tụt về ~38 MB và ở đó suốt lượt (2 mẫu trên 173). Đó là **tàn dư bộ nhớ chưa được thu hồi từ
+lượt chạy trước**, không phải hành vi của lượt Load — nên tôi không lấy 928 MB làm "đỉnh RSS". Ghi
+lại ở đây thay vì lặng lẽ chọn con số đẹp hơn: `results/resources/23127178_Load_20260815-142705.resources.csv`
+dòng 2–3 kiểm được điều này.
+
+Cột `load_1m` là cột quan trọng nhất của bảng, và §2.8 giải thích vì sao.
 
 ### 2.6 Xử lý account-lockout và state machine giữa các lượt (§6 đòi ghi lại)
 
@@ -230,14 +220,29 @@ npm run reset:orders       # UPDATE orders SET status='pending'
 `tools/run-scenario.sh` tự chạy cả hai ở đầu mỗi lượt và in trạng thái trước/sau.
 
 **Lockout kích hoạt sau 2 lần sai, không phải 3** — `login_attempts + 2` với ngưỡng 3
-([`server.js:54-58`](../../eshop-sut/backend/server.js#L54)), khoá 180 giây. Nhánh lockout (bước 6)
-cho phân bố **lặp lại y hệt qua cả 4 lượt**: đúng 4 lần `401` (2 tài khoản × 2 lần sai trước khi
-khoá) rồi 89–97 lần `403`. Con số lặp lại chính xác là bằng chứng reset hoạt động đúng.
+([`server.js:54-58`](../../eshop-sut/backend/server.js#L54)), khoá 180 giây.
 
-**State machine FR-10** cho bước 5: **đúng 400 lần HTTP 200** ở mỗi lượt — bằng số dòng
-`orders.csv`. Mỗi order chuyển được đúng một lần `pending → confirmed`, sau đó trả 400. Đây là
-**giới hạn của phép đo phải nói rõ**: nhánh 400 trả về **trước** lệnh `UPDATE` nên nhẹ hơn nhánh
-200, vậy p95 của bước 5 bị kéo xuống theo tỉ lệ 400. Tín hiệu ghi nặng nằm ở **bước 4**.
+| Scenario | bước 6: 401 (sai lần đầu) | bước 6: 403 (đã khoá) | bước 5: 200 (ghi thật) | bước 5: 400 (FR-10 chặn) |
+|---|---|---|---|---|
+| Load | 4 (4,3%) | 90 (95,7%) | **400** (12,3%) | 2.850 (87,7%) |
+| Stress | 4 (4,1%) | 93 (95,9%) | **400** (0,7%) | 53.668 (99,3%) |
+| Spike | 4 (4,2%) | 91 (95,8%) | **400** (5,3%) | 7.171 (94,7%) |
+| Soak | 4 (4,3%) | 89 (95,7%) | **400** (4,4%) | 8.616 (95,6%) |
+
+Hai con số lặp lại **y hệt qua cả 4 lượt** là bằng chứng reset hoạt động đúng:
+
+- **Đúng 4 lần `401`** mỗi lượt = 2 tài khoản × 2 lần sai trước khi bị khoá. Nếu reset không chạy,
+  lượt sau sẽ bắt đầu bằng `403` ngay và con số 4 này biến mất.
+- **Đúng 400 lần `200`** ở bước 5 = số dòng `orders.csv`. Mỗi order chuyển được đúng một lần
+  `pending → confirmed`. Nếu `reset-orders.mjs` không chạy, con số này sẽ là 0.
+
+Từ lượt chạy này, cột `responseMessage` trong raw `.jtl` ghi đúng lý do cho từng loại:
+`FR-10 invalid transition (hop le)` cho bước 5 và `Account lockout (hop le)` cho bước 6 — trước đó
+cả hai đều ghi "lockout", xem lỗi #11.
+
+**Giới hạn của phép đo ở bước 5:** nhánh 400 trả về **trước** lệnh `UPDATE` nên nhẹ hơn nhánh 200.
+Ở lượt Stress chỉ 0,7% sample chạm tới lệnh ghi thật, nên p95 5ms của bước 5 **không** đại diện cho
+chi phí ghi. Tín hiệu ghi nặng nằm ở **bước 4**.
 
 ### 2.7 Endurance threshold (§6)
 
@@ -248,142 +253,161 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 
 | Chỉ số | Giá trị |
 |---|---|
-| Thời lượng soak | **725s** (12 phút) · 45.288 sample |
-| **Max stable RPS** | **62,9 req/s** ở 20 VU |
-| p95 toàn lượt | **6 ms** · p99 16 ms |
+| Thời lượng soak | **719,6s** (12 phút) · 45.220 sample |
+| **Max stable RPS** | **62,8 req/s** ở 20 VU |
+| p95 toàn lượt | **6 ms** · p99 11 ms |
 | p95 5 phút đầu → cuối | 6 ms → **6 ms** (**+0%**) |
 | Error rate | **0%** |
-| RSS `node` đầu → cuối | 16,9 → **33,9 MB** (đỉnh 80,8 MB) |
-| CPU `node` đỉnh | **20,7%** |
+| RSS `node` đầu → cuối | 19,3 → **29,0 MB** (đỉnh 83,5 MB) |
+| CPU `node` đỉnh | **22,1%** |
 | **Kết luận** | **ỔN ĐỊNH** theo đúng định nghĩa đã chốt |
 
-Độ trôi **đúng 0%** — p95 phút 1 và phút 12 đều 6ms. RSS tăng +100,6% nhưng từ mốc rất thấp
-(16,9 → 33,9 MB) và đỉnh 80,8 MB trên máy 16 GB; là heap ổn định sau warm-up, không phải rò rỉ.
-Lập luận đầy đủ ở [`endurance-threshold.md §5`](../endurance/endurance-threshold.md).
+Độ trôi **đúng 0%**. RSS tăng +50,3% nhưng từ mốc rất thấp (19,3 → 29,0 MB) và đỉnh 83,5 MB trên
+máy 16 GB — heap ổn định sau warm-up, không phải rò rỉ. Lập luận đầy đủ ở
+[`endurance-threshold.md §5`](../endurance/endurance-threshold.md).
 
-### 2.8 Phát hiện quan trọng nhất — kích thước dữ liệu, và vì sao Load test không thấy nó
+### 2.8 Một phát hiện tôi đã tự bác bỏ — và vì sao nó đáng nằm trong báo cáo
 
-Hai bộ lượt chạy tồn tại: **13/08** (bảng `products` ~50k dòng lúc bắt đầu Stress) và **14/08**
-(**436.692 dòng**, file SQLite 33 MB). **Cùng test plan, cùng máy, cùng tham số.** Không endpoint
-nào trong workflow *truy vấn* bảng `products` — chỉ bước 4 *ghi vào* nó.
+Bản báo cáo trước của chính tôi có một mục mang tên *"phát hiện quan trọng nhất của bài"*: so hai
+batch chạy cách nhau hai ngày, thấy p95 chênh **2,4–6,4 lần**, và kết luận rằng **kích thước dữ liệu
+phình lên** là nguyên nhân — kèm cơ chế nghe rất hợp lý (SQLite một writer, INSERT chậm hơn tạo hàng
+đợi mà cả endpoint đọc cũng phải xếp sau).
 
-p95 theo từng endpoint, DB nhỏ → DB lớn:
+**Lượt chạy ngày 15/08 bác bỏ kết luận đó.**
 
-| Endpoint | Load 20 VU | Stress 200 VU | Spike 212 VU | Soak 20 VU |
-|---|---|---|---|---|
-| 1 POST /api/login | 5 → 4 ms · **0,80×** | 40 → 107 ms · **2,67×** | 10 → 64 ms · **6,40×** | 5 → 5 ms · **1,00×** |
-| 2 GET /api/admin/orders | 7 → 6 · 0,86× | 23 → 55 · **2,39×** | 9 → 34 · **3,78×** | 7 → 7 · 1,00× |
-| 3 GET /api/admin/users | 5 → 4 · 0,80× | 19 → 49 · **2,58×** | 7 → 31 · **4,43×** | 4 → 5 · 1,25× |
-| 4 POST /api/admin/import-products | 9 → 8 · 0,89× | 34 → 82 · **2,41×** | 13 → 54 · **4,15×** | 8 → 9 · 1,12× |
-| 5 PUT /api/admin/orders/:id/status | 5 → 4 · 0,80× | 19 → 53 · **2,79×** | 7 → 39 · **5,57×** | 4 → 4 · 1,00× |
+| | Batch 13/08 | Batch 15/08 |
+|---|---|---|
+| `products` trong DB | ~50.000 | **830.139** (gấp ~16 lần) |
+| `load_1m` trung bình (Stress) | **5,2** | **3,1** |
+| p95 Stress | 40–107 ms | **7 ms** |
 
-**Kết luận: hồi quy do dữ liệu phình HOÀN TOÀN VÔ HÌNH ở tải kỳ vọng, và chỉ lộ ra dưới tải cao.**
+Dữ liệu **nhiều hơn 16 lần** mà lại **nhanh hơn khoảng 10 lần**. Nếu kích thước dữ liệu là nguyên
+nhân thì kết quả phải đi theo hướng ngược lại.
 
-- Ở **20 VU** (Load và Soak): không thay đổi, thậm chí nhanh hơn một chút.
-- Ở **200 VU** (Stress): xấu đi **2,4–2,8 lần** trên **mọi** endpoint.
-- Ở **212 VU dồn trong 5 giây** (Spike): xấu đi **3,8–6,4 lần**.
+Biến số thật hiện ra ở cột `load_1m`, và nó nhất quán trên **cả bốn** lượt:
 
-**Cơ chế.** Bảng `products` lớn hơn 8 lần làm mỗi `INSERT` của bước 4 đắt hơn (b-tree sâu hơn,
-nhiều page phải ghi hơn). SQLite chỉ có **một writer** cho cả file, nên các INSERT chậm hơn tạo ra
-một hàng đợi mà **mọi** request khác phải xếp sau — kể cả hai endpoint chỉ đọc. Đó là lý do
-`GET /api/admin/users`, một `SELECT *` trên bảng 54 dòng không liên quan gì tới `products`, cũng
-chậm đi 2,58 lần.
+| Lượt | `load_1m` tb 13/08 | `load_1m` tb 15/08 |
+|---|---|---|
+| Load | 5,5 | 2,9 |
+| Stress | 5,2 | 3,1 |
+| Spike | 4,5 | 2,2 |
+| Soak | 4,8 | 3,8 |
 
-Ở 20 VU, khoảng nghỉ giữa các request đủ dài để hàng đợi luôn kịp rỗng → chi phí thêm bị hấp thụ
-hoàn toàn. Ở 200 VU thì không.
+Batch 13/08 chạy khi máy đang gánh **1,3–2 lần** tải nền so với batch 15/08 — và chậm hơn ở mọi
+lượt. Trên máy này, lúc đo vẫn có 4 container Docker (`postgres`, `redis`, `qdrant`, `adminer`),
+VS Code, và một tiến trình AI agent cùng chạy.
 
-**Hệ quả cho Task 3 — và đây là một lỗ hổng trong chính đề xuất của tôi ở §4.** Mô hình CI ở §4
-chạy **Load test rút gọn 3 phút**. Bảng trên chứng minh loại hồi quy này **sẽ lọt qua** một lượt
-Load, dù nó làm hệ thống xấu đi 2,4–6,4 lần khi có tải thật. Cách bù: xem §4.3 mục "Bỏ sót" — lượt
-soak theo lịch hàng tuần là chưa đủ, phải có **một lượt Stress theo lịch trên dữ liệu production
-đã phình**, không phải trên DB mới seed.
+**Sai ở chỗ nào, gọi tên chính xác:** tôi so hai lượt chạy khác nhau ở **nhiều biến cùng lúc** (thời
+điểm, tải nền, kích thước dữ liệu, và cả bug sampler ở lỗi #8), rồi quy toàn bộ chênh lệch cho một
+biến duy nhất mà tôi thấy thú vị. Cơ chế tôi viện ra không sai về lý thuyết — SQLite thật sự có một
+writer — nhưng **một cơ chế đúng không chứng minh được rằng nó là nguyên nhân của con số này**. Đó
+là hai việc khác nhau, và tôi đã trộn chúng.
 
----
+Mức độ lan của lỗi: kết luận đó từng là **headline của README**, một **nhánh trong flow chart Task
+3**, và một dòng **tự đánh giá** khoe rằng bài tự chỉ ra lỗ hổng của chính nó bằng số đo. Cả ba đã
+được sửa lại.
+
+**Kết luận thay thế, và nó có giá trị hơn kết luận cũ:**
+
+> Trên máy cá nhân dùng chung với công việc khác, **tải nền là biến số áp đảo**. Nó đủ lớn để tạo ra
+> chênh lệch 10 lần ở p95 — lớn hơn mọi hiệu ứng khác mà bài này đo được, kể cả việc tăng số VU
+> gấp 10 lần (20 → 200 VU chỉ làm p95 đi từ 6 lên 7ms).
+
+Điều này **kiểm chứng được**, không phải suy đoán: bốn cặp `load_1m` ở bảng trên. Và nó có hệ quả
+trực tiếp cho Task 3 — xem §4.3, mục *"Độ tin của baseline"*.
+
+**Còn câu hỏi kích thước dữ liệu thì sao?** Vẫn là câu hỏi mở. Bài này **không trả lời được** nó, vì
+không có lượt nào cô lập được biến đó. Muốn trả lời thì phải: giữ nguyên tải nền, snapshot DB ở hai
+kích thước, chạy cùng plan hai lần. Đó là một phép đo tôi chưa làm, và ghi nó vào phần "chưa làm"
+trung thực hơn là giữ một kết luận không đứng được.
 
 ## 3. Task 2 — AI phân tích và soát lỗi đọc metric
 
 ### 3.1 Phân tích của AI (nguyên văn, chưa sửa)
 
-> Kết quả rất tốt. Error rate 0% ở cả bốn scenario cho thấy hệ thống hoàn toàn ổn định. Stress
-> test đạt 525 RPS với p95 70ms, nghĩa là backend chịu được ít nhất 200 người dùng đồng thời mà
-> không suy giảm. Average response time chỉ 14,6ms ở Stress — rất nhanh. Soak test 12 phút không
-> có dấu hiệu rò rỉ bộ nhớ. Đề xuất ngưỡng: p95 < 100ms, error rate < 1%, RPS ≥ 500. Hệ thống đã
-> đáp ứng vượt mức mọi ngưỡng này nên không cần tối ưu gì thêm.
+> Kết quả xuất sắc. Cả bốn scenario đều 0% error. Stress test đạt **564 RPS với p95 chỉ 7ms** —
+> nghĩa là backend xử lý 200 người dùng đồng thời gần như không suy giảm so với 20 người (p95 6ms).
+> Average chỉ 3,1ms. Soak 12 phút không rò rỉ bộ nhớ. So với batch trước (p95 70ms), hệ thống đã
+> **cải thiện 10 lần** — có thể do database đã được tối ưu hoặc cache đã ấm. Đề xuất ngưỡng:
+> p95 < 50ms, error < 1%, RPS ≥ 500. Hệ thống vượt xa mọi ngưỡng, không cần tối ưu.
 
 ### 3.2 Soát lại — chỗ AI đọc sai metric
 
-| # | AI nói | Giá trị đúng từ raw `.jtl` | Sai ở đâu |
+| # | AI nói | Giá trị đúng từ raw `.jtl` / resources | Sai ở đâu |
 |---|---|---|---|
-| 1 | *"chịu được ít nhất 200 người dùng đồng thời mà không suy giảm"* | p95 đi từ **6ms** (20 VU) lên **70ms** (200 VU) — **11,7 lần** cho 10 lần số VU. `node` CPU đỉnh **108%** (`results/resources/23127178_Stress_20260814-101731.resources.csv`) | **"Không suy giảm" là sai hoàn toàn.** Suy giảm siêu tuyến tính và CPU đã vượt trần một lõi. Không có lỗi ≠ không suy giảm |
-| 2 | *"Average 14,6ms — rất nhanh"* | avg 14,6ms nhưng **p95 = 70ms, p99 = 210ms, max = 1058ms** (`…Stress_20260814-101731.jtl`) | Phân phối lệch phải mạnh: p99 gấp **14,4 lần** avg, max gấp **72 lần**. Dùng average che mất đúng phần người dùng cảm nhận |
-| 3 | *"p95 70ms"* dùng cho toàn hệ thống | p95 **theo endpoint**: login **107ms**, import-products **82ms**, ba endpoint còn lại 49–55ms | p95 tổng bị ba endpoint nhanh pha loãng; endpoint đắt nhất cao hơn **1,53 lần** |
-| 4 | *"Error rate 0% → hệ thống hoàn toàn ổn định"* | 0% là **đúng**, nhưng bước 5 chỉ có **400/50.262 sample** trả 200; 99,2% trả **HTTP 400**, và 95%+ sample bước 6 trả **403** | 0% đúng **nhờ test plan đã sửa** để coi 400/403 là hợp lệ. Đọc thành "mọi request thành công" là sai: phần lớn request bước 5 **không** chạm tới lệnh ghi |
-| 5 | *"không có dấu hiệu rò rỉ bộ nhớ"* | Kết luận đúng, nhưng RSS `node` **tăng +100,6%** (16,9 → 33,9 MB) | Đúng vì lý do sai. AI không nêu con số nào; +100,6% nghe như rò rỉ nếu chỉ nhìn phần trăm. Cơ sở đúng là **p95 trôi 0%** và RSS đi ngang ở nửa sau |
-| 6 | *"đã đáp ứng vượt mức nên không cần tối ưu gì"* | §2.8: cùng hệ thống này xấu đi **2,4–6,4 lần** chỉ vì dữ liệu phình 8 lần | **Lỗi nghiêm trọng nhất.** Kết luận từ một lát cắt duy nhất, bỏ qua chiều thời gian. Hệ thống "vượt mức" hôm nay là hệ thống đã xấu đi gấp 2,4 lần so với hai tuần trước — và AI có đủ dữ liệu của cả hai bộ nhưng không so |
-| 7 | *"Đề xuất ngưỡng p95 < 100ms"* | login đã ở **107ms** | Ngưỡng do AI đặt ra **đã bị vi phạm ngay bởi số liệu nó vừa đọc** — vì nó lấy p95 tổng chứ không lấy p95 theo endpoint |
+| 1 | *"cải thiện 10 lần — có thể do database đã được tối ưu hoặc cache đã ấm"* | DB **lớn hơn 16 lần** (50k → 830.139 dòng `products`). `load_1m` tb giảm từ 5,2 → 3,1 (`results/resources/*Stress*.csv`) | **Lỗi nặng nhất, và là lỗi tôi từng tự mắc theo hướng ngược lại (§2.8).** AI thấy chênh lệch giữa hai lượt rồi đoán nguyên nhân từ những giả thuyết nghe hợp lý, trong khi biến duy nhất đo được và nhất quán trên cả 4 lượt là **tải nền của máy**. Không phải "cache ấm", không phải "DB tối ưu" — máy rảnh hơn |
+| 2 | *"200 người dùng đồng thời gần như không suy giảm so với 20 người"* | p95 6 → 7ms là đúng, **nhưng** `node` CPU đi từ **19,9% → 98,4%** (cùng file resources) | Đọc p95 mà bỏ CPU thì kết luận ngược hoàn toàn. Server không "không suy giảm" — nó **đã dùng gần hết một lõi** để giữ p95. Đó là trạng thái sát trần, không phải trạng thái thoải mái |
+| 3 | *"Average chỉ 3,1ms"* | avg 3,1 nhưng p99 **29ms**, max **363ms** (`23127178_Stress_20260815-143439.jtl`) | p99 gấp **9,4 lần** avg, max gấp **117 lần**. Ở Load thì p99/avg chỉ 3,4 lần — nghĩa là đuôi **dãn ra theo tải**, và đó là dấu hiệu bão hoà mà average xoá sạch |
+| 4 | *"Cả bốn scenario đều 0% error"* | Đúng, nhưng **99,3%** sample bước 5 ở Stress trả `400`, và **95,9%** sample bước 6 trả `403` | 0% đúng **nhờ test plan đã được sửa** để coi hai loại 4xx đó là hợp lệ. Đọc "0% error" thành "mọi request thành công" là sai: chỉ **0,7%** request bước 5 chạm tới lệnh ghi thật |
+| 5 | *"Soak 12 phút không rò rỉ bộ nhớ"* | Kết luận đúng, nhưng RSS `node` **tăng +50,3%** (19,3 → 29,0 MB) | Đúng vì lý do sai. AI không nêu con số nào. Cơ sở đúng để loại giả thuyết rò rỉ là **p95 trôi 0%** và RSS đi ngang ở nửa sau, không phải "12 phút thì chưa sao" |
+| 6 | *"Đề xuất ngưỡng p95 < 50ms"* | Ngưỡng này **rộng gấp 7 lần** giá trị đo được (7ms) | Một ngưỡng mà hệ thống vượt qua với biên 7 lần thì không phát hiện được hồi quy nào cả. Ngưỡng hồi quy phải là **tương đối** (p95 tăng > 20% so với baseline), không phải một số tuyệt đối chọn cho dễ đạt |
+| 7 | *"không cần tối ưu"* | `node` CPU 98,4% ở 200 VU | Kết luận từ p95, bỏ qua CPU. Đúng là chưa cần tối ưu **vì chưa sinh lỗi**, nhưng lý do phải là "còn 1 lõi chưa dùng hết" chứ không phải "p95 đẹp" |
+
+**Điểm chung của 7 lỗi:** sáu trong bảy đến từ việc **đọc một metric mà bỏ metric đi kèm** — p95 mà
+bỏ CPU, average mà bỏ p99, error rate mà bỏ phân bố response code, chênh lệch giữa hai lượt mà bỏ
+`load_1m`. Không lỗi nào là do đọc sai con số; tất cả là do đọc **thiếu** con số.
 
 ### 3.3 Đề xuất tối ưu của AI — feasible hay hallucinated
 
 | Đề xuất | Phân loại | Lý do | Cách kiểm chứng |
 |---|---|---|---|
-| *"Không cần tối ưu gì"* | **Sai** | §2.8 bác bỏ trực tiếp | So hai bộ lượt chạy 13/08 và 14/08 |
-| Thêm index cho `orders.user_id` | **feasible** | `GET /api/admin/orders` JOIN theo `user_id`, không index | `CREATE INDEX` rồi chạy lại Stress, so p95 của đúng label |
-| Bật SQLite **WAL** | **feasible, ưu tiên cao nhất** | §2.8 cho thấy nút cổ chai là **một writer duy nhất** cho cả file. WAL cho phép reader không bị writer chặn — đúng vấn đề đã đo được | Một dòng `PRAGMA journal_mode=WAL`, chạy lại Stress, xem hai endpoint **đọc** có thoát khỏi hàng đợi ghi |
-| Thêm **connection pool** cho SQLite | **hallucinated** | `sqlite3` của Node mở handle trên file cục bộ, không phải client-server → không có pool theo nghĩa đó. Đề xuất bê từ PostgreSQL/MySQL sang | — |
-| Scale ngang / thêm replica | **hallucinated trong phạm vi bài** | SUT là một process trên máy cá nhân | — |
-| Redis cache cho danh sách sản phẩm | **ngoài phạm vi** | `GET /api/products` **không nằm trong workflow** | — |
+| *"không cần tối ưu"* | **Sai** | `node` CPU 98,4% ở 200 VU — sát trần một lõi | Đẩy quá 200 VU trên máy rảnh, xem error rate bật lên ở đâu |
+| *"DB đã được tối ưu"* (giải thích cho chênh lệch) | **hallucinated** | Không ai tối ưu DB gì cả; DB chỉ **to ra**. Đây là AI bịa nguyên nhân cho một hiện tượng nó không đo | — |
+| Bật SQLite **WAL** | **feasible** | Đúng loại tải: bước 4 ghi 3 dòng/request. Một dòng `PRAGMA journal_mode=WAL` | Chạy lại Stress ở cùng `load_1m`, so p95 của `import-products` |
+| Thêm index cho `orders.user_id` | **feasible** | `GET /api/admin/orders` JOIN theo `user_id`, không index | `CREATE INDEX` rồi chạy lại, so p95 của đúng label |
+| Connection pool cho SQLite | **hallucinated** | `sqlite3` của Node mở handle trên file cục bộ, không phải client-server | — |
+| Scale ngang / replica | **hallucinated trong phạm vi bài** | SUT là một process trên máy cá nhân | — |
 
-**Hai đề xuất của tôi mà AI không nêu:**
+**Ba đề xuất của tôi mà AI không nêu:**
 
-1. **Phân trang cho `GET /api/admin/orders` và `GET /api/admin/users`.** Cả hai `SELECT` toàn
-   bảng. Ở bài này hai bảng đó gần như không đổi kích thước nên **phép đo chưa bộc lộ vấn đề**,
-   nhưng nó là hồi quy chờ sẵn.
-2. **Dọn dữ liệu test sau mỗi lượt chạy.** Đây là hệ quả trực tiếp của §2.8: bảng `products` phình
-   từ ~50k lên 436k dòng **chỉ vì chính bài kiểm thử này**, và điều đó làm mọi lượt sau không so
-   được với lượt trước. Một perf test làm hỏng chính điều kiện đo của nó là một lỗi thiết kế của
-   bộ test, không phải của SUT.
+1. **Chạy `node` với cluster / nhiều worker.** Đây là đề xuất có căn cứ mạnh nhất từ số liệu: `node`
+   CPU chạm 98,4% của **một** lõi trong khi máy còn **11 lõi rảnh**. Trần hiện tại là trần của
+   một-luồng, không phải của máy.
+2. **Kiểm soát tải nền khi đo.** §2.8 cho thấy đây là biến áp đảo. Không có nó thì mọi so sánh giữa
+   hai lượt đều vô nghĩa — kể cả so sánh của chính bài này.
+3. **Dọn dữ liệu test sau mỗi lượt.** Bộ test này tự đẩy `products` từ 5 dòng lên 830.139. Dù §2.8
+   không chứng minh được ảnh hưởng của nó, việc để một biến trôi không kiểm soát qua các lượt là lỗi
+   thiết kế của bộ test.
 
 ### 3.4 Đo hồi phục sau cú sốc (Spike)
 
-p95 theo cửa sổ 10 giây quanh cú sốc ở giây 60 (`results/jtl/23127178_Spike_20260814-102710.jtl`):
+p95 theo cửa sổ 10 giây quanh cú sốc ở giây 60 (`results/jtl/23127178_Spike_20260815-144416.jtl`):
 
 | Giây | VU | Sample | **p95** | p99 |
 |---|---|---|---|---|
-| 40–50 | 12 | 481 | **5** | 20 |
-| 50–60 | 25 | 496 | **9** | 33 |
-| **60–70** | **212** | **7.630** | **65** | 129 |
-| **70–80** | **212** | **9.852** | **59** | 141 |
-| **80–90** | **212** | **9.622** | **46** | 119 |
-| 90–100 | 12 | 490 | **6** | 9 |
-| 100–110 | 12 | 480 | **6** | 11 |
+| 40–50 | 12 | 476 | **7** | 9 |
+| 50–60 | 20 | 479 | **7** | 9 |
+| **60–70** | **212** | **7.944** | **5** | 9 |
+| **70–80** | **212** | **10.281** | **7** | 19 |
+| **80–90** | **212** | **10.125** | **6** | 15 |
+| 90–100 | 12 | 467 | **7** | 10 |
+| 100–110 | 12 | 496 | **6** | 8 |
 
-**Thời gian hồi phục: dưới 10 giây sau khi tải rút, nhưng KHÔNG hồi phục trong lúc còn chịu tải.**
-p95 giữ ở 65 → 59 → 46ms suốt 30 giây của cú sốc — giảm dần nhưng vẫn gấp 9 lần mức nền. Ngay khi
-tải về 12 VU, p95 trở lại 6ms trong cửa sổ 10 giây đầu tiên.
+**Không có gì để hồi phục — server hấp thụ trọn cú sốc.** VU nhảy từ 12 lên **212 trong 5 giây** mà
+p95 đứng nguyên ở 5–7ms, sample/10s tăng từ 476 lên 10.281 (gấp **21 lần**). p99 nhích từ 9 lên
+19ms rồi về 15 — dấu hiệu duy nhất cho thấy có chuyện gì xảy ra.
 
-**So với lượt 13/08 (DB nhỏ) thì đây là khác biệt về bản chất:** ở DB nhỏ, p95 nhảy lên 47ms rồi
-tự về 6ms **ngay trong lúc vẫn chịu 212 VU** — server hấp thụ được cú sốc. Ở DB lớn, nó không hấp
-thụ nổi; nó chỉ **không sụp**. Một spike test trên DB mới seed sẽ cho kết luận sai về khả năng
-chịu sốc của hệ thống thật.
+Đây là kết quả **khác** cả hai lượt Spike trước (batch 13/08: p95 nhảy lên 47ms; một lượt khác lên
+65ms và giữ suốt 30 giây). Ba lượt cùng plan, ba kết quả khác nhau — và §2.8 đã chỉ ra biến số:
+`load_1m` 4,5 → 2,2. **Bài học: spike test là loại test nhạy nhất với tải nền**, vì nó đo phản ứng
+trong một cửa sổ 30 giây, nơi một tiến trình khác chen vào là đủ làm sai kết luận.
 
-Đây cũng là chỗ **View Results Tree** phát huy: mở các sample chậm nhất trong cửa sổ 60–70s cho
-thấy chúng là `POST /api/login`, khớp với phân tích ở §2.3.
+Đây cũng là chỗ **View Results Tree** phát huy: mở các sample chậm nhất trong cửa sổ 70–80s cho thấy
+chúng là `POST /api/login`, khớp với việc login là bước phải khởi tạo 200 kết nối mới cùng lúc.
 
 ### 3.5 Đối chiếu chéo bằng k6 (bonus §8)
 
-Bản mirror k6 dùng **cùng** workflow và cùng CSV: [`k6/`](../k6/). Mục đích là định lượng phần chi
-phí thuộc về load generator: JMeter cấp một thread JVM cho mỗi VU (833 MB RSS ở 200 VU), k6 dùng
-goroutine.
+Bản mirror k6 dùng **cùng** workflow và cùng CSV: [`k6/`](../k6/). Câu hỏi nó trả lời: JMeter cấp
+một thread JVM cho mỗi VU (RSS đỉnh 818 MB ở lượt Soak); k6 dùng goroutine. Ở lượt Stress 15/08,
+JMeter CPU đỉnh **106,2%** so với `node` **98,4%** — hai bên xấp xỉ nhau, nên một phần latency đo
+được vẫn là chi phí của load generator.
 
 ```bash
 k6 run --summary-export k6/summary-stress.json k6/stress.js
 ```
 
-*(Chưa chạy — bản JMeter là bản chính theo §14.)* Ở lượt Stress 14/08, JMeter CPU đỉnh 118% và
-`node` 108% — hai bên **xấp xỉ nhau**, khác hẳn lượt 13/08 (158% vs 79%). Nghĩa là ở DB lớn, phần
-lớn thời gian đã thực sự nằm ở server; bản k6 sẽ xác nhận hoặc bác bỏ điều đó bằng số.
-
----
+*(Chưa chạy — bản JMeter là bản chính theo §14. Nếu chạy, phải chạy ở cùng mức `load_1m` mới so được,
+theo đúng bài học §2.8.)*
 
 ## 4. Task 3 — Đề xuất Continuous Performance Testing
 
@@ -404,12 +428,14 @@ flowchart TD
     I -- không --> J[Nhiễu — ghi log, không cảnh báo]
     I -- có --> K[Chặn PR + cảnh báo kèm<br/>link .jtl và dashboard]
     H --> L{Lịch hàng tuần?}
-    L -- có --> M[Stress test trên snapshot DB<br/>production đã phình]
-    M --> N{p95 tăng > 20%<br/>so với tuần trước?}
-    N -- có --> O[Cảnh báo hồi quy do dữ liệu<br/>không chặn PR nào]
+    L -- có --> M[Chạy lại baseline main + PR<br/>trên CÙNG runner, CÙNG lượt CI]
+    M --> N{Chênh p95 > 20%<br/>giữa hai lần đo?}
+    N -- có --> O[Nghi runner nhiễu —<br/>không chặn PR, ghi log]
 ```
 
-Hai nhánh cuối (`L → O`) **được thêm sau khi có số liệu §2.8**, không có trong bản thiết kế đầu.
+Nhánh `L → O` **được viết lại sau khi §2.8 bị bác bỏ**. Bản trước là "chạy Stress hàng tuần trên
+snapshot DB đã phình" — dựa trên một kết luận đã sai. Bản này giải quyết vấn đề **thật sự** đo được:
+nhiễu từ máy chạy.
 
 ### 4.2 Giải thích từng nhánh quyết định
 
@@ -420,7 +446,10 @@ Quyết định về **chi phí**: SUT có 4 ứng dụng, phần lớn commit s
 **C — phân loại commit.** `hotfix`/`docs` chỉ smoke 60 giây. `feature`/`refactor` chạy Load rút gọn
 3 phút — vẫn qua được ramp-up và vào trạng thái ổn định.
 
-**F — so baseline theo TỪNG endpoint.** §2.3 là bằng chứng: p95 tổng 70ms trong khi login 107ms.
+**F — so baseline theo TỪNG endpoint.** Ở batch này p95 tổng (7ms) **trùng** p95 của endpoint đắt
+nhất, tức không có hiệu ứng pha loãng — nhưng **chỉ biết được điều đó bằng cách xem theo endpoint**.
+Batch 13/08 thì có pha loãng thật (p95 tổng 26ms trong khi login 40ms). Không thể giả định trước là
+số tổng đại diện được.
 
 **G — ngưỡng 20%.** Lấy đúng ngưỡng của định nghĩa "ổn định" ở endurance test, để cả hệ thống chỉ
 có **một** định nghĩa hồi quy.
@@ -431,10 +460,11 @@ tải máy chủ.
 **K — chặn PR kèm bằng chứng.** Cảnh báo phải kèm link `.jtl` và dashboard. Không có raw log thì
 người nhận không phân biệt được hồi quy thật với lỗi môi trường, và cảnh báo sẽ bị bỏ qua.
 
-**L → O — lượt Stress hàng tuần trên snapshot DB production.** Đây là nhánh §2.8 buộc phải thêm:
-hồi quy do dữ liệu phình **không hiện ra ở 20 VU** và **không gắn với commit nào**, nên không bộ
-lọc theo diff nào bắt được nó. Nó chỉ hiện ra khi chạy Stress trên dữ liệu **đã phình thật**. Và
-nó **không được chặn PR** — vì không PR nào gây ra nó.
+**L → O — đo baseline hai lần trên cùng runner.** §2.8 cho thấy tải nền tạo được chênh lệch **10
+lần** ở p95 — lớn hơn mọi hiệu ứng khác bài này đo được. Trên CI, mỗi lượt là một runner khác, chạy
+cùng lúc với job của người khác. Nên baseline **không thể** là "p95 của `main` đo tuần trước": phải
+đo lại `main` **trong cùng lượt CI, trên cùng runner** với PR, rồi chỉ so **tỉ lệ** giữa hai lần đo
+đó. Nếu hai lần đo `main` khác nhau quá 20% thì chính runner đang nhiễu → không kết luận gì về PR.
 
 ### 4.3 Trade-off
 
@@ -443,8 +473,9 @@ nó **không được chặn PR** — vì không PR nào gây ra nó.
 | **Chi phí** | Load rút gọn 3 phút + 2 lượt xác nhận = tối đa ~9 phút CI cho một PR chạm backend, cộng ~30 phút/tuần cho lượt Stress theo lịch. Chạy đủ 3 scenario cho mọi commit thì ~30 phút/commit — không ai đợi. Cái phải trả: **chỉ Load được tự động hoá theo PR** |
 | **Báo động giả** | Nguồn nhiễu lớn nhất là **máy chạy**. Bài này đo trên cấu hình load generator và SUT **cùng máy**; riêng việc `java` chạy qua Rosetta thay vì arm64 đã đủ làm sai lệch. Vì thế ngưỡng 20% chứ không phải 5%, và đòi lặp lại 2 lượt. Cái phải trả: hồi quy **nhỏ mà thật** (10–15%) sẽ lọt |
 | **Độ tin của baseline** | p95 **tuyệt đối** không so được giữa hai runner khác cấu hình. Baseline phải là p95 của **cùng commit `main`, cùng runner, cùng lượt CI** — mỗi lượt chạy hai lần và chỉ so tỉ lệ. Gấp đôi chi phí, và đó là giá của việc con số có nghĩa |
-| **Bỏ sót — đã được chứng minh bằng số** | §2.8: hồi quy do dữ liệu phình làm hệ thống xấu **2,4–6,4 lần** nhưng **hoàn toàn vô hình ở 20 VU** → lượt Load 3 phút trong CI **sẽ không bắt được nó**. Đây không phải suy đoán, mà là số đo của chính bài này. Bù bằng nhánh `L → O`. Vẫn còn bỏ sót: (1) frontend gọi API nhiều hơn — tải tăng mà backend không đổi dòng nào; (2) hồi quy chỉ hiện sau 10 phút chạy liên tục |
-| **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 2: p99 gấp 14,4 lần avg. Nhưng p95 cũng không bắt được đuôi: max 1058ms trong khi p95 70ms. Với hệ thống một-writer như SUT này thì đuôi mới là chỗ người dùng cảm nhận → theo dõi **cả p95 và p99**, chỉ chặn PR theo p95 |
+| **Bỏ sót** | Lọc theo `backend/` bỏ sót ít nhất ba loại hồi quy: (1) frontend gọi API nhiều hơn — tải tăng mà backend không đổi dòng nào; (2) hồi quy chỉ hiện sau 10 phút chạy liên tục, mà lượt 3 phút không thấy; (3) hồi quy do **dữ liệu** phình chứ không do code. Mục (3) là thứ bài này **không chứng minh được** — xem §2.8 — nên nó ở đây với tư cách **giả thuyết chưa kiểm**, không phải phát hiện |
+| **Nhiễu áp đảo tín hiệu** | Đây là trade-off quan trọng nhất và nó có số đo: §2.8 cho thấy tải nền tạo chênh lệch **10 lần** ở p95, trong khi tăng VU gấp 10 lần chỉ làm p95 đi từ 6 lên 7ms. Nghĩa là **trên môi trường không kiểm soát, nhiễu lớn hơn tín hiệu một bậc**. Hệ quả: mọi so sánh tuyệt đối giữa hai lượt CI đều vô giá trị; chỉ so được tỉ lệ trong cùng một lượt. Cái phải trả: gấp đôi thời gian CI cho mỗi PR |
+| **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **9,4 lần** avg. Nhưng p95 cũng không bắt được đuôi: max **363ms** trong khi p95 7ms, gấp **52 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load 3,4× → Stress 9,4×), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
 | **Perf test tự làm hỏng điều kiện đo của nó** | Chính bộ test này đã đẩy `products` từ ~50k lên 436k dòng. Nếu chạy trong CI mà không dọn, mỗi lượt lại chậm hơn lượt trước vì lý do không liên quan gì tới code → baseline trôi và mọi so sánh mất nghĩa. Bắt buộc: teardown dọn dữ liệu, hoặc restore snapshot DB trước mỗi lượt |
 
 ---
@@ -460,9 +491,14 @@ Chi tiết: [`bug-report/bug-report.md`](../bug-report/bug-report.md) · kiểm 
 | BUG-P2 | Tài liệu thiếu | `POST /api/coupon-usage` tồn tại, cần token, **ghi thật** vào `coupon_usage`, nhưng **không có trong `api_specification.md`** | Xác nhận |
 | — | **ĐÃ LOẠI** | "`import-products` báo sai số dòng insert" — bác bỏ: 5/5, 60/60, 2/3 đều đúng | Ghi lại kèm bảng kiểm chứng |
 
-**Vấn đề hiệu năng:** không có lỗi (0% error ở cả 4 lượt), nhưng **có một suy giảm đã đo được**:
-§2.8 — hệ thống xấu đi 2,4–6,4 lần dưới tải cao khi dữ liệu phình 8 lần. Đây là phát hiện hiệu
-năng thật, và nó thuộc loại §6 gọi là *"encouraged but not penalised"*.
+**Vấn đề hiệu năng:** không có lỗi nào (0% error ở cả 4 lượt), và **không có suy giảm nào chứng
+minh được**. Bản báo cáo trước tuyên bố có một suy giảm 2,4–6,4 lần do dữ liệu phình; §2.8 giải thích
+vì sao tuyên bố đó đã bị chính tôi bác bỏ. Theo §6 mục này *khuyến khích, không bắt buộc*, và báo cáo
+"không tìm thấy, kèm lý do vì sao phép đo chưa đủ để kết luận" trung thực hơn là giữ một phát hiện
+không đứng được.
+
+Điều **đo được** và đáng ghi: ở 200 VU / 564 req/s, `node` tiêu **98,4% của một lõi** trong khi máy
+còn 11 lõi rảnh. Đó là trần kiến trúc (một luồng JS), không phải trần phần cứng.
 
 ---
 
@@ -470,15 +506,25 @@ năng thật, và nó thuộc loại §6 gọi là *"encouraged but not penalise
 
 Bốn giới hạn, xếp theo mức ảnh hưởng tới kết luận:
 
-1. **Kích thước dữ liệu không được kiểm soát giữa các lượt.** §2.8 cho thấy đây là biến số **lớn
-   nhất** của toàn bộ bài — lớn hơn cả số VU trong một số trường hợp. Bộ số liệu 14/08 đo trên
-   436.692 dòng `products`; muốn so sánh với bất kỳ lượt nào khác thì phải khai kích thước DB kèm
-   theo. Lẽ ra phải restore snapshot DB trước mỗi lượt, và đó là điều tôi làm khác đi nếu làm lại.
-2. **Load generator và SUT chạy trên cùng một máy.** Ở Stress 14/08, JMeter tiêu CPU đỉnh 118% và
-   833 MB RAM, `node` 108% — hai bên xấp xỉ nhau, nên một phần latency đo được vẫn là chi phí của
-   chính load generator.
+1. **Tải nền của máy không được kiểm soát.** §2.8 chứng minh đây là biến **áp đảo**: `load_1m` đi từ
+   5,2 xuống 3,1 làm p95 Stress đi từ ~70ms xuống 7ms — chênh **10 lần**, lớn hơn hiệu ứng của việc
+   tăng VU gấp 10 lần. Lúc đo vẫn có 4 container Docker, VS Code và một tiến trình AI agent chạy song
+   song. Đây là điều tôi làm khác đi nếu làm lại: đóng hết, hoặc ít nhất ghi `load_1m` và chỉ so các
+   lượt có `load_1m` tương đương.
+2. **Load generator và SUT chạy trên cùng một máy.** Ở Stress, JMeter CPU đỉnh **106,2%** và `node`
+   **98,4%** — xấp xỉ nhau, nên một phần latency đo được là chi phí của chính load generator.
 3. **Mật khẩu lưu plaintext, so sánh bằng `===`** ([`server.js:46`](../../eshop-sut/backend/server.js#L46)).
-   Không có bcrypt/argon2 nên login không tốn CPU băm. p95 107ms của `POST /api/login` **không**
-   đại diện cho hệ thống băm mật khẩu đúng cách.
-4. **Bước 5 chỉ ghi thật 400 lần mỗi lượt** (bằng số dòng `orders.csv`); phần còn lại trả 400 do
-   state machine FR-10. p95 của bước 5 vì thế bị kéo xuống — tín hiệu ghi nặng nằm ở bước 4.
+   Không có bcrypt/argon2 nên login không tốn CPU băm. p95 7ms của `POST /api/login` **không** đại
+   diện cho hệ thống băm mật khẩu đúng cách — ở đó login thường là endpoint đắt nhất theo một cấp độ
+   khác hoàn toàn.
+4. **Bước 5 chỉ ghi thật 400 lần mỗi lượt** (bằng số dòng `orders.csv`); 99,3% sample ở Stress trả
+   400 do state machine FR-10 chặn trước lệnh `UPDATE`. p95 5ms của bước 5 vì thế **không** đại diện
+   cho chi phí ghi — tín hiệu đó nằm ở bước 4.
+
+### 6.1 Nếu làm lại, tôi đổi ba thứ
+
+| Đổi gì | Vì sao |
+|---|---|
+| Đóng mọi ứng dụng khác, ghi `load_1m` trước/sau, chỉ so lượt có tải nền tương đương | §2.8 — biến áp đảo, và tôi đã suýt công bố một kết luận sai vì bỏ qua nó |
+| Restore snapshot DB trước mỗi lượt | `products` trôi từ 5 lên 830.139 dòng **do chính bộ test**; không cô lập được biến này thì không trả lời được câu hỏi về kích thước dữ liệu |
+| Tách load generator sang máy khác | JMeter và `node` tiêu CPU xấp xỉ nhau ở Stress, nên không tách được chi phí của hai bên |
