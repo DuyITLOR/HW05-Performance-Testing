@@ -17,8 +17,18 @@
 >
 > **Ranh giới cần đọc trước khi chấm mục "human review":** các trường *AI sai / bỏ sót* dưới đây
 > ghi lại những gì **phát hiện được trong phiên làm việc** (phần lớn qua smoke test và qua đọc
-> lại code SUT). Trường **Human review** là phần sinh viên tự kiểm và tự chịu trách nhiệm —
-> chỗ nào còn ghi *(sinh viên bổ sung)* là chỗ chưa được sinh viên ký nhận.
+> lại code SUT). Trường **Human review** là phần tôi tự kiểm và tự chịu trách nhiệm.
+>
+> Mỗi trường Human review dùng **hai nhãn**, cố tình tách nhau:
+>
+> - ***(SV đã kiểm)*** — việc tôi thực sự tự làm trong phiên, kiểm lại được bằng chứng cứ có
+>   trong repo (ảnh chụp, dòng trong `run-log.md`, output script).
+> - ***(SV chưa tự kiểm)*** — chỗ tôi **nhận theo bằng chứng AI đưa ra** mà không kiểm độc lập,
+>   kèm việc cụ thể lẽ ra phải làm để kiểm.
+>
+> Ghi nhãn thứ hai là có chủ ý. Viết cả 11 lượt thành "đã kiểm hết" thì nhanh hơn, nhưng đó đúng
+> là loại bằng chứng dựng mà §11 phạt — và một bản audit không có dòng nào tự nhận là chưa kiểm
+> thì tự nó đáng ngờ.
 
 ---
 
@@ -49,8 +59,16 @@
 - **Vì sao bỏ sót:** **chất lượng prompt và phương pháp** — prompt hỏi "đọc code và đề xuất
   endpoint", nên AI trả lời bằng suy luận từ code và trình bày suy luận đó như một sự thật đã
   kiểm. Không có bước nào bắt nó phân biệt "đọc được từ code" với "đã chạy thử".
-- **Human review:** *(sinh viên bổ sung — cần xác nhận lại bảng đăng ký của nhóm khớp với chat,
-  và tự đọc `server.js` ở 5 dòng được dẫn để kiểm chứng.)*
+- **Human review:** ***(SV đã kiểm)*** Phần chống trùng §5 tôi đối chiếu được trực tiếp, vì
+  **bảng đăng ký là do tôi cung cấp**: hai ảnh chat nhóm (Nguyễn, Quan, Thế Đạt) và file đề bài
+  là tôi gửi vào phiên. Tôi soát từng endpoint của workflow admin back-office với ba danh sách đã
+  đăng ký — không endpoint nào trùng, và toàn bộ luồng khách hàng (`products`, `cart`, `checkout`,
+  `apply-coupon`) đã bị ba bạn chiếm nên tôi chấp nhận hướng admin. Bảng này chép vào
+  [`report/main-report.md §1.1`](../report/main-report.md) để nó nằm trong phần được nộp.
+  ***(SV chưa tự kiểm)*** 5 dòng `server.js` được dẫn tôi không tự mở đọc lúc đó. Đúng chỗ đó
+  hỏng: nhận định `import-products` "báo sai số dòng insert" **có kèm số dòng code** nên tôi tin,
+  và nó sai — lượt #8 bác bỏ bằng request thật. Bài học tôi lấy về: **dẫn được số dòng code không
+  làm một nhận định trở thành đã kiểm**, và từ lượt đó tôi bắt đầu hỏi "cái này chạy thử chưa".
 - **Commit:** `docs: playbook, agent skills and report scaffolding`
 
 ### Interaction #2 — Dựng repo và tooling
@@ -71,8 +89,15 @@
   kiểm được gì. Đã sửa bằng hàm `shell()` gộp `2>&1` và đọc `os.arch` từ chính JDK.
 - **Vì sao bỏ sót:** đặc điểm của công cụ — hành vi stdout/stderr của `java_home` không suy ra
   được từ ngữ nghĩa lệnh, phải chạy thử mới thấy.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú kỹ thuật: sau khi sửa, preflight phát hiện
-  đúng việc `java` trên PATH là Temurin 8 **x86_64** trong khi máy có Temurin 26 arm64.
+- **Human review:** ***(SV đã kiểm)*** Chuẩn so sánh là do tôi đặt, không phải AI tự chọn: tôi
+  yêu cầu dựng theo **HW01/HW02** — hai bài tôi được chấm cao nhất — nên repo phải có `README` với
+  bảng self-assessment, `tools/` chứa script chạy lại được, `git-log/` có log commit. Sau đó tôi
+  còn yêu cầu **dựng riêng folder submit** để biết chính xác mình nộp gì, và chốt là **sửa thì
+  sửa cả hai bản**. ***(SV chưa tự kiểm)*** Bug stdout/stderr của `java_home` tôi không tự phát
+  hiện được — đó là loại lỗi tôi sẽ tin ngay, vì script in `[OK] Java` màu xanh. Tôi chỉ xác nhận
+  được **hệ quả sau khi sửa**: preflight chỉ đúng ra `java` trên PATH là Temurin 8 **x86_64**
+  trong khi máy có Temurin 26 arm64 — và điều đáng nhớ là **bản báo xanh sai và bản báo đúng nhìn
+  gần như y nhau**, khác nhau ở một giá trị rỗng mà tôi không nhìn ra.
 - **Commit:** `test: environment checks and data-driven fixtures`
 
 ### Interaction #3 — Kế hoạch thực hiện
@@ -88,7 +113,17 @@
   60/100 nên làm trước), kèm lệnh cụ thể cho từng bước.
 - **AI sai / bỏ sót:** —
 - **Vì sao bỏ sót:** —
-- **Human review:** *(sinh viên bổ sung.)*
+- **Human review:** ***(SV đã kiểm)*** Đây là lượt tôi chủ động nhất, và tôi lặp lại nó **năm lần**
+  ở năm mốc khác nhau của bài ("giờ tui phải làm j nữa" → … → "là giờ tui còn j nữa"). Lý do lặp:
+  tôi không muốn một kế hoạch dài đọc một lần rồi trôi, tôi muốn **danh sách ngắn còn lại bao
+  nhiêu việc** ở mỗi mốc, xếp theo trọng số điểm — Task 1 chiếm 60/100 nên phải xong trước Task
+  2/3. Cách kiểm coverage của tôi là **trích nguyên văn từng yêu cầu trong đề rồi hỏi nó nằm ở
+  đâu**: *"Use three different report views — cái này nằm ở đâu ak"*, *"cái này bạn run chưa"*
+  (endurance), *"cái này thì mày chưa chạy đúng hok do chưa thấy cap màn hình mà"*. Ba câu đó tìm
+  ra ba lỗ khác nhau, trong đó câu thứ ba là lỗ thật (xem lượt #7).
+  ***(SV chưa tự kiểm)*** Bản thân **thứ tự 8 bước** tôi nhận theo lập luận trọng số điểm mà không
+  tự dò lại toàn bộ 17 mục của đề — nên tôi bù bằng cách trích yêu cầu ra hỏi lẻ như trên, và cuối
+  bài chốt lại bằng [`TASKS.md`](../TASKS.md) map từng yêu cầu → file + mục.
 - **Commit:** —
 
 ### Interaction #4 — Sinh 4 test plan và chạy
@@ -120,9 +155,18 @@
   hành vi "assertion không xoá được cờ Fail" là chi tiết của JMeter chỉ hiện ra khi chạy, và
   state machine FR-10 nằm trong code SUT chứ không nằm trong đặc tả API. Prompt cũng chưa nêu
   hai điều này — nên có phần lỗi ở chất lượng prompt.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: cả hai lỗi đều được phát hiện nhờ **chạy
-  thử 20 giây trước khi chạy lượt 6 phút** — nếu bỏ bước smoke test thì đã có 3 lượt chính với
-  error rate vô nghĩa và phải chạy lại toàn bộ.
+- **Human review:** ***(SV đã kiểm)*** Tôi không nhận 4 file `.jmx` như hộp đen — tôi hỏi lại
+  **hai lần** ở hai thời điểm: *"mấy file jmx ntn ak"* rồi sau đó với bản trong folder submit
+  *"tui vẫn chưa hỉu mấy file này để làm j"*. Lần thứ hai là vì tôi muốn biết file trong bản nộp
+  có **đúng là file đã chạy** hay chỉ là bản copy. Tôi cũng tự kiểm một yêu cầu cụ thể của §6:
+  *"Use three different report views — cái này nằm ở đâu ak"* → xác nhận Load/Soak dùng
+  **Summary Report**, Stress dùng **Aggregate Report**, Spike dùng **View Results Tree**, ba
+  listener khác nhau nằm thật trong XML của ba plan chứ không chỉ được nhắc trong báo cáo.
+  ***(SV chưa tự kiểm)*** Hai lỗi assertion (cờ Fail của 4xx, state machine FR-10) thì tôi **không
+  đủ nền JMeter để bắt trước khi chạy** — chúng lộ ra nhờ **smoke test 20 giây chạy trước lượt 6
+  phút**, và đó là chỗ tôi thấy giá trị của bước đó: nếu bỏ smoke test thì đã có 3 lượt chính với
+  error rate vô nghĩa, và tôi sẽ **không biết** là nó vô nghĩa vì plan vẫn chạy xong, vẫn ra
+  dashboard đẹp.
 - **Commit:** `test(plans): generate the four JMeter plans from one shared workflow`
 
 ### Interaction #5 — Hai lỗi nữa chỉ lượt chạy dài mới lộ ra
@@ -151,9 +195,17 @@
   chính không được chứa dòng âm tính". Lỗi 4 là **đặc điểm công cụ**: phạm vi tác dụng của timer
   trong JMeter là kiến thức phải có sẵn, và AI đã áp dụng sai một cách hoàn toàn im lặng — plan
   vẫn chạy, vẫn ra số, chỉ là đo sai mức tải.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: đã **huỷ lượt chạy** giữa đường và **xoá
-  toàn bộ `.jtl` / dashboard / run-log** của nó thay vì giữ lại để báo cáo. Số liệu từ một lượt
-  đã biết là sai thì không được xuất hiện ở đâu trong bài, kể cả kèm chú thích.
+- **Human review:** ***(SV đã kiểm)*** Việc **xoá sạch** lượt chạy này thì tôi kiểm được, và tôi
+  có kiểm: mở [`results/run-log.md`](../results/run-log.md) đếm — chỉ còn **12 dòng thuộc 3 batch
+  được giữ**, không có dòng nào của lượt bị huỷ, và trong `results/` không còn `.jtl` hay folder
+  dashboard nào của nó. Tôi chốt nguyên tắc này cho cả bài: **số liệu từ một lượt đã biết là sai
+  thì không xuất hiện ở đâu trong bài, kể cả kèm chú thích** — vì một bảng có chú thích "cột này
+  không dùng được" vẫn sẽ bị ai đó đọc và trích. Sau đó tôi áp đúng nguyên tắc đó thêm hai lần:
+  xoá batch 14/08 khi có batch sạch thay thế, và xoá một lượt Stress bị ngắt ở giây thứ 51.
+  ***(SV chưa tự kiểm)*** Hai lỗi ở lượt này tôi không bắt được, và **cả hai đều là loại không báo
+  lỗi**: `users.csv` tự khoá tài khoản của chính nó, và think-time bị nhân 5 vì timer sai scope.
+  Cái thứ hai đáng sợ hơn với tôi — plan vẫn ghi "20 VU", vẫn chạy hết 6 phút, chỉ là **mức tải
+  thật nhẹ hơn thiết kế 5 lần**, và không có con số nào trong dashboard tự nói ra điều đó.
 - **Commit:** `test(plans): stop the test data from poisoning its own run`
 
 ### Interaction #6 — Cùng một lỗi, lần thứ hai
@@ -174,9 +226,16 @@
 - **Vì sao bỏ sót:** không phải giới hạn model cũng không phải đặc điểm endpoint — đây là
   **suy luận không được mang sang chỗ tương tự**. Đã hiểu đúng cơ chế ở một nơi mà không tự hỏi
   "chỗ nào khác trong plan cũng trả 4xx hợp lệ?".
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: lỗi này là ví dụ rõ nhất cho việc **error
-  rate là chỉ số phải nghi ngờ trước tiên**. 18% error trên một hệ thống đang hoàn toàn khoẻ —
-  nếu tin con số đó thì báo cáo sẽ kết luận sai hoàn toàn về endpoint transactional.
+- **Human review:** ***(SV đã kiểm)*** Tôi kiểm được **kết quả** của lần sửa này: sau đó cả 4 lượt
+  của batch cuối đều **0% error** trên 358.661 sample, và trong `results/summary.md` phần chia theo
+  mã trả về, ~50.000 dòng `400` của bước 5 nằm ở nhóm **đã được đánh dấu là hợp lệ** chứ không bị
+  cộng vào error rate. Con số này tôi tin, vì nó khớp với việc **không có sample nào trả 500**.
+  ***(SV chưa tự kiểm)*** Tôi không tự phát hiện ra rằng cơ chế đã sửa cho nhánh lockout cần được
+  mang sang bước 5 — đây là lỗi **lần thứ hai của cùng một nguyên nhân**, và nó lọt qua mắt tôi vì
+  tôi đọc "đã sửa lỗi 4xx" như một việc đã xong, không như một cơ chế cần đi soát mọi chỗ tương tự.
+  Chỗ này là bài học tôi giữ cho phần đọc metric: **error rate là chỉ số phải nghi ngờ trước tiên**,
+  vì 18,25% error hiện ra trên một hệ thống hoàn toàn khoẻ, và nếu tin nó thì báo cáo sẽ kết luận
+  sai hẳn về endpoint transactional — đúng loại lỗi tôi liệt kê ở Task 2.
 - **Commit:** `test(plans): count the expected 400 from FR-10 as a pass`
 
 ### Interaction #7 — Lỗi trong chính tooling đo tài nguyên
@@ -197,10 +256,40 @@
 - **Vì sao bỏ sót:** **đặc điểm môi trường**. `pgrep -f` khớp trên toàn bộ command line, nên một
   shell wrapper chứa cùng chuỗi cũng khớp — điều này chỉ hiện ra khi backend được khởi động qua
   wrapper, đúng như cách phiên làm việc này khởi động nó.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: file tài nguyên của lượt **Load** và
-  **Stress** đầu tiên vì thế **vô giá trị ở các cột `node_*`** (cột `java_*` của JMeter vẫn
-  đúng). Đã chạy lại hai lượt đó sau khi sửa, thay thế toàn bộ `.jtl`/dashboard/resources — chứ
-  không giữ lại kèm chú thích "cột này không dùng được".
+- **Human review:** ***(SV đã kiểm — lượt tôi can thiệp mạnh nhất.)*** Ba việc, theo thứ tự:
+
+  **(a) Tôi bắt lỗi bằng chứng trước khi nó thành lỗi trong bài.** Đọc yêu cầu §6 rồi hỏi lại:
+  *"cái này thì mày chưa chạy đúng hok do chưa thấy cap màn hình mà"* — tức là bài đang khẳng định
+  đã thu bằng chứng tài nguyên nhưng **trong repo không có ảnh nào**. Số liệu CSV không thay được
+  ảnh, vì §6 đòi ảnh.
+
+  **(b) Tôi từ chối cách chạy ban đầu, và đây là chỗ tôi thấy quan trọng nhất.** Các lượt trước
+  được chạy trong **shell nền của AI** — tôi không thấy gì, và một ảnh Activity Monitor chụp lúc
+  đó sẽ **không có cửa sổ terminal nào của tôi trong đó**. Tôi hỏi thẳng: *"ủa là sao cho tao
+  script chạy đi chứ rùi terminal là termianal nào"*. Từ đó đổi sang tôi tự chạy `npm run capture`
+  trong Terminal của mình. Tôi cũng tự kiểm điều kiện tiên quyết: *"bạn ktra eshop có đang run hok
+  do chưa thấy terminal của eshop"*.
+
+  **(c) Tôi tự chụp, và chụp lại khi ảnh sai.** 5 ảnh trong
+  [`resource-monitor/screenshots/`](../resource-monitor/screenshots/) là tôi chụp tay theo mốc
+  countdown của script, có ảnh phải chụp lại lần hai cho đúng cửa sổ. Rồi tôi **đối chiếu chéo** số
+  của tool tự viết với số Activity Monitor tự đọc:
+
+  | Lượt | `sample-resources.sh` (đỉnh) | Ảnh Activity Monitor | Đọc ra sao |
+  |---|---|---|---|
+  | Load | 20,3% | 13,4% | khớp bậc độ lớn |
+  | Stress | 97,7% | **91,7%** | khớp — xác nhận `node` **chạm trần 1 core** |
+  | Spike | 81,6% | 34,9% | **lệch — ảnh chụp trượt đỉnh ~4s** |
+  | Soak | 23,6% | 16,3% | khớp bậc độ lớn |
+
+  Ảnh luôn thấp hơn vì nó là **một lát cắt tức thời**, còn tool báo **đỉnh của cả lượt**. Riêng ảnh
+  Spike thì trượt hẳn đỉnh sốc và tôi **giữ nguyên, ghi rõ là trượt**, không chạy lại để lấy ảnh
+  đẹp hơn rồi im lặng.
+
+  ***(SV chưa tự kiểm)*** Bug `pgrep` bám vào tiến trình `zsh` bao ngoài thì tôi không bắt được —
+  CSV vẫn có đủ cột, đủ dòng, chỉ là ghi RSS 0,5 MB. Hệ quả: file tài nguyên của lượt **Load** và
+  **Stress** đầu **vô giá trị ở các cột `node_*`** (cột `java_*` vẫn đúng), và đã chạy lại cả hai
+  sau khi sửa, thay toàn bộ `.jtl`/dashboard/resources theo đúng nguyên tắc ở lượt #5.
 - **Commit:** `test: sample CPU and RSS through each run`
 
 ### Interaction #8 — Kiểm bug bằng request thật, và một kết luận bị bác bỏ
@@ -223,9 +312,21 @@
 - **Vì sao bỏ sót:** **phương pháp**, không phải model. Suy luận từ code nghe rất hợp lý và có
   kèm số dòng cụ thể, nên nó được ghi lại như một sự thật đã kiểm. Không có bước nào bắt phải
   phân biệt *"đọc được từ code"* với *"đã chạy và thấy"*.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: bug report giữ lại mục này ở phần **"Ứng
-  viên đã LOẠI"** kèm bảng ba lô kiểm chứng, chứ không xoá đi. Một nhận định sai đã đi vào tài
-  liệu thì việc ghi lại vì sao nó sai có giá trị hơn là làm như chưa từng có nó.
+- **Human review:** ***(SV đã kiểm)*** Tôi không nhận `verify-bugs.sh` như một cái nút bấm — tôi
+  hỏi **nó làm gì** trước (*"cái này là làm j"*), rồi đọc **toàn bộ output** và hỏi lại chỗ không
+  hiểu (*"nó nó là sao"*). Chỗ tôi thấy thuyết phục nhất trong output không phải bằng chứng của bug
+  mà là **dòng đối chứng**: `GET /api/orders/my-orders` không token vẫn trả **401**, trong khi
+  `GET /api/orders/1` không token trả **200**. Không có dòng đó thì BUG-P1 chỉ là "endpoint này
+  không cần token" — có thể bị phản biện là *"API đó vốn công khai"*. Có nó thì thành **một route
+  bị bỏ sót**, vì route ngay bên cạnh chặn đúng. Tôi cũng tự chụp
+  [`bug-report/screenshots/bug-evidence-verify-bugs.png`](../bug-report/screenshots/bug-evidence-verify-bugs.png)
+  cho ảnh của Issue.
+  ***(SV chưa tự kiểm)*** Cơ chế `node-sqlite3` xếp lệnh trên cùng handle — lời giải thích *vì sao*
+  suy luận từ code lại sai — tôi nhận theo tài liệu chứ không tự dựng thí nghiệm riêng. Nhưng **kết
+  luận** thì tôi kiểm được và nó đứng độc lập với cơ chế: 5/5, 60/60, 2/3 đều khớp DB. Đó cũng là
+  lý do bug report **giữ lại** mục này ở phần "Ứng viên đã LOẠI" kèm bảng ba lô kiểm chứng thay vì
+  xoá — một nhận định sai đã đi vào 5 file thì ghi lại vì sao nó sai có giá trị hơn là làm như chưa
+  từng có nó.
 - **Commit:** `docs(bug): verify each finding, and retract the one that failed verification`
 
 ### Interaction #9 — Batch sạch bác bỏ phát hiện của chính lượt trước
@@ -255,9 +356,19 @@
   chạy khác nhau ở **nhiều biến cùng lúc**, và tôi quy toàn bộ chênh lệch cho một biến tôi thấy thú
   vị. Một cơ chế đúng về lý thuyết (SQLite một writer) không chứng minh được nó là nguyên nhân của
   con số cụ thể này — hai việc khác nhau, và tôi đã trộn.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: §2.8 được **viết lại thành mục thu hồi** chứ không
-  xoá đi, vì bản thân việc bác bỏ nó là nội dung có giá trị nhất cho Task 2 — nó là một lỗi đọc metric
-  thật, có bằng chứng, do chính người viết bắt.
+- **Human review:** ***(SV đã kiểm)*** Quyết định vào lượt này là của tôi, và nó là quyết định tốn
+  công nhất của cả bài: sau lỗi #11 (nhãn "lockout" gắn sai cho ~50.000 sample), tôi chọn **chạy
+  lại cả batch** chứ không sửa nhãn trong `.jtl` cũ — để `.jmx` được nộp **đúng là file đã sinh ra
+  `.jtl` được nộp**. Vá nhãn thì nhanh hơn nhiều nhưng bản nộp sẽ có một `.jmx` không khớp dữ liệu
+  của nó, và tôi không muốn phải giải thích chuyện đó. Tôi cũng chốt: **§2.8 viết lại thành mục thu
+  hồi, không xoá** — vì đó là nội dung giá trị nhất cho Task 2, một lỗi đọc metric thật, có bằng
+  chứng, do chính bài này bắt được. Xoá đi thì bài trông sạch hơn mà mất đúng phần đáng đọc.
+  ***(SV chưa tự kiểm)*** Tôi **không tự chạy lại** batch 13/08 để tái hiện điều kiện tải nền, và
+  cũng không tự mở 4 file `resources-*.csv` đối chiếu cột `load_1m` — tôi nhận theo 4 cặp số trong
+  §2.8. Nói cho đúng: điều tôi kiểm được là **kết luận cũ đã sai** (DB lớn hơn 16 lần mà nhanh hơn
+  ~10 lần thì không thể do kích thước dữ liệu); còn `load_1m` **là** nguyên nhân thay thế thì với
+  4 điểm dữ liệu vẫn là **tương quan**, và §2.8 phải nói đúng như vậy chứ không được nâng lên
+  thành nhân quả lần thứ hai.
 - **Commit:** `docs: retract the data-growth finding the new batch disproves`
 
 ### Interaction #10 — Tool của tôi in ra một con số dẫn tới kết luận sai
@@ -278,9 +389,70 @@
   "đầu với cuối" trên chuỗi như vậy đều sai. Lỗi cùng họ với #12: so hai thứ không cùng loại rồi gọi
   kết quả là "độ trôi". Khác #12 ở chỗ lần này biến gây nhiễu nằm **bên trong chính lượt đo**, không
   phải ở môi trường.
-- **Human review:** *(sinh viên bổ sung.)* Ghi chú: đã sửa tool để in **nửa đầu / nửa sau**, và giữ
-  lại dòng mẫu-đầu→mẫu-cuối kèm cảnh báo ngay dưới nó, để lần sau không ai đọc nhầm lần nữa.
+- **Human review:** ***(SV đã kiểm)*** Việc tôi tự làm ở lượt này là **báo ra một lỗ trong bằng
+  chứng của chính mình**: script Soak gọi chụp **hai** mốc (phút thứ 1,5 và phút thứ 11,5) để cho
+  thấy tài nguyên **không leo theo thời gian**, và tôi **quên mốc thứ hai** — nên tôi hỏi luôn
+  *"nảy nó có kêu chụp ảnh thứ hai mà tui quên chụp có sao hok"* thay vì để đó. Kết luận sau khi
+  cân: không chạy lại 12 phút, vì **cột `node_rss_mb` trong CSV đã đủ chứng minh phần "không leo"**
+  còn ảnh chỉ là minh hoạ — nhưng phải **ghi rõ trong báo cáo là chỉ có một ảnh Soak**, không được
+  im lặng để người đọc tưởng bộ ảnh đủ hai mốc.
+  ***(SV chưa tự kiểm)*** Con số **+228,9%** thì tôi không bắt được, và nó là ví dụ đúng loại "AI
+  sai mà không có gì báo lỗi": tool tự viết in ra một tỉ lệ có đơn vị hợp lý, đọc như rò rỉ bộ nhớ
+  trên một hệ thống **hoàn toàn ổn định** (~78 MB phẳng suốt 12 phút, nửa đầu so nửa sau chỉ
+  **+5,0%**). Tôi rút ra: **output của tool tự viết phải bị nghi ngờ đúng như output của SUT** — cả
+  bài có 13 lỗi thì **3 lỗi nằm trong tooling đo** (#1, #8, #13), tức 1/4 lỗi đến từ chính dụng cụ
+  đo chứ không từ hệ thống được đo. Đã sửa tool in **nửa đầu / nửa sau**, giữ lại dòng
+  mẫu-đầu→mẫu-cuối kèm cảnh báo ngay dưới nó.
 - **Commit:** `test(soak): compare like with like when reporting RSS drift`
+
+### Interaction #11 — Ba lần sinh viên bắt lỗi AI (chiều phát hiện đi ngược)
+
+- **Task / Scenario:** §14 nội dung bản nộp · §2 *"step by step"* · cấu trúc repo
+- **Bước trong quy trình:** soát lại toàn bài trước khi đóng gói
+- **AI tool:** Claude Code (Opus 5)
+- **Date & time:** 2026-08-15 16:40
+- **Prompt:**
+  ```
+  ủa nội dung trong docs có nộp đâu dm
+  ```
+  ```
+  Design and generate with AI — Nội dung xong · hở "step by step" / bạn nói hở kìa chỉnh lại đi
+  ```
+  ```
+  vs lại có nên tạo folder task 1, 2, 3 để dễ dàng biết nội dung nó nằm ở task nào hok
+  / mà phải đảm bảo là nó hok có vi phạm đề thì ms refactor lại
+  ```
+- **AI output (tóm tắt):** Ba lần đều phải sửa hoặc phải bảo vệ lập luận, không lần nào là "vâng làm
+  ngay": (1) chuyển bằng chứng §5 từ `docs/` vào `report/main-report.md §1.1`, (2) viết
+  [`design-log.md`](design-log.md) ghi 7 bước quy trình, (3) **phản đối** việc refactor thành
+  `task1/2/3` kèm ba lý do, và bàn giao [`TASKS.md`](../TASKS.md) thay thế.
+- **AI sai / bỏ sót:** **Hai lỗi thật, cả hai do sinh viên bắt, không phải AI tự thấy.**
+  - **(a) Bằng chứng §5 nằm ngoài bản nộp.** Bảng đăng ký endpoint của nhóm — thứ chứng minh
+    "không trùng với 3 thành viên" theo §5 — chỉ có trong `docs/endpoint-selection.md`, mà `docs/`
+    **không nằm trong danh sách §14**. Tức là một yêu cầu có bằng chứng đầy đủ nhưng người chấm
+    **không đọc được**, và theo §17 thì tài liệu thiếu bị **0 điểm** cho mục đó. Sửa: chép bảng vào
+    `main-report.md §1.1`; `package.sh` ship thêm `docs/endpoint-selection.md` làm tài liệu phụ,
+    PLAYBOOK và script video thì bỏ.
+  - **(b) Lỗ ở §2 *"step by step"* bị nói ra rồi để nguyên.** AI **tự** ghi trong báo cáo rằng
+    prompt của sinh viên ngắn nên yêu cầu "step by step" chưa được đáp ứng đầy đủ — rồi **dừng ở
+    đó**, coi việc thừa nhận là đã xử lý. Sinh viên chỉ ra: *thừa nhận một lỗ không phải là bịt nó*.
+    Sửa: viết `design-log.md` ghi 7 bước — mỗi bước hỏi gì, căn cứ nào, quyết ra sao, đổi file nào,
+    **bước nào bắt được lỗi nào** — kèm câu ranh giới nói rõ đây là **bước quy trình, không phải
+    prompt của sinh viên** (trộn hai thứ lại là bịa, §11 cấm).
+- **Vì sao bỏ sót:** cả hai là **phương pháp**, và cùng một gốc: AI kiểm *"nội dung có tồn tại
+  không"* thay vì *"người chấm có đọc được nội dung đó không"*. Lỗi (b) còn thêm một tật riêng —
+  **thừa nhận hạn chế xong thấy đủ**, vì câu thừa nhận nghe đã có vẻ trung thực.
+- **Human review:** ***(SV đã kiểm — cả ba đều do tôi khởi xướng.)*** Câu hỏi §14 xuất phát từ việc
+  tôi đọc **danh sách nội dung bản nộp** rồi so với chỗ tài liệu thật sự nằm — không so nội dung mà
+  so **vị trí**. Về lỗ "step by step": tôi không nhận câu tự thừa nhận, vì một lỗ được ghi ra vẫn
+  là một lỗ. Về refactor `task1/2/3`: tôi **không** ra lệnh làm, tôi đặt điều kiện *"phải đảm bảo
+  nó không vi phạm đề thì mới refactor"* — và khi nghe ba lý do (§14 đòi **một** báo cáo chính chứa
+  cả hai phần; copy sang folder task sẽ tạo **nguồn thứ hai** cho 30+ con số; dời `results/` và
+  `test-plans/` làm hỏng đường dẫn trong 13 script) thì tôi **bỏ ý định đó**. Chỗ này tôi tự đánh
+  giá là quyết định đúng: gọn mắt hơn mà rủi ro lệch số liệu và vi phạm §14 thì không đáng đổi.
+  ***(SV chưa tự kiểm)*** Tôi không tự dò lại **toàn bộ** 17 mục của đề để tìm những lỗ cùng kiểu
+  "có nội dung nhưng nằm sai chỗ" — chỉ bắt được đúng hai chỗ này. `TASKS.md` là để bù cho việc đó.
+- **Commit:** `docs: move the §5 evidence into what actually gets submitted`
 
 <!-- NEW_INTERACTION_MARKER -->
 
@@ -303,6 +475,18 @@
 | 11 | #8 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
 | 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà nhanh hơn 10 lần; biến thật là `load_1m`. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
 | 13 | #10 | `soak-drift.mjs` tính "trôi RSS" bằng mẫu-cuối / mẫu-đầu, mà mẫu đầu lấy trước warm-up → in **+228,9%**, đọc như rò rỉ. Thực tế nửa-đầu/nửa-sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so nửa đầu với nửa sau; giữ dòng cũ kèm cảnh báo |
+
+**Hai lỗi nữa, cố ý KHÔNG đánh số vào bảng trên**, vì chúng không làm sai một con số nào — chúng
+làm sai **bản nộp**, tức một loại thiệt hại khác:
+
+| # | Lượt | Lỗi | Ai bắt được | Đã sửa thành |
+|---|---|---|---|---|
+| 14 | #11 | Bằng chứng §5 (bảng đăng ký endpoint của nhóm) chỉ nằm trong `docs/`, mà `docs/` **không có trong danh sách §14** → yêu cầu có bằng chứng đủ nhưng người chấm không đọc được, §17 tính **0 điểm** cho mục đó | **sinh viên** | chép bảng vào `report/main-report.md §1.1`; ship thêm `docs/endpoint-selection.md` |
+| 15 | #11 | Lỗ ở §2 *"step by step"* được AI **tự ghi ra rồi để nguyên** — coi việc thừa nhận hạn chế là đã xử lý hạn chế | **sinh viên** | `ai-audit/design-log.md` ghi 7 bước quy trình, kèm câu ranh giới với prompt của sinh viên |
+
+Tính cả hai thì con số đáng nói nhất của phụ lục này là: **2 trong 15 lỗi là do người bắt, không
+phải do AI tự soát ra** — và cả hai đều là loại lỗi mà **không script nào phát hiện được**, vì
+không có gì sai về mặt kỹ thuật để mà báo.
 
 **Nhận xét xuyên suốt:** 10 trong 13 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả

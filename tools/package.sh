@@ -28,10 +28,10 @@ if [ -z "$GRADE" ]; then
   echo "Dùng: bash tools/package.sh <điểm 0-100> [--check]"
   exit 2
 fi
-GRADE3="$(printf "%03d" "$GRADE")"
-
+# Điểm ghi ĐÚNG như nhập, không pad thêm 0. HW02/03/04 đều tự chấm 100 nên tên file khi đó là
+# `_100` — đọc nhầm thành "luôn 3 chữ số" thì điểm 88 sẽ ra `_088`, một dạng số không ai viết.
 MSSV="23127178"
-NAME="${MSSV}_HW05_AI_Performance_${GRADE3}"
+NAME="${MSSV}_HW05_AI_Performance_${GRADE}"
 
 MISSING=0
 need() { # $1 = đường dẫn, $2 = mô tả theo §14

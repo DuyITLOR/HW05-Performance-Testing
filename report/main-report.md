@@ -147,7 +147,7 @@ có thể không làm p95 tổng nhích lên đủ để vượt ngưỡng cản
 
 ### 2.4 Human review — AI sai gì, vì sao (§6 chấm mục này)
 
-Toàn bộ 11 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
+Toàn bộ 13 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
 Bảy bước của quy trình thiết kế — mỗi bước hỏi gì, căn cứ nào, quyết ra sao, và **bước nào bắt được
 lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 
@@ -162,18 +162,33 @@ lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 | 7 | Áp `mark_expected_4xx` cho lockout mà quên bước 5 | Báo **18,25% error** trên hệ thống khoẻ; 667/667 sample "lỗi" là 400 hợp lệ | suy luận không mang sang chỗ tương tự | dùng lại cùng cơ chế cho bước 5 |
 | 8 | `sample-resources.sh` dùng `pgrep -f 'node server.js' \| head -1` | Khớp cả tiến trình `zsh` bao ngoài → ghi **RSS 0,5MB / CPU 0%** suốt 6 phút | đặc điểm môi trường | lọc theo token đầu command line phải là `node` |
 | 9 | Khẳng định `import-products` báo sai số dòng insert | **Bác bỏ khi chạy thử**: 5/5, 60/60, 2/3 đều đúng. Đã lan vào 5 file | phương pháp: suy luận từ code trình bày như sự thật đã kiểm | giữ ở mục "đã loại" kèm bảng kiểm chứng |
-| 10 | `Math.min(...array)` trong summarizer | Tràn call stack với `.jtl` 251k sample; chạy qua bình thường ở file 16k | đặc điểm dữ liệu | thay bằng `reduce` |
+| 10 | `Math.min(...array)` trong summarizer | Tràn call stack với `.jtl` **264.141** sample; chạy qua bình thường ở file 16k | đặc điểm dữ liệu | thay bằng `reduce` |
 | 11 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"* | Dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của endpoint không liên quan gì tới lockout. Không sai số đo, nhưng là **nhãn sai nằm trong bằng chứng gốc** | suy luận không mở rộng — **cùng loại lỗi #7** | tham số hoá `reason` theo từng nhánh |
+| 12 | Kết luận **kích thước dữ liệu** gây suy giảm p95 2,4–6,4 lần, kèm cơ chế SQLite một writer | **Nhân quả rút từ một so sánh không kiểm soát biến nào.** Batch sạch bác bỏ: DB **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến thật là `load_1m`. Kết luận sai đã lan tới **headline README**, một **nhánh flow chart Task 3** và một dòng **self-assessment** | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` |
+| 13 | `soak-drift.mjs` tính "trôi RSS" = mẫu cuối / mẫu đầu | Mẫu đầu (19,7 MB) lấy **trước khi warm-up xong** → in **+228,9%**, đọc y như một vụ rò rỉ bộ nhớ. Thực tế RSS phẳng ~78 MB suốt 12 phút; nửa đầu so nửa sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so **nửa đầu / nửa sau**; giữ dòng cũ kèm cảnh báo |
 
-**7 trong 10 lỗi không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
-đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 7 đều lọt. Chi phí thật: **hai
+**10 trong 13 lỗi không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
+đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 10 đều lọt. Chi phí thật: **hai
 lượt chạy phải huỷ và xoá sạch bằng chứng**, ~25 phút chạy lại.
 
-Phân bố ba nhóm lý do §6 yêu cầu phân loại lệch hẳn về một phía: **6 lỗi là đặc điểm
-công cụ/endpoint/môi trường**, 1 là chất lượng prompt, 1 là phương pháp, 2 là *suy luận đúng
-nhưng không mang sang chỗ tương tự* (#7 và #11 — cùng một cơ chế, sai hai lần), và **không lỗi nào** thuộc
-"model không đủ khả năng". Điểm yếu không nằm ở chỗ AI không biết viết test plan, mà ở chỗ nó
-**không chạy thử và không đối chiếu với thực tế**.
+Phân bố ba nhóm lý do §6 yêu cầu phân loại lệch hẳn về một phía: **7 lỗi là đặc điểm
+công cụ/endpoint/môi trường/dữ liệu**, 1 là chất lượng prompt, **3 là phương pháp** (#9, #12, #13),
+2 là *suy luận đúng nhưng không mang sang chỗ tương tự* (#7 và #11 — cùng một cơ chế, sai hai lần),
+và **không lỗi nào** thuộc "model không đủ khả năng". Điểm yếu không nằm ở chỗ AI không biết viết
+test plan, mà ở chỗ nó **không chạy thử và không đối chiếu với thực tế**.
+
+Một con số đáng chú ý riêng: **3 trong 13 lỗi nằm trong chính tooling đo** (#1 preflight, #8
+sample-resources, #13 soak-drift) — gần **1/4 số lỗi đến từ dụng cụ đo, không từ hệ thống được
+đo**. Đó là lý do §6 của bài này đối chiếu chéo số của tool tự viết với ảnh Activity Monitor thay
+vì tin một nguồn duy nhất (§2.5).
+
+**Hai lỗi nữa không nằm trong bảng, vì chúng không làm sai con số nào — chúng làm sai bản nộp**,
+và **cả hai do tôi bắt, không phải AI tự soát ra**: (14) bằng chứng §5 chỉ nằm trong `docs/` là
+folder **không có trong danh sách §14** → yêu cầu có bằng chứng đủ mà người chấm không đọc được,
+§17 tính 0 điểm cho mục đó, đã chép vào **§1.1** của chính báo cáo này; (15) lỗ ở §2 *"step by
+step"* được AI **tự ghi ra rồi để nguyên**, coi thừa nhận hạn chế là đã xử lý hạn chế, đã bịt bằng
+`ai-audit/design-log.md`. Tính cả hai: **2 trong 15 lỗi của cả bài là do người bắt** — và đó đúng
+là hai lỗi **không script nào phát hiện được**, vì không có gì sai về mặt kỹ thuật để mà báo.
 
 ### 2.5 Bằng chứng chạy
 

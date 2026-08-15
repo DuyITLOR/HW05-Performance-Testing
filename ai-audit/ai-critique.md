@@ -10,11 +10,11 @@
 
 ## Critique
 
-AI sai mười hai lần, nhưng chỉ một lỗi nghiêm trọng. Mười một lỗi kia là kỹ thuật: think-time nhân
+AI sai mười ba lần, nhưng chỉ một lỗi nghiêm trọng. Mười hai lỗi kia là kỹ thuật: think-time nhân
 năm lần vì timer sai scope, dữ liệu test tự khoá tài khoản của chính nó, 4xx hợp lệ bị tính thành
 lỗi hiệu năng. Chúng lộ ra ngay khi đọc `.jtl`.
 
-Lỗi thứ mười hai khác hẳn: AI so hai lượt chạy cách nhau hai ngày, thấy p95 chênh vài lần, rồi kết
+Lỗi còn lại khác hẳn: AI so hai lượt chạy cách nhau hai ngày, thấy p95 chênh vài lần, rồi kết
 luận **kích thước dữ liệu** là nguyên nhân — kèm cơ chế nghe rất thuyết phục về SQLite một writer.
 Nó gọi đó là "phát hiện quan trọng nhất của bài", đưa lên headline README, dựng một nhánh flow chart
 Task 3 dựa trên nó. Lượt chạy sạch hôm sau bác bỏ: database lớn hơn mười sáu lần mà nhanh hơn mười
