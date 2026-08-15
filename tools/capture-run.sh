@@ -172,10 +172,13 @@ for S in "${SCENARIOS[@]}"; do
   # đỉnh, rồi tụt khi các VU bắt đầu chờ think-time lệch pha nhau. Một ảnh trong cửa sổ 30 giây là
   # một lát cắt may rủi.
   #
-  # Cách sửa không phải "chụp lại cho tới khi ra số đẹp" — đó là chọn bằng chứng. Cách sửa là chụp
-  # **cả ba mốc và giữ cả ba**: ảnh ở giây 72 vẫn là ảnh chính (§6 cần một ảnh), hai ảnh kia đi kèm
-  # để thấy CPU biến thiên thế nào trong chính cửa sổ sốc. Ba ảnh nói được nhiều hơn một, và không
-  # có ảnh nào bị loại.
+  # §6 chỉ đòi **một** ảnh cho mỗi scenario. Hai mốc thêm là **bảo hiểm cho việc canh giờ**, không
+  # phải yêu cầu: nếu ảnh ở giây 72 đọc ra số thấp (tức đã trượt), thì còn hai mốc nữa vẫn nằm trong
+  # cửa sổ sốc để chụp. Nếu tấm đầu đã tốt thì bỏ qua hai mốc sau, không sao cả.
+  #
+  # Điều KHÔNG được làm: chụp nhiều tấm rồi chọn tấm có số cao nhất mà im lặng — đó là chọn bằng
+  # chứng. Nếu giữ nhiều tấm thì giữ hết và nói rõ tấm nào ở giây nào. Lượt 21:59 chỉ cần tấm đầu:
+  # đọc 72,6% so với đỉnh tool đo 75,7%.
   if [ "$S" = "Spike" ]; then
     echo ""
     echo "  Cửa sổ sốc rộng ~30s và CPU trong đó KHÔNG phẳng → chụp thêm 2 mốc, GIỮ CẢ BA."
