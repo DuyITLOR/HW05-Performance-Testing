@@ -1,3 +1,40 @@
+* ef9cc96 2026-08-15 23:25:22 +0700 DuyITLOR
+|   docs: rewrite the video script around what each file prevents
+| The old script walked the assignment's requirements. Rewritten to walk the files instead, because a
+| grader can already read what a file contains - what they cannot see is which mistake it exists to
+| stop. Every block is contains-what / produces-what / prevents-what, and the third line is the one
+| marked as the important one to say slowly.
+| 
+| Grouped by role rather than by task number: files that generate the plans, files that clean up before
+| measuring, the live run with Activity Monitor in frame, files that read the results, the Agent Skills
+| segment, and the verify/package pair. 10:00 target against a 6:00 minimum.
+| 
+| Each prevents-line is tied to a specific logged mistake, so the narration has something concrete
+| behind it: gen-test-plans makes the shared workflow structural rather than promised; the JSR223
+| post-processor is why smoke tests stopped reporting 41% error on a healthy system; the split CSVs are
+| why the main thread group stopped locking out its own accounts; preflight catches the Rosetta JVM
+| before a six-minute run is wasted; reset-lockout matters because this SUT increments login_attempts by
+| two; capture-run counts down because the shock window is 30 seconds wide and the first attempt caught
+| 34.9% against a real 81.6%.
+| 
+| Three requirements the assignment names explicitly get their own scripted lines rather than being left
+| to improvisation: why 400 and 403 are marked successful (with the consequence that 539.7 req/s is
+| workflow throughput, not completed transactions), how lockout is reset between runs, and an
+| end-to-end skill run that stops at the human-review step.
+| 
+| Every command in it was executed to confirm it runs and every path checked to exist. Closes with the
+| CI result that contradicted its own purpose - three identical runs at 101, 15 and 8 ms - since that is
+| the strongest thing the submission has to say.
+| 
+|  docs/kich-ban-video-demo.md | 339 ++++++++++++++++++++++++++++++++++++------
+|  1 file changed, 294 insertions(+), 45 deletions(-)
+| 
+* 25b1606 2026-08-15 23:20:36 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 40 ++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 40 insertions(+)
+| 
 * 95a0d80 2026-08-15 23:20:34 +0700 DuyITLOR
 |   docs: pull three conclusions back to what the data supports
 | The reviewer's sharpest point is that several conclusions are stated more strongly than the evidence
