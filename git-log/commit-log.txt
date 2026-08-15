@@ -1,3 +1,31 @@
+* 70b2c0c 2026-08-15 22:35:42 +0700 DuyITLOR
+|   docs(ci): a sixth run appeared, and I cannot say what triggered it
+| gh run list shows six perf-smoke runs where ci/ci-runs.md documented five. The sixth is a 5-VU
+| push-triggered run that passed with 779 samples and p95 8ms - identical to run 3, also 5 VU. Two
+| 5-VU runs matching exactly while three 20-VU runs span 12.6x says the variance switches on with
+| load rather than being present at every level, which sharpens §4.4.
+| 
+| What I cannot explain: the run says it came from a push, but git diff --name-only for that push
+| matches none of the workflow's paths filters. The plausible story is the concurrency group queueing
+| it from an earlier push, and plausible is exactly what §2.8 says not to accept, so it is recorded as
+| unknown rather than explained. Counts synced in four documents.
+| 
+|  README.md                    |   2 +-
+|  TASKS.md                     |   2 +-
+|  ai-audit/ai-audit-report.pdf | Bin 677859 -> 677859 bytes
+|  ai-audit/ai-critique.pdf     | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf    | Bin 296646 -> 296646 bytes
+|  ci/ci-runs.md                |  22 +++++++++++++++++-----
+|  report/main-report.md        |   4 ++--
+|  report/main-report.pdf       | Bin 902015 -> 902018 bytes
+|  8 files changed, 21 insertions(+), 9 deletions(-)
+| 
+* 1521aba 2026-08-15 22:29:24 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 49 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 49 insertions(+)
+| 
 * 104466d 2026-08-15 22:29:23 +0700 DuyITLOR
 |   test: add a verifier so the report's numbers can be checked without trusting it
 | Every document in the repo is an assertion, and a reviewer reading only documents cannot tell a
