@@ -1,3 +1,41 @@
+* 961e1fb 2026-08-15 17:34:41 +0700 DuyITLOR
+|   docs: two of the three Spike peak numbers were wrong, and the cause was misattributed
+| Checking whether re-running Spike would change the report turned up that §3.4 states the per-window
+| peak p95 of the three Spike runs as 47 / 65 / 7 ms. Measured back from the .jtl files: 47 / 8 / 12.
+| The 7ms also contradicts the 10-second window table four lines above it, which puts the 90-100s
+| window at 12ms.
+| 
+| Worse than the numbers: the section attributed the spread to load_1m, and load_1m does not order
+| these runs. The highest background load (6.0) produced 12ms while the run that produced 47ms sat at
+| 4.5. §2.8 had already retracted exactly this style of single-variable attribution - the retraction
+| just never reached §3.4, which went on using the reasoning that had been withdrawn. Logged as #17,
+| the inverse of #7 and #11: a fix that was not carried to every place the old reasoning had reached.
+| 
+| The conclusion that survives needs no attribution at all, and is stronger for it: spike runs carry
+| the largest run-to-run variance of any scenario here - 5.9x spread across three runs whose sample
+| counts differ by 0.8% - because the reading comes from a 30-second window where any short event on
+| the machine moves the number. What causes it is recorded as unknown.
+| 
+| It now has independent support from §4.4, where three CI runs identical in every parameter returned
+| 101 / 15 / 8 ms on a clean runner. Two platforms, same phenomenon, which is why node I of the flow
+| chart demands reproducibility before alerting.
+| 
+|  README.md                    |  10 +++++-----
+|  ai-audit/ai-audit-report.md  |  12 +++++++-----
+|  ai-audit/ai-audit-report.pdf | Bin 664876 -> 672398 bytes
+|  ai-audit/ai-critique.pdf     | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf    | Bin 296646 -> 296646 bytes
+|  report/main-report.md        |  42 +++++++++++++++++++++++++++++++++--------
+|  report/main-report.pdf       | Bin 835296 -> 861178 bytes
+|  tools/capture-run.sh         |   6 +++++-
+|  8 files changed, 51 insertions(+), 19 deletions(-)
+| 
+* a9a39a0 2026-08-15 17:26:35 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 105 +++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 105 insertions(+)
+| 
 * 09810ec 2026-08-15 17:26:33 +0700 DuyITLOR
 |   docs: close the Task 3 deduction with five real CI runs, and log the mistake they exposed
 | Self-assessment goes 88 to 99. The Task 3 point came back by doing the work rather than by
