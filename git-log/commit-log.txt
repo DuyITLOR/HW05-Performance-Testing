@@ -1,3 +1,60 @@
+* c419c7a 2026-08-15 22:10:01 +0700 DuyITLOR
+|   test(spike): re-run the whole scenario so the screenshot and the numbers come from one run
+| The Spike screenshot caught node at 34.9% against a real peak of 81.6% - it landed outside the
+| 30-second shock window - and that cost a self-assessed point. Fixed by re-running the scenario, not
+| by re-shooting a frame: 21:59, full 240s, 38,251 samples, 0% error, so the .jmx, .jtl, dashboard,
+| resources CSV and screenshot all belong to a single run. The new capture reads 72.6% against a
+| tool-measured peak of 75.7%.
+| 
+| That distinction is the whole point, since 'run it again for a nicer picture' is exactly what §2.5
+| says it will not do. Picking one frame out of a run and attaching it to numbers from a different run
+| is selecting evidence. Re-running everything and keeping the old run is not - the 15:47 run was not
+| deleted, it became the fourth row in §3.4.
+| 
+| Four Spike runs now, and the fourth column is what makes the table worth reading: node CPU peak is
+| 75.7 / 76.1 / 78.9 / 81.6% - four percentage points apart - while peak-window p95 spans 47 / 8 / 12 /
+| 9 ms, a 5.9x range, on sample counts that differ by 0.8%. The server does the same amount of work
+| every time. The 5.9x is queueing, not load, which is why a single Spike run cannot serve as a
+| baseline even when CPU looks completely normal. load_1m still fails to order the runs (3.3 gives 9ms,
+| 6.0 gives 12ms, 4.5 gives 47ms).
+| 
+| Dashboard regenerated from the .jtl with jmeter -g rather than by running the plan a third time.
+| 
+| I also had this wrong mid-session: I measured the .jtl while the run was still in progress, read 164
+| of 240 seconds, and reported the run as aborted. The run-log row and the completed file say
+| otherwise. Reading a file that is still being written and treating the result as final is the same
+| error as comparing a pre-warm-up sample against a settled one (#13).
+| 
+|  README.md                                         |    28 +-
+|  ai-audit/ai-audit-report.md                       |    15 +-
+|  ai-audit/ai-audit-report.pdf                      |   Bin 672398 -> 677859 bytes
+|  ai-audit/ai-critique.pdf                          |   Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf                         |   Bin 296646 -> 296646 bytes
+|  docs/review-task1.md                              |     2 +-
+|  report/main-report.md                             |    48 +-
+|  report/main-report.pdf                            |   Bin 861178 -> 874374 bytes
+|  resource-monitor/screenshots/activity-spike.png   |   Bin 1436609 -> 1403854 bytes
+|  results/html/spike/content/js/dashboard.js        |     4 +-
+|  results/html/spike/content/js/graph.js            |    32 +-
+|  .../html/spike/content/pages/CustomsGraphs.html   |     6 +-
+|  results/html/spike/content/pages/OverTime.html    |     6 +-
+|  .../html/spike/content/pages/ResponseTimes.html   |     6 +-
+|  results/html/spike/content/pages/Throughput.html  |     6 +-
+|  results/html/spike/index.html                     |     6 +-
+|  results/html/spike/statistics.json                |   106 +-
+|  .../jtl/23127178_Spike_20260815-215939.jmeter.log |   595 +
+|  results/jtl/23127178_Spike_20260815-215939.jtl    | 38252 ++++++++++++++++++
+|  .../23127178_Spike_20260815-215939.resources.csv  |   116 +
+|  results/run-log.md                                |     1 +
+|  results/summary.md                                |    27 +-
+|  22 files changed, 39120 insertions(+), 136 deletions(-)
+| 
+* 7d8aa30 2026-08-15 17:34:42 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 38 ++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 38 insertions(+)
+| 
 * 961e1fb 2026-08-15 17:34:41 +0700 DuyITLOR
 |   docs: two of the three Spike peak numbers were wrong, and the cause was misattributed
 | Checking whether re-running Spike would change the report turned up that §3.4 states the per-window
