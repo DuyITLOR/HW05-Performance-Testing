@@ -1,3 +1,52 @@
+* 104466d 2026-08-15 22:29:23 +0700 DuyITLOR
+|   test: add a verifier so the report's numbers can be checked without trusting it
+| Every document in the repo is an assertion, and a reviewer reading only documents cannot tell a
+| measured number from a written one. tools/verify-all.sh goes the other way: it recomputes from .jmx,
+| .jtl, .csv and screenshot mtimes, then compares against what the report prints, and on a mismatch
+| shows both values. It reads no numbers out of any .md to compute with. 33 PASS, 1 FAIL - the missing
+| video link.
+| 
+| The checks worth having:
+| 
+|   - The four plans share one workflow, verified by extracting each plan's endpoint list and comparing
+|     the strings, so editing one plan by hand turns it red. Not by trusting the generator.
+|   - Three distinct listener types across Load/Stress/Spike, counted as distinct.
+|   - Each CSV is actually referenced by a plan, not merely present.
+|   - §11's real check: each screenshot's mtime must fall inside its run's window from run-log, with
+|     UTC-to-local conversion and a 90s grace because mtime is when the file was saved, not when the
+|     frame was taken.
+| 
+| TASKS.md gains a third column - the command to check each row yourself - and a closing section naming
+| the four things no script can confirm: group non-duplication (needs the chat screenshots), what is
+| inside a screenshot as opposed to when it was taken, the video, and k6.
+| 
+| Two real defects surfaced while writing it. §3.5 quoted JMeter CPU 106.2% against node 98.4% and
+| called them comparable; those are the 14:34 run's numbers, and the submitted 15:37 run reads 178.3%
+| against 97.7% - the load generator costing 1.8x the system under test, which is a stronger statement
+| and changes how every p95 here should be read. It also never said which run it was quoting. The
+| generator ratio itself varies 1.7x between two runs whose SUT CPU is identical, so the section now
+| carries both rows. And the heading said 'cross-check with k6' for a tool that has never been run;
+| saying a cross-check happened when it did not is exactly the class of claim Task 2 exists to catch.
+| 
+| Also fixed in the verifier itself: grep -c exits 1 on no match, so '|| echo 0' appended a second
+| line and turned the count into '0\n0', which printed a FAIL for a passing check.
+| 
+|  TASKS.md                     | 133 +++++++++++++++++------------
+|  ai-audit/ai-audit-report.pdf | Bin 677859 -> 677859 bytes
+|  ai-audit/ai-critique.pdf     | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf    | Bin 296646 -> 296646 bytes
+|  package.json                 |   3 +-
+|  report/main-report.md        |  35 ++++++--
+|  report/main-report.pdf       | Bin 888393 -> 902015 bytes
+|  tools/verify-all.sh          | 186 +++++++++++++++++++++++++++++++++++++++++
+|  8 files changed, 297 insertions(+), 60 deletions(-)
+| 
+* 943a4ad 2026-08-15 22:20:16 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 49 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 49 insertions(+)
+| 
 * 3907728 2026-08-15 22:20:15 +0700 DuyITLOR
 |   docs(task2): the tear-down finding did not reproduce, so demote it
 | Recomputing the 10-second window table against the run that is actually submitted showed that §3.4's
