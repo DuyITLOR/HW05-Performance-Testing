@@ -110,7 +110,10 @@ console.log(`  Độ trôi         : ${drift >= 0 ? '+' : ''}${n1(drift)}%   (ng
 console.log(`  Error rate tổng : ${n1(errAll)}%        (ngưỡng cho phép: < 1%)`);
 const stable = Math.abs(drift) <= 20 && errAll < 1;
 console.log(`\n  → ${stable ? 'ỔN ĐỊNH theo đúng định nghĩa đã chốt trước khi chạy.' : 'KHÔNG ổn định — xem cửa sổ nào bắt đầu xấu ở bảng trên.'}`);
-console.log(`  → Max stable RPS ở mức tải này: ${n1(samples.length / totalSec)} req/s`);
+// KHÔNG gọi là "max stable RPS": đây là nhịp đã xác nhận bền được ở ĐÚNG mức tải của lượt soak
+// (20 VU, think-time 1–2s). Mức tối đa phải tìm bằng cách tăng dần sustained load qua nhiều bậc.
+console.log(`  → Nhịp đã xác nhận bền được ở mức tải này: ${n1(samples.length / totalSec)} req/s`);
+console.log(`     (KHÔNG phải mức tối đa — lượt Stress đạt 539,7 req/s với 0% error)`);
 
 // ── Bộ nhớ, đọc từ file resources cùng lượt ─────────────────────────────────────
 const resPath = jtlPath.replace('/jtl/', '/resources/').replace(/\.jtl$/, '.resources.csv');

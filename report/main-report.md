@@ -197,18 +197,38 @@ là hai lỗi **không script nào phát hiện được**, vì không có gì s
 
 ### 2.5 Bằng chứng chạy
 
-| Scenario | Test plan | Raw `.jtl` | HTML dashboard |
-|---|---|---|---|
-| Load | `23127178_Load_20260813.jmx` | `results/jtl/…20260814-093756.jtl` | [`results/html/load/`](../results/html/load/index.html) |
-| Stress | `23127178_Stress_20260813.jmx` | `results/jtl/…20260814-101731.jtl` | [`results/html/stress/`](../results/html/stress/index.html) |
-| Spike | `23127178_Spike_20260813.jmx` | `results/jtl/…20260814-102710.jtl` | [`results/html/spike/`](../results/html/spike/index.html) |
-| Soak | `23127178_Soak_20260813.jmx` | `endurance/jtl/…20260814-103245.jtl` | [`endurance/html/soak/`](../endurance/html/soak/index.html) |
+| Scenario | Test plan | Raw `.jtl` **được nộp làm số chính** | HTML dashboard | Ảnh §6 |
+|---|---|---|---|---|
+| Load | `23127178_Load_20260813.jmx` | `results/jtl/23127178_Load_20260815-152938.jtl` | [`results/html/load/`](../results/html/load/index.html) | `activity-load.png` — **13,4%** |
+| Stress | `23127178_Stress_20260813.jmx` | `results/jtl/23127178_Stress_20260815-153717.jtl` | [`results/html/stress/`](../results/html/stress/index.html) | `activity-stress.png` — **91,7%** |
+| Spike | `23127178_Spike_20260813.jmx` | `results/jtl/23127178_Spike_20260815-215939.jtl` | [`results/html/spike/`](../results/html/spike/index.html) | `activity-spike.png` — **72,6%** |
+| Soak | `23127178_Soak_20260813.jmx` | `endurance/jtl/23127178_Soak_20260815-155240.jtl` | [`endurance/html/soak/`](../endurance/html/soak/index.html) | `activity-soak.png` — **16,3%** |
 
-**Ảnh Activity Monitor: chưa có.** Lần chụp đầu dùng `screencapture` toàn màn hình và bắt được cửa
-sổ đang ở trước (VS Code của một project khác, và một lần là Mission Control) chứ không phải JMeter
-+ Activity Monitor. Những ảnh đó **vô giá trị** làm bằng chứng §6 nên đã bị xoá, kể cả khỏi lịch
-sử git. Cách làm đúng: giới hạn vùng chụp theo bounds của đúng hai cửa sổ cần thiết
-(`screencapture -R`), và vì §6 đòi chụp **trong lúc** lượt chạy diễn ra nên phải chạy lại 4 lượt.
+**Ảnh: đủ 4 lượt + 1 ảnh spec máy**, ở [`resource-monitor/screenshots/`](../resource-monitor/screenshots/).
+Cột cuối là số `node` CPU **đọc được trong ảnh**; đối chiếu với đỉnh do tool đo ở bảng dưới.
+
+Mốc thời gian từng ảnh chốt trong
+[`resource-monitor/screenshots/manifest.json`](../resource-monitor/screenshots/manifest.json) — mỗi
+ảnh có `sha256` + `captured_at` + lượt chạy tương ứng + **offset giây** tính từ lúc lượt bắt đầu.
+Kiểm bằng `npm run verify` mục 4.
+
+**Vì sao chốt vào manifest chứ không đọc `mtime`:** `package.sh` copy bằng `cp -R`, và `cp` **đặt
+mtime mới** cho bản copy — chạy validator bên trong `.zip` sẽ báo đỏ toàn bộ dù ảnh hoàn toàn thật.
+`sha256` là phần làm manifest có giá trị: nếu chỉ ghi giờ thì sửa một dòng JSON là xong.
+
+**Một chi tiết phải nói ra, vì §11 chấm đúng chỗ này:** `activity-stress.png` có giờ lưu **sau khi
+lượt Stress kết thúc vài giây**. `Cmd+Shift+4` ghi file lúc **nhả chuột**, nên giờ lưu luôn trễ hơn
+khoảnh khắc trong khung. Bằng chứng khung hình đúng là trong lượt nằm ở **nội dung ảnh**: nó đọc
+`node` **91,7%**, chỉ có ở bậc 200 VU, còn sau khi lượt kết thúc thì `node` về dưới 5%. Manifest ghi
+nhận ảnh này là *lưu sau lượt* thay vì để nó lặng lẽ đậu ở biên.
+
+**Đường đi tới bộ ảnh này, vì §11 chấm bằng chứng có thật:** lần chụp đầu dùng `screencapture` toàn
+màn hình và bắt được cửa sổ đang ở trước (VS Code của một project khác, một lần là Mission Control)
+chứ không phải JMeter + Activity Monitor. Những ảnh đó **vô giá trị** làm bằng chứng §6 nên đã bị
+xoá, kể cả khỏi lịch sử git. Cách làm đúng và đã dùng: **sinh viên tự chạy `npm run capture` trong
+Terminal của mình**, script đếm ngược tới mốc cần chụp, và vì §6 đòi chụp **trong lúc** lượt chạy
+diễn ra nên 4 lượt đã được chạy lại. Riêng Spike phải chạy lại lần nữa lúc 21:59 vì ảnh đầu trượt
+đỉnh cú sốc (34,9% trong khi đỉnh thật 81,6%).
 
 Bằng chứng tài nguyên **dạng số** thì có đầy đủ và tính toán được — `results/resources/*.csv` và
 `endurance/resources/*.csv`, lấy mẫu 2 giây/lần cho cả `node` và JMeter:
@@ -279,7 +299,7 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 | Chỉ số | Giá trị |
 |---|---|
 | Thời lượng soak | **719,6s** (12 phút) · 45.166 sample |
-| **Max stable RPS** | **62,8 req/s** ở 20 VU |
+| **Nhịp đã xác nhận bền được** *(không phải "tối đa")* | **62,8 req/s** ở 20 VU |
 | p95 toàn lượt | **8 ms** · p99 12 ms |
 | p95 5 phút đầu → cuối | 8 ms → **8 ms** (**+0%**) |
 | Error rate | **0%** |
@@ -562,8 +582,8 @@ cùng lúc với job của người khác. Nên baseline **không thể** là "p
 | **Báo động giả** | Nguồn nhiễu lớn nhất là **máy chạy**. Bài này đo trên cấu hình load generator và SUT **cùng máy**; riêng việc `java` chạy qua Rosetta thay vì arm64 đã đủ làm sai lệch. Vì thế ngưỡng 20% chứ không phải 5%, và đòi lặp lại 2 lượt. Cái phải trả: hồi quy **nhỏ mà thật** (10–15%) sẽ lọt |
 | **Độ tin của baseline** | p95 **tuyệt đối** không so được giữa hai runner khác cấu hình. Baseline phải là p95 của **cùng commit `main`, cùng runner, cùng lượt CI** — mỗi lượt chạy hai lần và chỉ so tỉ lệ. Gấp đôi chi phí, và đó là giá của việc con số có nghĩa |
 | **Bỏ sót** | Lọc theo `backend/` bỏ sót ít nhất ba loại hồi quy: (1) frontend gọi API nhiều hơn — tải tăng mà backend không đổi dòng nào; (2) hồi quy chỉ hiện sau 10 phút chạy liên tục, mà lượt 3 phút không thấy; (3) hồi quy do **dữ liệu** phình chứ không do code. Mục (3) là thứ bài này **không chứng minh được** — xem §2.8 — nên nó ở đây với tư cách **giả thuyết chưa kiểm**, không phải phát hiện |
-| **Nhiễu áp đảo tín hiệu** | Đây là trade-off quan trọng nhất và nó có số đo: §2.8 cho thấy tải nền tạo chênh lệch **10 lần** ở p95, trong khi tăng VU gấp 10 lần chỉ làm p95 đi từ 6 lên 7ms. Nghĩa là **trên môi trường không kiểm soát, nhiễu lớn hơn tín hiệu một bậc**. Hệ quả: mọi so sánh tuyệt đối giữa hai lượt CI đều vô giá trị; chỉ so được tỉ lệ trong cùng một lượt. Cái phải trả: gấp đôi thời gian CI cho mỗi PR |
-| **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **9,4 lần** avg. Nhưng p95 cũng không bắt được đuôi: max **363ms** trong khi p95 7ms, gấp **52 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load 3,4× → Stress 9,4×), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
+| **Nhiễu áp đảo tín hiệu** | Trade-off quan trọng nhất, và nó có số đo — **cập nhật theo batch được nộp**: §2.8 cho thấy `load_1m` chênh 1,8 lần (3,1 → 5,7) làm p95 chênh **2,6 lần**, trong khi tăng VU **gấp 10 lần** (20 → 200) chỉ làm p95 đi từ **8 lên 18ms**, tức **2,25 lần**. Nhiễu môi trường **lớn hơn** tín hiệu chủ động tạo ra. §4.4 xác nhận độc lập trên CI: ba lượt **giống nhau từng tham số** cho p95 **101/15/8ms** (**12,6 lần**). Hệ quả: mọi so sánh **tuyệt đối** giữa hai lượt CI là vô giá trị; chỉ so tỉ lệ trong cùng một lượt. Cái phải trả: gấp đôi thời gian CI cho mỗi PR |
+| **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **13,0 lần** avg (124 vs 9,6ms). Nhưng p95 cũng không bắt được đuôi: max **3.691ms** trong khi p95 18ms, gấp **205 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load **3,2×** → Stress **13,0×**), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
 | **Perf test tự làm hỏng điều kiện đo của nó** | Chính bộ test này đã đẩy `products` từ ~50k lên 436k dòng. Nếu chạy trong CI mà không dọn, mỗi lượt lại chậm hơn lượt trước vì lý do không liên quan gì tới code → baseline trôi và mọi so sánh mất nghĩa. Bắt buộc: teardown dọn dữ liệu, hoặc restore snapshot DB trước mỗi lượt |
 
 ### 4.4 Đã chạy thật trong CI — 6 lượt, và kết quả sửa lại chính §4.3
@@ -658,7 +678,7 @@ còn 11 lõi rảnh. Đó là trần kiến trúc (một luồng JS), không ph�
 
 ## 6. Giới hạn của bài đo này
 
-Bốn giới hạn, xếp theo mức ảnh hưởng tới kết luận:
+Năm giới hạn, xếp theo mức ảnh hưởng tới kết luận:
 
 1. **Tải nền của máy không được kiểm soát.** §2.8 chứng minh đây là biến **áp đảo** bằng ba điểm dữ
    liệu: `load_1m` 5,2 / 3,1 / 5,7 → p95 Stress 26 / 7 / 18 ms. Chênh 1,8 lần tải nền tạo ra chênh

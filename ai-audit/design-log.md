@@ -154,9 +154,9 @@ Lượt thứ ba còn lộ thêm: **18,25% error**, toàn bộ là 400 hợp l�
 | Trong đó **không** làm test plan báo lỗi | **7** |
 | Lượt chạy phải huỷ và xoá bằng chứng | 2 |
 
-Con số đáng chú ý nhất: **7/10 lỗi không làm plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra
+Con số đáng chú ý nhất: **12/15 lỗi kỹ thuật không làm plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra
 dashboard trông chuyên nghiệp — chỉ con số là sai. Nếu quy trình chỉ có "sinh plan rồi chạy" mà
 không có bước 5–6–7, cả 7 lỗi đó đều đi thẳng vào báo cáo.
 
-Danh sách 10 lỗi kèm phân loại lý do: [`ai-audit-report.md`](ai-audit-report.md) và
+Danh sách 15 lỗi kỹ thuật + 2 lỗi bản nộp kèm phân loại lý do: [`ai-audit-report.md`](ai-audit-report.md) và
 [`report/main-report.md §2.4`](../report/main-report.md).

@@ -1,0 +1,62 @@
+{
+  "note": "captured_at chốt một lần từ repo gốc — KHÔNG đọc lại mtime, vì cp/zip đặt mtime mới. sha256 để ảnh không thể bị thay. Nội dung trong ảnh vẫn phải xem bằng mắt.",
+  "screenshots": {
+    "activity-load.png": {
+      "sha256": "0acd3ef08f4f5ffdabfb3ea7e589b715deeda331dd33560742503d6df5c3c010",
+      "captured_at": "2026-08-15T08:33:45.706Z",
+      "bytes": 1407119,
+      "run": {
+        "scenario": "Load",
+        "start": "2026-08-15T08:29:38Z",
+        "end": "2026-08-15T08:35:41Z",
+        "jtl": "23127178_Load_20260815-152938.jtl"
+      },
+      "offset_s": 248,
+      "inside_run": true
+    },
+    "activity-soak.png": {
+      "sha256": "f7448dcb40e4812cd8430013e0923bd9a1da6066c1b6d443b01cd70eb9d761b2",
+      "captured_at": "2026-08-15T08:54:28.673Z",
+      "bytes": 1429407,
+      "run": {
+        "scenario": "Soak",
+        "start": "2026-08-15T08:52:40Z",
+        "end": "2026-08-15T09:04:44Z",
+        "jtl": "23127178_Soak_20260815-155240.jtl"
+      },
+      "offset_s": 109,
+      "inside_run": true
+    },
+    "activity-spike.png": {
+      "sha256": "14a7c8d5c70f870bd11744cf0b1f01184c0e45f99b28f33f8a8a30f82b75d9a0",
+      "captured_at": "2026-08-15T15:01:24.622Z",
+      "bytes": 1403854,
+      "run": {
+        "scenario": "Spike",
+        "start": "2026-08-15T14:59:39Z",
+        "end": "2026-08-15T15:03:43Z",
+        "jtl": "23127178_Spike_20260815-215939.jtl"
+      },
+      "offset_s": 106,
+      "inside_run": true
+    },
+    "activity-stress.png": {
+      "sha256": "07ea371d6981c43a0511ede737771d0ee88141d36284cb02e83e062423a60a5a",
+      "captured_at": "2026-08-15T08:45:25.791Z",
+      "bytes": 1412111,
+      "run": {
+        "scenario": "Stress",
+        "start": "2026-08-15T08:37:17Z",
+        "end": "2026-08-15T08:45:25Z",
+        "jtl": "23127178_Stress_20260815-153717.jtl"
+      },
+      "offset_s": 489,
+      "inside_run": false
+    },
+    "hardware-spec.png": {
+      "sha256": "a51f77f066a6528d58c85cf0243c45881465e45477d2b1891c34727b81db727d",
+      "captured_at": "2026-08-15T09:07:52.122Z",
+      "bytes": 1418194
+    }
+  }
+}

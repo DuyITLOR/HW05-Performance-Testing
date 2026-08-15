@@ -38,7 +38,12 @@ Kiểm lại bất cứ lúc nào: `npm run drift`
 
 | Chỉ số | Giá trị | Lấy từ đâu |
 |---|---|---|
-| **Max stable RPS** | **62,8 req/s** | 45.166 sample / 719,6s |
+| **Nhịp đã xác nhận bền được** | **62,8 req/s** | 45.166 sample / 719,6s |
+
+> **Cố ý KHÔNG gọi là "max stable RPS".** 62,8 req/s là nhịp **đã được xác nhận giữ ổn định 12 phút**,
+> không phải mức cao nhất backend chịu được — chính lượt Stress đã đạt **539,7 req/s** với 0% error.
+> Muốn gọi là *maximum* thì phải tăng dần **sustained load** qua nhiều bậc cho tới khi vi phạm tiêu chí
+> ổn định, rồi lấy bậc cuối còn đạt; bài này chưa làm bước đó. Xem mục 6.
 | **p95 toàn lượt** | **8 ms** | `results/summary.md`, dòng Soak |
 | p99 toàn lượt | 12 ms | như trên |
 | max | 192 ms | như trên |

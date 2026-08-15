@@ -75,7 +75,7 @@ hỏi gì · căn cứ nào · quyết ra sao · thay đổi cụ thể nào tro
 | 6 | Smoke test 20–40s trước lượt 6 phút | **2 lỗi** |
 | 7 | Đọc kết quả trước khi tin nó | **3 lỗi** (+4 lỗi tooling) |
 
-Con số đắt nhất trong nhật ký: **7/10 lỗi không làm test plan báo lỗi.** Không có bước 5–6–7 thì cả
+Con số đắt nhất trong nhật ký: **12/15 lỗi kỹ thuật không làm test plan báo lỗi.** Không có bước 5–6–7 thì cả
 7 lỗi đó đi thẳng vào báo cáo.
 
 - [ ] Đọc `design-log.md`, đối chiếu với `.jmx` xem các quyết định có khớp file thật không
@@ -180,7 +180,7 @@ muốn tên khớp ngày chạy: `npm run plans` sinh lại với ngày hôm nay
 > thread counts, weak assertions, or missing account-lockout handling — and explain **why** it
 > missed them (prompt quality, model limitations, or characteristics of the endpoint)."*
 
-### Đã làm — 10 lỗi, đủ 3 nhóm lý do
+### Đã làm — 15 lỗi kỹ thuật + 2 lỗi bản nộp, đủ 3 nhóm lý do
 
 Bảng đầy đủ: [`report/main-report.md §2.4`](../report/main-report.md) · chi tiết kèm prompt nguyên
 văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md) (8 lượt).
@@ -193,7 +193,7 @@ văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md) (8 lượt
 | *weak assertions* | #2 (lockout 41% error giả) · #3 (bước 5 assert cứng 200) · #7 (18% error giả) |
 | *missing account-lockout handling* | #5 — `users.csv` chứa dòng mật khẩu sai, luồng chính tự khoá tài khoản của mình |
 
-Điểm đáng nói nhất khi review: **7 trong 10 lỗi không làm test plan báo lỗi.** Plan vẫn chạy, vẫn
+Điểm đáng nói nhất khi review: **12 trong 15 lỗi kỹ thuật không làm test plan báo lỗi.** Plan vẫn chạy, vẫn
 ra `.jtl`, vẫn sinh dashboard — chỉ con số là sai.
 
 ### Tự kiểm
@@ -266,7 +266,7 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 | Chỉ số | Giá trị |
 |---|---|
 | Thời lượng | **719,6s** (12 phút) · 45.166 sample |
-| **Max stable RPS** | **62,8 req/s** |
+| **Nhịp bền được đã xác nhận** *(đề gọi là "max stable RPS" — bài cố ý không dùng chữ "max", xem endurance §3)* | **62,8 req/s** |
 | p95 | **8 ms** · p99 12 ms |
 | Trôi p95 (5 phút đầu → cuối) | **+0%** |
 | RSS nửa đầu → nửa sau | 74,5 → 78,3 MB (**+5,0%**, đi ngang) |

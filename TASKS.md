@@ -49,7 +49,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 | **Hardware report** (hostname khớp HW trước) | [`resource-monitor/hardware-report.md`](resource-monitor/hardware-report.md) — `Le-Nhut-Duy.local` | `verify-all.sh` mục 6 · `hostname -s` |
 | **Reset lockout giữa các lượt** + ghi thủ tục | [`report/main-report.md §2.6`](report/main-report.md) · [`tools/reset-lockout.mjs`](tools/reset-lockout.mjs), [`tools/reset-orders.mjs`](tools/reset-orders.mjs) | `node tools/reset-lockout.mjs` (cần SUT chạy) |
 | **Endurance threshold** kèm số cụ thể | [`endurance/endurance-threshold.md`](endurance/endurance-threshold.md) · §2.7 | `node tools/soak-drift.mjs` — tính lại từ `.jtl` |
-| **Video demo ≥6 phút** | **CHƯA CÓ** — kịch bản: [`docs/kich-ban-video-demo.md`](docs/kich-ban-video-demo.md) | `verify-all.sh` mục 6 — đang **[FAIL]** |
+| **Video demo ≥6 phút** | **CHƯA CÓ** — kịch bản `docs/kich-ban-video-demo.md` (chỉ trong repo, không đóng gói) · phải có cả đoạn **demo Agent Skill end-to-end** (§7) | `verify-all.sh` mục 6 — đang **[FAIL]** |
 | **Report issues** lên GitHub Issues | [`bug-report/bug-report.md`](bug-report/bug-report.md) — Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289) | `bash bug-report/verify-bugs.sh` — **gọi request thật** vào SUT, chạy lại từng bằng chứng |
 
 ## Task 2 — AI analysis and misinterpretation hunt (10 điểm)

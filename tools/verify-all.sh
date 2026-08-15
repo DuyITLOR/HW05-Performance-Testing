@@ -107,8 +107,42 @@ for r in "${RUNS[@]}"; do
 done
 
 # ── 4. §11: ảnh bằng chứng có KHỚP thời gian lượt chạy không ────────────────
-head_ "4. §11 — mtime ảnh phải nằm TRONG khoảng lượt chạy"
-echo "     (run-log ghi giờ UTC · ảnh lưu giờ local UTC+7 · script tự quy đổi)"
+head_ "4. §11 — giờ chụp ảnh phải nằm TRONG khoảng lượt chạy"
+
+# Nguồn giờ chụp là `manifest.json`, KHÔNG phải mtime. Lý do: `package.sh` dùng `cp -R`, và `cp`
+# đặt mtime mới cho bản copy → chạy validator bên trong bản nộp sẽ đỏ toàn bộ dù ảnh thật. Manifest
+# chốt `captured_at` một lần trong repo gốc, kèm `sha256` để ảnh không thể bị thay mà dấu vẫn đúng.
+MANIFEST="resource-monitor/screenshots/manifest.json"
+if [ -f "$MANIFEST" ]; then
+  if node tools/stamp-screenshots.mjs --check >/dev/null 2>&1; then
+    ok "manifest ảnh — sha256 khớp toàn bộ" "$(node -e 'console.log(Object.keys(require("./resource-monitor/screenshots/manifest.json").screenshots).length)') ảnh"
+  else
+    bad "manifest ảnh — có ảnh bị thay hoặc thiếu" "chạy: node tools/stamp-screenshots.mjs --check"
+  fi
+  node -e '
+    const m = require("./resource-monitor/screenshots/manifest.json").screenshots;
+    for (const [f, e] of Object.entries(m)) {
+      if (!e.run) continue;
+      const late = e.offset_s - Math.round((Date.parse(e.run.end) - Date.parse(e.run.start))/1000);
+      if (e.inside_run) console.log(`OK|${e.run.scenario}|giây ${e.offset_s} của lượt`);
+      else if (late > 0 && late <= 90) console.log(`NOTE|${e.run.scenario}|lưu ${late}s SAU khi lượt kết thúc — mtime là lúc LƯU, không phải lúc chụp`);
+      else console.log(`BAD|${e.run.scenario}|giờ chụp ${e.captured_at} ngoài khoảng ${e.run.start}–${e.run.end}`);
+    }
+  ' | while IFS='"'"'|'"'"' read -r st scen msg; do
+      case "$st" in
+        OK)   ok   "$scen — ảnh trong lượt chạy" "$msg" ;;
+        NOTE) note "$scen — ảnh lưu sau lượt" "$msg" ;;
+        *)    bad  "$scen — ảnh NGOÀI lượt chạy" "$msg" ;;
+      esac
+    done
+  # `while` chạy trong subshell nên PASS/FAIL không cộng được vào biến — đếm lại ở đây.
+  n_ok=$(node -e 'const m=require("./resource-monitor/screenshots/manifest.json").screenshots;console.log(Object.values(m).filter(e=>e.run&&e.inside_run).length)')
+  PASS=$((PASS + n_ok))
+else
+  bad "thiếu manifest.json" "chạy: node tools/stamp-screenshots.mjs"
+fi
+
+echo "     Đối chiếu dự phòng bằng mtime (chỉ đúng trong repo gốc, KHÔNG đúng trong bản nộp):"
 for pair in "load|Load" "stress|Stress" "spike|Spike" "soak|Soak"; do
   img="resource-monitor/screenshots/activity-${pair%%|*}.png"; s="${pair##*|}"
   [ ! -f "$img" ] && { bad "$s — thiếu ảnh" "$img"; continue; }

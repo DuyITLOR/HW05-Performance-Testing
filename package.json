@@ -19,6 +19,7 @@
     "drift": "node tools/soak-drift.mjs",
     "plans": "python3 tools/gen-test-plans.py",
     "reset:orders": "node tools/reset-orders.mjs",
-    "verify": "bash tools/verify-all.sh"
+    "verify": "bash tools/verify-all.sh",
+    "stamp": "node tools/stamp-screenshots.mjs"
   }
 }

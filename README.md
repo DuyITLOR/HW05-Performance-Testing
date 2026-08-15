@@ -9,7 +9,8 @@
 > điểm dữ liệu** (§2.8), và một con số do chính tool của tôi in ra sai (§2.7) — **cộng 2 lỗi bản nộp
 > do chính sinh viên bắt**, tức **2 trong 17 lỗi là do người soát ra, không phải AI tự thấy**.
 > **Còn thiếu:** chỉ **video demo** — xem [§9](#9-việc-còn-lại).
-> Quy trình làm bài: [docs/PLAYBOOK.md](docs/PLAYBOOK.md) (trong repo, không kèm bản nộp).
+> Quy trình làm bài: `docs/PLAYBOOK.md` — **chỉ có trong repo, KHÔNG kèm bản nộp**, nên ở đây để dạng
+> chữ thường chứ không để link: link tương đối trong file `.md` đã đóng gói sẽ 404.
 
 ## Liên kết
 
@@ -18,7 +19,7 @@
 | **Repo bài làm (HW05)** | https://github.com/DuyITLOR/HW05-Performance-Testing |
 | **SUT (hệ thống được kiểm thử)** | https://github.com/ttbhanh/eshop-sut |
 | **GitHub Issues** | [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289) — cả hai có ảnh nhúng sẵn |
-| **Video demo (≥6 phút, unlisted)** | *(chờ quay — kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md))* |
+| **Video demo (≥6 phút, unlisted)** | **CHƯA CÓ** — §17: thiếu là **0 điểm toàn bài**. Kịch bản ở `docs/kich-ban-video-demo.md` (chỉ trong repo) |
 | **Bản đồ yêu cầu → file** | [TASKS.md](TASKS.md) — từng yêu cầu Task 1/2/3 nằm ở đâu |
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
 | **Test summary sinh tự động** | [results/summary.md](results/summary.md) |
@@ -133,8 +134,8 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · một "phát hiện" của bản trước (p95 tăng lúc tải **rút**, 12ms) **không lặp lại** ở lượt nộp (8ms) → giữ cả hai cột và hạ nó xuống thành **quan sát chưa tái hiện được** · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
 | 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
 | 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
-| 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Chờ video demo skill.** |
-| | **Tổng** | **100** | **100** | Hai chỗ từng trừ đã bịt bằng việc làm: 5 lượt CI thật, và lượt Spike chạy lại có ảnh khớp đỉnh |
+| 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Điểm 10 có điều kiện:** §7 đòi demo skill trong video, nên dòng này chỉ đạt 10 **sau khi** video có đoạn dùng skill end-to-end trên một endpoint group. Chưa có video thì dòng này là **5**. |
+| | **Tổng** | **100** | **100\*** | \* **Có điều kiện: chỉ đúng khi video đã quay và link đã dán.** Chưa có video thì bảng này là **90**, và theo §17 thì thiếu tài liệu bắt buộc là **0 điểm** — nên con số nào cũng vô nghĩa nếu thiếu video |
 
 ---
 
@@ -230,19 +231,19 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 | File | Trạng thái |
 |---|---|
-| [report/main-report.md](report/main-report.md) + PDF | **Đạt** — số liệu 4 lượt, human review 10 lỗi, Task 2 (6 lỗi đọc metric), Task 3, 4 giới hạn |
-| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — 8 lượt tương tác, prompt nguyên văn, bảng tổng hợp 10 lỗi |
-| [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **298 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
+| [report/main-report.md](report/main-report.md) + PDF | **Đạt** — số liệu 4 lượt · human review **15 lỗi kỹ thuật + 2 lỗi bản nộp** (§2.4) · Task 2 **7 lỗi đọc metric** (§3.2) · Task 3 kèm **§4.4 đã chạy CI thật** · **5 giới hạn** |
+| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — **12 lượt** tương tác, prompt nguyên văn, bảng tổng hợp **15 lỗi kỹ thuật + 2 lỗi bản nộp**, mỗi lượt có Human review ghi rõ *đã kiểm* / *chưa tự kiểm* |
+| [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **293 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
 | [bug-report/bug-report.md](bug-report/bug-report.md) + ảnh | **Đạt** — 2 bug xác nhận + 1 ứng viên đã loại kèm bảng kiểm chứng + `verify-bugs.sh` chạy lại được |
 | 4 test plan `.jmx` đúng tên `{MSSV}_{Scenario}_{YYYYMMDD}` | **Đạt** |
-| 4 raw `.jtl` đầy đủ + 4 HTML dashboard | **Đạt** — 358.661 sample (+ 8 lượt của 2 batch trước, giữ cho §2.8) |
+| 4 raw `.jtl` đầy đủ + 4 HTML dashboard | **Đạt** — **13 file .jtl** tổng 194 MB · bộ nộp 358.661 sample; 9 lượt còn lại **giữ có chủ đích** cho §2.8 và bảng 4 lượt Spike ở §3.4 |
 | [endurance/endurance-threshold.md](endurance/endurance-threshold.md) | **Đạt** — 62,8 RPS · p95 8ms · trần 83,1 MB · trôi p95 **+0%**, RSS **+5,0%** |
 | [resource-monitor/hardware-report.md](resource-monitor/hardware-report.md) | **Đạt** — hostname `Le-Nhut-Duy.local` khớp HW trước |
-| Ảnh Activity Monitor (JMeter + monitor **cùng khung**) | **Đạt** — 4 ảnh, mỗi ảnh khớp lượt chạy trong `run-log.md` |
+| Ảnh Activity Monitor (JMeter + monitor **cùng khung**) | **Đạt** — 4 ảnh: Load 13,4% · Stress **91,7%** · Spike **72,6%** · Soak 16,3% · mỗi ảnh khớp khoảng chạy trong `run-log.md`, kiểm bằng `npm run verify` mục 4 |
 | Ảnh spec phần cứng | **Đạt** — `hardware-spec.png`, screenfetch với hostname `Le-Nhut-Duy` |
-| Video demo ≥6 phút, unlisted, tiếng Việt | **Thiếu** |
-| GitHub Issues cho 2 bug | **Thiếu** → lệnh có sẵn trong bug-report §4 |
-| Task 3 — flow chart + trade-off | **Đạt** — main-report §4 |
+| Video demo ≥6 phút, unlisted, tiếng Việt | **THIẾU** — §17: thiếu tài liệu bắt buộc = **0 điểm toàn bài**. Phải có cả đoạn **demo Agent Skill end-to-end** (§7) |
+| GitHub Issues cho 2 bug | **Đạt** — [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289), **có ảnh nhúng sẵn** |
+| Task 3 — flow chart + trade-off | **Đạt** — main-report §4 · **§4.4: đã chạy 6 lượt CI thật, 1 lượt build ĐỎ** ([`ci/ci-runs.md`](ci/ci-runs.md)) |
 | [git-log/commit-log.txt](git-log/) | Xuất bằng `bash tools/commit-plan.sh log` |
 
 ## 9. Việc còn lại
@@ -250,13 +251,13 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 Chạy `bash tools/package.sh 100 --check` để soát. Còn **1 mục**:
 
 1. **Video ≥6 phút**, unlisted, giọng mình → dán link vào README và main-report.
-   Kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Chuyện đáng kể nhất: mở bảng
+   Kịch bản: `docs/kich-ban-video-demo.md` (chỉ trong repo). Chuyện đáng kể nhất: mở bảng
    ba batch ở §2.8, giải thích vì sao kết luận đầu tiên về nguyên nhân là sai.
 
 **Đã xong:** Human review của cả **12 lượt** trong
 [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — dùng hai nhãn ***(SV đã kiểm)*** và
 ***(SV chưa tự kiểm)***, cố ý tách nhau vì viết cả 12 lượt thành "đã kiểm hết" đúng là loại bằng
-chứng dựng mà §11 phạt · **cột điểm §3** đã điền, tổng **88**, chỉ trừ ở hai chỗ nêu được tên ·
+chứng dựng mà §11 phạt · **cột điểm §3** đã điền ·
 **Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) ·
 [#289](https://github.com/DuyITLOR/group05_eshop/issues/289)** đã mở kèm ảnh nhúng.
 

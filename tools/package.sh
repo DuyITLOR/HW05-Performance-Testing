@@ -74,6 +74,7 @@ need ".github/workflows/perf-smoke.yml"   "Workflow CI hiện thực flow chart 
 need "resource-monitor/hardware-report.md" "Hardware report (hostname khớp HW trước)"
 needglob "resource-monitor/screenshots/activity-*.png" 4 "Ảnh resource monitor + tool CÙNG khung"
 need "resource-monitor/screenshots/hardware-spec.png" "Ảnh spec phần cứng"
+need "resource-monitor/screenshots/manifest.json" "Dấu ảnh: sha256 + giờ chụp (mtime bị cp làm mới)"
 needglob "bug-report/screenshots/*.png" 1 "Ảnh bug"
 
 echo ""

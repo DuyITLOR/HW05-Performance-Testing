@@ -546,7 +546,7 @@ không có gì sai về mặt kỹ thuật để mà báo.
 **Nhận xét xuyên suốt:** 12 trong 15 lỗi kỹ thuật **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
-có chạy không" thì cả 10 lỗi này đều lọt.
+có chạy không" thì cả 12 lỗi này đều lọt.
 
 **Chi phí thật của các lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
 phút chạy lại. Nếu không đọc `.jtl` giữa lượt mà chờ đến khi viết báo cáo mới đọc, thì cái phải
