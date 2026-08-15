@@ -1,4 +1,261 @@
-* 08c6d57 2026-08-14 10:55:06 +0700 DuyITLOR
+* e6b3a2a 2026-08-15 15:14:56 +0700 DuyITLOR
+|   test: rerun on a quiet machine, and retract the finding it disproves
+| The previous report had a section called 'the most important finding': comparing two batches two days
+| apart, p95 differed by 2.4-6.4x, and I attributed it to the database having grown, with a mechanism
+| that reads well - SQLite has one writer, slower INSERTs build a queue, even the read endpoints queue
+| behind it.
+| 
+| This batch disproves it. The products table is now sixteen times larger (50k to 830,139 rows) and the
+| run is roughly ten times faster: Stress p95 7ms against 70ms. The variable that actually moved is in
+| a column my own sampler had been writing all along and I never read - load_1m averaged 5.2 during the
+| 13/08 batch against 3.1 today, and the same gap holds across all four scenarios. Four Docker
+| containers, VS Code and an agent process were competing for the machine.
+| 
+| What I did wrong has a name: I compared two runs that differed in several variables at once and
+| assigned the whole difference to the one I found interesting. A mechanism being true in theory does
+| not make it the cause of a particular number, and I merged those two things.
+| 
+| Section 2.8 is now a retraction rather than a deletion - it is a real metric misreading caught with
+| evidence, which is what Task 2 asks for, and it happens to be mine. The claim had spread to the
+| README headline, a Task 3 flowchart branch, and a self-assessment line; all three are corrected.
+| 
+| The replacement conclusion is more useful than the one it replaces: on a shared personal machine the
+| background load dominates, by an order of magnitude more than raising VUs tenfold. That is why the CI
+| proposal now measures the baseline again on the same runner inside the same run.
+| 
+|  README.md                                         |     99 +-
+|  TASKS.md                                          |      6 +-
+|  ai-audit/ai-audit-report.md                       |     41 +-
+|  ai-audit/ai-audit-report.pdf                      |    Bin 406724 -> 439273 bytes
+|  ai-audit/ai-critique.md                           |     30 +-
+|  ai-audit/ai-critique.pdf                          |    Bin 59898 -> 54238 bytes
+|  ai-audit/design-log.pdf                           |    Bin 249086 -> 249086 bytes
+|  bug-report/bug-report.pdf                         |    Bin 290922 -> 290922 bytes
+|  docs/review-task1.md                              |     35 +-
+|  .../vi-du-anh/vi-du-dinh-dang-anh-bang-chung.png  |    Bin
+|  endurance/endurance-threshold.md                  |    106 +-
+|  endurance/html/soak/content/js/dashboard.js       |      4 +-
+|  endurance/html/soak/content/js/graph.js           |     32 +-
+|  .../html/soak/content/pages/CustomsGraphs.html    |      6 +-
+|  endurance/html/soak/content/pages/OverTime.html   |      6 +-
+|  .../html/soak/content/pages/ResponseTimes.html    |      6 +-
+|  endurance/html/soak/content/pages/Throughput.html |      6 +-
+|  endurance/html/soak/index.html                    |      6 +-
+|  endurance/html/soak/statistics.json               |    104 +-
+|  .../jtl/23127178_Soak_20260814-103245.jmeter.log  |    236 -
+|  .../jtl/23127178_Soak_20260815-144951.jmeter.log  |    236 +
+|  ...3245.jtl => 23127178_Soak_20260815-144951.jtl} |  90508 ++-
+|  .../23127178_Soak_20260814-103245.resources.csv   |    343 -
+|  .../23127178_Soak_20260815-144951.resources.csv   |    345 +
+|  endurance/run-log.md                              |      2 +-
+|  report/main-report.md                             |    412 +-
+|  report/main-report.pdf                            |    Bin 723485 -> 731136 bytes
+|  results/html/load/content/js/dashboard.js         |      4 +-
+|  results/html/load/content/js/graph.js             |     32 +-
+|  .../html/load/content/pages/CustomsGraphs.html    |      6 +-
+|  results/html/load/content/pages/OverTime.html     |      6 +-
+|  .../html/load/content/pages/ResponseTimes.html    |      6 +-
+|  results/html/load/content/pages/Throughput.html   |      6 +-
+|  results/html/load/index.html                      |      6 +-
+|  results/html/load/statistics.json                 |    124 +-
+|  results/html/spike/content/js/dashboard.js        |      4 +-
+|  results/html/spike/content/js/graph.js            |     32 +-
+|  .../html/spike/content/pages/CustomsGraphs.html   |      6 +-
+|  results/html/spike/content/pages/OverTime.html    |      6 +-
+|  .../html/spike/content/pages/ResponseTimes.html   |      6 +-
+|  results/html/spike/content/pages/Throughput.html  |      6 +-
+|  results/html/spike/index.html                     |      6 +-
+|  results/html/spike/statistics.json                |    134 +-
+|  results/html/stress/content/js/dashboard.js       |      4 +-
+|  results/html/stress/content/js/graph.js           |     32 +-
+|  .../html/stress/content/pages/CustomsGraphs.html  |      6 +-
+|  results/html/stress/content/pages/OverTime.html   |      6 +-
+|  .../html/stress/content/pages/ResponseTimes.html  |      6 +-
+|  results/html/stress/content/pages/Throughput.html |      6 +-
+|  results/html/stress/index.html                    |      6 +-
+|  results/html/stress/statistics.json               |    130 +-
+|  .../jtl/23127178_Load_20260814-093756.jmeter.log  |    212 -
+|  results/jtl/23127178_Load_20260814-093756.jtl     |  16437 -
+|  .../jtl/23127178_Load_20260814-234307.jmeter.log  |    212 -
+|  results/jtl/23127178_Load_20260814-234307.jtl     |  16349 -
+|  .../jtl/23127178_Load_20260815-142705.jmeter.log  |    214 +
+|  results/jtl/23127178_Load_20260815-142705.jtl     |  16396 +
+|  .../jtl/23127178_Spike_20260814-102710.jmeter.log |    597 -
+|  results/jtl/23127178_Spike_20260814-102710.jtl    |  37127 --
+|  .../jtl/23127178_Spike_20260815-144416.jmeter.log |    595 +
+|  results/jtl/23127178_Spike_20260815-144416.jtl    |  38389 ++
+|  .../23127178_Stress_20260814-101731.jmeter.log    |    602 -
+|  results/jtl/23127178_Stress_20260814-101731.jtl   | 251821 --------
+|  .../23127178_Stress_20260814-235046.jmeter.log    |    602 -
+|  .../23127178_Stress_20260815-143439.jmeter.log    |    603 +
+|  ...46.jtl => 23127178_Stress_20260815-143439.jtl} | 540710 +++++++++--------
+|  .../23127178_Load_20260814-093756.resources.csv   |    173 -
+|  .../23127178_Load_20260814-234307.resources.csv   |    173 -
+|  .../23127178_Load_20260815-142705.resources.csv   |    174 +
+|  .../23127178_Spike_20260814-102710.resources.csv  |    115 -
+|  .../23127178_Spike_20260815-144416.resources.csv  |    117 +
+|  .../23127178_Stress_20260814-101731.resources.csv |    229 -
+|  .../23127178_Stress_20260814-235046.resources.csv |    233 -
+|  .../23127178_Stress_20260815-143439.resources.csv |    234 +
+|  results/run-log.md                                |      8 +-
+|  results/summary.md                                |    110 +-
+|  76 files changed, 374210 insertions(+), 641377 deletions(-)
+| 
+* d0f16cd 2026-08-15 14:25:25 +0700 DuyITLOR
+|   test(plans): say why the 4xx was expected instead of always saying lockout
+| mark_expected_4xx() hardcoded 'Expected lockout response' because it was written for the lockout
+| branch. Reusing it for step 5 carried that wording along, so the responseMessage column of the raw
+| .jtl reads 'Expected lockout response 400' for roughly fifty thousand samples of an endpoint that
+| has nothing to do with lockout - a wrong label sitting inside the primary evidence, where anyone
+| reading the log would take it at face value.
+| 
+| It changes no measurement, which is exactly why it survived three runs unnoticed. Now the reason is
+| a parameter: step 5 records 'FR-10 invalid transition', the lockout branch records 'Account
+| lockout'.
+| 
+| Same mechanism as mistake #7 - understanding something in one place and not carrying it to the
+| identical case next door. Logged as #11 so the pattern is visible rather than the two incidents
+| looking unrelated.
+| 
+|  README.md                               |   2 +-
+|  ai-audit/ai-audit-report.md             |   7 ++++---
+|  ai-audit/ai-audit-report.pdf            | Bin 394285 -> 406724 bytes
+|  ai-audit/ai-critique.pdf                | Bin 59898 -> 59898 bytes
+|  bug-report/bug-report.pdf               | Bin 290922 -> 290922 bytes
+|  report/main-report.md                   |   6 ++++--
+|  report/main-report.pdf                  | Bin 716241 -> 723485 bytes
+|  test-plans/23127178_Load_20260813.jmx   |   4 ++--
+|  test-plans/23127178_Soak_20260813.jmx   |   4 ++--
+|  test-plans/23127178_Spike_20260813.jmx  |   6 +++---
+|  test-plans/23127178_Stress_20260813.jmx |  10 +++++-----
+|  tools/gen-test-plans.py                 |  18 ++++++++++++------
+|  12 files changed, 33 insertions(+), 24 deletions(-)
+| 
+* 4fb27f3 2026-08-15 14:21:30 +0700 DuyITLOR
+|   docs: record the seven design steps as their own log
+| Section 2 wants the AI driven step by step. The seven steps were real - the skill defines them and
+| each audit entry names which one it was in - but they only existed as a one-line field, so from the
+| outside the work looked like it came from one broad prompt.
+| 
+| design-log.md writes each step out: what it asked, what it was based on, what it decided, and which
+| line of which file changed as a result. It also records which step caught which mistake - one at
+| review, two at smoke test, three on the first long run - which is the part that shows the process
+| did work rather than merely existed.
+| 
+| The student's verbatim prompts stay in ai-audit-report.md untouched, and both files say plainly
+| that the two are separate. Folding the internal steps in as if they were typed prompts would be
+| fabrication, which section 11 rules out.
+| 
+|  TASKS.md                     |   2 +-
+|  ai-audit/ai-audit-report.md  |   6 ++
+|  ai-audit/ai-audit-report.pdf | Bin 383765 -> 394285 bytes
+|  ai-audit/ai-critique.pdf     | Bin 59898 -> 59898 bytes
+|  ai-audit/design-log.md       | 162 +++++++++++++++++++++++++++++++++++++++++
+|  ai-audit/design-log.pdf      | Bin 0 -> 249086 bytes
+|  bug-report/bug-report.pdf    | Bin 290922 -> 290922 bytes
+|  docs/review-task1.md         |  37 ++++++++--
+|  report/main-report.md        |   2 +
+|  report/main-report.pdf       | Bin 714415 -> 716241 bytes
+|  tools/package.sh             |   1 +
+|  11 files changed, 201 insertions(+), 9 deletions(-)
+| 
+* 895872e 2026-08-15 14:17:58 +0700 DuyITLOR
+|   docs: a per-requirement trace sheet for Task 1
+| Nine bullets, each with what was done, the exact file and command to verify it, and a tick box.
+| Marks honestly where it is thin rather than only where it is finished: the 'step by step, not a
+| single generic prompt' requirement reads weak against the verbatim prompts in the audit, the
+| evidence bullet is missing three of four screenshots, and the .jtl files currently span three
+| batches so the summary no longer matches the report.
+| 
+| Internal file - package.sh does not put docs/ in the archive apart from endpoint-selection.md.
+| 
+|  TASKS.md             |   3 +
+|  docs/review-task1.md | 325 +++++++++++++++++++++++++++++++++++++++++++++++++
+|  2 files changed, 328 insertions(+)
+| 
+* 69a88aa 2026-08-15 14:03:39 +0700 DuyITLOR
+|   docs: index every requirement to the file and section that answers it
+| HW01 used task1/task2/task3 folders because its three tasks were genuinely separate subjects. This
+| assignment is the opposite: Task 2 analyses the numbers Task 1 produced, and Task 3 is built on a
+| finding that only exists by comparing both (section 2.8). Section 14 also asks for one main report
+| 'including the performance-testing report and your AI-analysis critique', so splitting them across
+| three files argues against the requirement.
+| 
+| Copying the sections into task folders would create a second source for thirty-odd numbers, which
+| is the failure mode that cost two runs and ten corrections already. Moving results/ and test-plans/
+| under a task folder would break the paths thirteen scripts depend on, and buys nothing a grader
+| scores.
+| 
+| TASKS.md gives what the folder names would have given - one page saying where each requirement is
+| answered - without duplicating a number or moving a path.
+| 
+|  README.md        |  2 ++
+|  TASKS.md         | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  tools/package.sh |  3 ++-
+|  3 files changed, 74 insertions(+), 1 deletion(-)
+| 
+* 8784afc 2026-08-15 14:00:34 +0700 DuyITLOR
+|   docs: move the section 5 anti-duplication evidence into the report itself
+| docs/ is not in the section 14 list, and HW04 deliberately dropped it from the package - but the
+| group registration table, which is the actual evidence that this submission does not duplicate a
+| teammate's workflow, only existed in docs/endpoint-selection.md. Submitted as it stood, section 5
+| would have been argued from a file the graders never receive, through a link that resolves to
+| nothing.
+| 
+| The registration table, the consequence (the whole customer journey is claimed, including the exact
+| example the assignment gives), and the one unavoidable overlap on POST /api/login now sit in
+| report/main-report.md section 1.1. endpoint-selection.md still ships as supporting material so the
+| link stays alive and the code-line citations remain available.
+| 
+| package.sh builds the archive from the section 14 list rather than by hand, and refuses to call it
+| complete while anything is missing - section 17 makes one absent document worth zero. It also
+| checks what a file listing cannot: the critique's word count against the 200-300 the assignment
+| sets, whether the video link and issue numbers were filled in, and whether the AI audit still has
+| unwritten Human review slots.
+| 
+|  README.md                                         |      7 +-
+|  ai-audit/ai-audit-report.pdf                      |    Bin 383765 -> 383765 bytes
+|  ai-audit/ai-critique.pdf                          |    Bin 59898 -> 59898 bytes
+|  bug-report/bug-report.pdf                         |    Bin 290922 -> 290922 bytes
+|  report/main-report.md                             |     32 +-
+|  report/main-report.pdf                            |    Bin 687071 -> 714415 bytes
+|  resource-monitor/screenshots/activity-load.png    |    Bin 0 -> 442443 bytes
+|  results/html/load/content/js/dashboard.js         |      4 +-
+|  results/html/load/content/js/graph.js             |     32 +-
+|  .../html/load/content/pages/CustomsGraphs.html    |      6 +-
+|  results/html/load/content/pages/OverTime.html     |      6 +-
+|  .../html/load/content/pages/ResponseTimes.html    |      6 +-
+|  results/html/load/content/pages/Throughput.html   |      6 +-
+|  results/html/load/index.html                      |      6 +-
+|  results/html/load/statistics.json                 |    104 +-
+|  results/html/stress/content/js/dashboard.js       |      6 +-
+|  results/html/stress/content/js/graph.js           |     32 +-
+|  .../html/stress/content/pages/CustomsGraphs.html  |      6 +-
+|  results/html/stress/content/pages/OverTime.html   |      6 +-
+|  .../html/stress/content/pages/ResponseTimes.html  |      6 +-
+|  results/html/stress/content/pages/Throughput.html |      6 +-
+|  results/html/stress/index.html                    |      6 +-
+|  results/html/stress/statistics.json               |    136 +-
+|  .../jtl/23127178_Load_20260814-234307.jmeter.log  |    212 +
+|  results/jtl/23127178_Load_20260814-234307.jtl     |  16349 +
+|  .../23127178_Stress_20260814-235046.jmeter.log    |    602 +
+|  results/jtl/23127178_Stress_20260814-235046.jtl   | 269863 +++++++++++++++++
+|  .../23127178_Load_20260814-234307.resources.csv   |    173 +
+|  .../23127178_Stress_20260814-235046.resources.csv |    233 +
+|  results/run-log.md                                |      2 +
+|  tools/package.sh                                  |    152 +
+|  31 files changed, 287806 insertions(+), 193 deletions(-)
+| 
+* 9dd3e7b 2026-08-14 23:38:29 +0700 DuyITLOR
+|   test(capture): stop asking for ENTER before every run
+| Four prompts spaced eight minutes apart means sitting at the machine just to press a key. The
+| one prompt that earns its place is the first - arranging the windows - so that one stays and the
+| rest of the sequence runs on its own.
+| 
+|  tools/capture-run.sh | 5 ++++-
+|  1 file changed, 4 insertions(+), 1 deletion(-)
+| 
+* d7f1579 2026-08-14 11:02:42 +0700 DuyITLOR
 |   docs: the data-growth regression, and the hole it opens in my own CI proposal
 | Comparing the two evidence sets endpoint by endpoint: at 20 VU the eightfold larger database
 | changes nothing (0.80-1.25x), at 200 VU everything degrades 2.4-2.8x, and in the spike 3.8-6.4x.
@@ -10,22 +267,19 @@
 | not. So the regression is invisible at expected load and only appears under stress.
 | 
 | That contradicts my own Task 3 proposal, which runs a three-minute Load test per PR: it would not
-| catch this. Section 4 now carries a weekly Stress run against a grown production snapshot, and
-| a sixth trade-off - this test suite pushed products from 50k to 436k rows by itself, so without
+| catch this. Section 4 now carries a weekly Stress run against a grown production snapshot, and a
+| sixth trade-off - this test suite pushed products from 50k to 436k rows by itself, so without
 | teardown every run is slower than the last for reasons unrelated to the code.
 | 
-* 2564e69 2026-08-14 10:55:06 +0700 DuyITLOR
-|   test: rerun all four scenarios with matching evidence screenshots
-| The first evidence set had no screenshots, and its resource CSVs for Load and Stress were
-| useless on the node columns - the sampler had latched onto the wrapping zsh process instead of
-| node. Both are fixed here, and all four runs now carry an Activity Monitor capture taken at the
-| moment that matters: Load at second 358, Stress at 421 while the 200-VU step is live, Spike at 73
-| in the middle of a 30-second shock, Soak at 91 and again at 690.
+* 5b7d1ac 2026-08-14 11:02:42 +0700 DuyITLOR
+|   test: rerun all four scenarios on a grown database
+| The first evidence set was superseded: its resource CSVs for Load and Stress were useless on the
+| node columns, because the sampler had latched onto the wrapping zsh process instead of node.
 | 
 | The earlier set is kept on purpose. Same plan, same machine, but the products table had grown
 | eightfold between them, and comparing the two is the most useful finding in the submission.
 | 
-|  README.md                                         |    113 +-
+|  README.md                                         |    115 +-
 |  ai-audit/ai-audit-report.pdf                      |    Bin 383765 -> 383765 bytes
 |  ai-audit/ai-critique.pdf                          |    Bin 59898 -> 59898 bytes
 |  bug-report/bug-report.pdf                         |    Bin 290922 -> 290922 bytes
@@ -42,13 +296,9 @@
 |  endurance/jtl/23127178_Soak_20260814-103245.jtl   |  45289 +++
 |  .../23127178_Soak_20260814-103245.resources.csv   |    343 +
 |  endurance/run-log.md                              |      1 +
-|  report/main-report.md                             |    459 +-
-|  report/main-report.pdf                            |    Bin 595553 -> 688898 bytes
-|  resource-monitor/screenshots/activity-load.png    |    Bin 0 -> 693632 bytes
-|  .../screenshots/activity-soak-cuoi.png            |    Bin 0 -> 1489075 bytes
-|  resource-monitor/screenshots/activity-soak.png    |    Bin 0 -> 687548 bytes
-|  resource-monitor/screenshots/activity-spike.png   |    Bin 0 -> 4523260 bytes
-|  resource-monitor/screenshots/activity-stress.png  |    Bin 0 -> 699033 bytes
+|  git-log/commit-log.txt                            |     96 +
+|  report/main-report.md                             |    468 +-
+|  report/main-report.pdf                            |    Bin 595553 -> 687071 bytes
 |  results/html/load/content/js/dashboard.js         |      2 +-
 |  results/html/load/content/js/graph.js             |     30 +-
 |  .../html/load/content/pages/CustomsGraphs.html    |      6 +-
@@ -84,7 +334,7 @@
 |  .../23127178_Stress_20260814-101731.resources.csv |    229 +
 |  results/run-log.md                                |      3 +
 |  results/summary.md                                |    117 +-
-|  59 files changed, 354007 insertions(+), 745 deletions(-)
+|  55 files changed, 354113 insertions(+), 746 deletions(-)
 | 
 * e98ab1d 2026-08-13 14:10:46 +0700 DuyITLOR
 |   docs: commit log as a text file (section 12)
