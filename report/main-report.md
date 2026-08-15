@@ -19,7 +19,32 @@ hai bộ cho ra phát hiện quan trọng nhất của bài.
 
 ## 1. Phạm vi — ba endpoint group (§5)
 
-Chi tiết và bằng chứng chống trùng: [`docs/endpoint-selection.md`](../docs/endpoint-selection.md).
+### 1.1 Đăng ký của nhóm 05 và bằng chứng không trùng
+
+§5 đòi *"ensure that your selection is **not duplicated** among the members of your group"*. Bảng
+đăng ký, chốt qua chat nhóm ngày 2026-08-11:
+
+| Thành viên | Endpoint đã đăng ký |
+|---|---|
+| Nguyễn | `POST /api/login` · `GET /api/products?search=` · `GET /api/products/:id` · `POST /api/cart` · `POST /api/checkout` |
+| Quan | `GET /api/categories` · `GET /api/orders/my-orders` · `POST /api/forgot-password` · `POST /api/apply-coupon` · `PUT /api/orders/:id/cancel` |
+| Thế Đạt | `POST /api/login` · `GET /api/categories` · `POST /api/categories` |
+| **23127178 (bài này)** | **workflow admin back-office — bảng §1.2** |
+
+Hệ quả: **toàn bộ luồng khách hàng** (login → search → xem chi tiết → thêm giỏ → checkout →
+xem/hủy đơn → áp coupon) đã bị chiếm. Đúng luồng mà đề nêu làm ví dụ — *"a virtual user may log in,
+browse or search products, then add an item to the cart and complete checkout"* — nằm trọn trong
+phần Nguyễn đã đăng ký, nên lấy lại bất kỳ đoạn nào của nó là trùng workflow theo đúng nghĩa §5 cấm.
+
+Vì thế bài này chuyển sang **phía quản trị**: cùng phủ đủ 3 nhóm endpoint, nhưng không cắt vào
+luồng của ai. Chỉ `POST /api/login` giao nhau, và nó **không thể tránh** — cả 4 endpoint còn lại đều
+đi qua `authenticateToken`, không có token thì không đo được gì. Bản thân Nguyễn và Thế Đạt cũng đã
+trùng nhau ở đúng endpoint này.
+
+*(Bản đầy đủ kèm trích dẫn số dòng code: [`docs/endpoint-selection.md`](../docs/endpoint-selection.md),
+nộp kèm trong `.zip` như supporting material.)*
+
+### 1.2 Workflow đã chọn
 
 Workflow end-to-end **admin back-office**, 6 bước. Cả 4 test plan dùng **cùng** workflow này, chỉ
 khác tham số tải (§6 đòi đúng điều này):
@@ -33,10 +58,7 @@ khác tham số tải (§6 đòi đúng điều này):
 | 5 | `PUT /api/admin/orders/:id/status` | **transactional** | Ghi có điều kiện qua state machine FR-10 ([`server.js:525`](../../eshop-sut/backend/server.js#L525)) |
 | 6 | `POST /api/login` (mật khẩu sai) | **auth-heavy** | Nhánh riêng 2 VU phủ **account-lockout**, thứ §5 nói đích danh phải tính tới |
 
-Không trùng thành viên nào trong nhóm 05: toàn bộ luồng khách hàng đã bị ba bạn còn lại đăng ký.
-Chỉ `POST /api/login` giao nhau và **không thể tránh** — bốn bước còn lại đều cần token.
-
-### 1.1 Dữ liệu data-driven (§6)
+### 1.3 Dữ liệu data-driven (§6)
 
 | File CSV | Cột | Dùng ở bước | Số dòng |
 |---|---|---|---|

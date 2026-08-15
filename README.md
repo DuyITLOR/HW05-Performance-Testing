@@ -139,6 +139,10 @@ npm run drift              # → p95 theo từng phút + endurance threshold
 npm run hardware           # → resource-monitor/hardware-report.md
 bash bug-report/verify-bugs.sh    # chạy lại toàn bộ bằng chứng bug
 bash tools/build-pdfs.sh   # xuất PDF cho 4 tài liệu §14
+
+# 6. Đóng gói nộp bài
+bash tools/package.sh 95 --check    # soát đủ/thiếu theo §14, không tạo gói
+bash tools/package.sh 95            # → 23127178_HW05_AI_Performance_095.zip
 ```
 
 > **Java:** máy này mặc định `java` = Temurin 8 **x86_64** → JMeter chạy qua Rosetta và chính
@@ -162,7 +166,8 @@ endurance/           lượt soak 12 phút + endurance-threshold.md (§6)
 resource-monitor/    hardware-report.md (spec + hostname) + screenshots/
 k6/                  bản mirror k6 (bonus §8) — cùng workflow, để đối chiếu chéo
 tools/               13 script — xem §6
-report/ ai-audit/ bug-report/ git-log/ docs/
+report/ ai-audit/ bug-report/ git-log/
+docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PLAYBOOK + kịch bản video KHÔNG nộp
 .claude/skills/      4 Agent Skill (§7)
 ```
 
