@@ -1,3 +1,40 @@
+* cb66f8e 2026-08-15 16:36:22 +0700 DuyITLOR
+|   docs(bug): file both issues with the evidence image embedded
+| gh cannot attach a local image to an issue, so the screenshot goes to an evidence/ branch of the
+| SUT repo through the Contents API and the issue embeds its raw URL - the same route HW03 and HW04
+| used. Pushed by API rather than through the local eshop-sut checkout, which has a dozen
+| half-finished edits in its working tree that one careless 'git add -A' would carry along.
+| 
+| Issue bodies live in issue-p1.md and issue-p2.md instead of inside the script. The first version
+| used heredocs nested in $( ) and broke on the backticks and parentheses in the prose; as separate
+| files there is nothing to escape and the text reads like a document.
+| 
+| #288 (security) - GET /api/orders/:id serves any user's order with no token, and the control line
+| matters more than the finding: /api/orders/my-orders still returns 401, so this is a route that was
+| missed rather than an endpoint meant to be public.
+| 
+| #289 (documentation) - POST /api/coupon-usage exists, needs a token, writes to coupon_usage, and
+| appears nowhere in api_specification.md. Nobody tests an endpoint they do not know exists. Noted
+| alongside: it writes without checking max_uses_per_user, which apply-coupon does check.
+| 
+|  README.md                          |   8 +--
+|  ai-audit/ai-audit-report.pdf       | Bin 464929 -> 464929 bytes
+|  ai-audit/ai-critique.pdf           | Bin 54238 -> 54238 bytes
+|  bug-report/bug-report.md           |  36 ++++++------
+|  bug-report/bug-report.pdf          | Bin 285810 -> 296646 bytes
+|  bug-report/create-github-issues.sh | 109 +++++++++++++++++++++++++++++++++++
+|  bug-report/issue-p1.md             |  56 ++++++++++++++++++
+|  bug-report/issue-p2.md             |  39 +++++++++++++
+|  report/main-report.md              |   4 +-
+|  report/main-report.pdf             | Bin 752487 -> 754011 bytes
+|  10 files changed, 226 insertions(+), 26 deletions(-)
+| 
+* 4a8e1c5 2026-08-15 16:28:06 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 95 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 95 insertions(+)
+| 
 * 56ff1d8 2026-08-15 16:27:57 +0700 DuyITLOR
 |   test: final evidence batch, and a third data point that settles section 2.8
 | The submitted set is now the 15/08 15:29-16:04 batch - the only one with all five evidence
