@@ -225,7 +225,7 @@ grep -c "^### Interaction" ai-audit/ai-audit-report.md    # 8 lượt
 | Reset lockout + **ghi thủ tục** | **Có** | [`§2.6`](../report/main-report.md) · `tools/reset-lockout.mjs`, `tools/reset-orders.mjs`, chạy tự động đầu mỗi lượt |
 | **Bảng spec** phần cứng | **Có** | [`resource-monitor/hardware-report.md`](../resource-monitor/hardware-report.md) |
 | **Ảnh screenfetch** | **Có** | `hardware-spec.png` — hostname `Le-Nhut-Duy`, M2 Pro, 16384MiB |
-| **Ảnh tool + monitor mỗi lượt** | **4/4** | Load 13,4% · **Stress 91,7%** · Spike 34,9% · Soak 16,3% CPU |
+| **Ảnh tool + monitor mỗi lượt** | **4/4** | Load 13,4% · **Stress 91,7%** · **Spike 72,6%** (chạy lại lúc 21:59 vì ảnh đầu trượt đỉnh) · Soak 16,3% CPU |
 | Ảnh bug | **Có** | `bug-report/screenshots/bug-evidence-verify-bugs.png` |
 
 Ngoài yêu cầu: bằng chứng tài nguyên **dạng số** có đầy đủ — `results/resources/*.csv`, lấy mẫu 2

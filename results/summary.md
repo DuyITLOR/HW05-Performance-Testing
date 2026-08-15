@@ -1,6 +1,6 @@
 # Test summary — HW05 Performance Testing
 
-> **Sinh tự động** bởi `npm run summary` lúc 2026-08-15T09:09:21.616Z, đọc từ raw `.jtl`.
+> **Sinh tự động** bởi `npm run summary` lúc 2026-08-15T15:09:25.542Z, đọc từ raw `.jtl`.
 > Đừng sửa tay. Mọi con số trong `report/main-report.md` và `README.md` phải khớp bảng này.
 > Percentile tính theo **nearest-rank**; JMeter dashboard nội suy khác một chút nên chênh
 > vài ms ở p99 là bình thường — không phải dấu hiệu file `.jtl` sai.
@@ -11,7 +11,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | **Load** | 16,343 | 22 | 359.7s | 45.4 | 0% | 3.7 | 3 | 7 | **8** | 12 | 84 |
 | **Stress** | 258,992 | 200 | 479.9s | 539.7 | 0% | 9.6 | 2 | 8 | **18** | 124 | 3691 |
-| **Spike** | 38,160 | 212 | 239.7s | 159.2 | 0% | 3.1 | 2 | 6 | **7** | 20 | 152 |
+| **Spike** | 38,251 | 212 | 239.8s | 159.5 | 0% | 2.8 | 2 | 5 | **7** | 16 | 176 |
 | **Soak** | 45,166 | 22 | 719.6s | 62.8 | 0% | 3.6 | 3 | 7 | **8** | 12 | 192 |
 
 Đơn vị thời gian: **ms**. RPS = số sample / khoảng thời gian thật của lượt chạy.
@@ -94,21 +94,21 @@ Không có sample lỗi nào trong lượt này.
 
 ---
 
-## Spike — `23127178_Spike_20260815-154700.jtl`
+## Spike — `23127178_Spike_20260815-215939.jtl`
 
-- Bắt đầu: `2026-08-15T08:47:02.046Z` · thời lượng **239.7s** · peak thread **212**
-- Tổng **38,160** sample · error **0%** · **159.2 RPS**
+- Bắt đầu: `2026-08-15T14:59:40.808Z` · thời lượng **239.8s** · peak thread **212**
+- Tổng **38,251** sample · error **0%** · **159.5 RPS**
 
 ### Theo endpoint
 
 | Endpoint (label) | Sample | Err % | avg | p90 | **p95** | p99 | max | latency avg | latency p95 |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 POST /api/login | 7,702 | 0% | 3 | 5 | **7** | 23 | 104 | 3 | 7 |
-| 2 GET /api/admin/orders | 7,655 | 0% | 3.5 | 6 | **7** | 20 | 146 | 3.4 | 7 |
-| 3 GET /api/admin/users | 7,608 | 0% | 2.3 | 4 | **5** | 16 | 61 | 2.3 | 5 |
-| 4 POST /api/admin/import-products | 7,571 | 0% | 4.4 | 7 | **9** | 24 | 152 | 4.4 | 9 |
-| 5 PUT /api/admin/orders/:id/status | 7,529 | 0% | 2.3 | 4 | **6** | 16 | 137 | 2.3 | 6 |
-| 6 POST /api/login (sai mat khau — lockout probe) | 95 | 0% | 2.4 | 4 | **5** | 12 | 12 | 2.4 | 5 |
+| 1 POST /api/login | 7,715 | 0% | 2.7 | 5 | **7** | 24 | 106 | 2.7 | 7 |
+| 2 GET /api/admin/orders | 7,679 | 0% | 3.2 | 5 | **7** | 13 | 123 | 3.1 | 6 |
+| 3 GET /api/admin/users | 7,627 | 0% | 2 | 4 | **5** | 12 | 148 | 1.9 | 5 |
+| 4 POST /api/admin/import-products | 7,591 | 0% | 4.1 | 7 | **9** | 21 | 176 | 4.1 | 9 |
+| 5 PUT /api/admin/orders/:id/status | 7,543 | 0% | 1.8 | 4 | **5** | 11 | 89 | 1.8 | 5 |
+| 6 POST /api/login (sai mat khau — lockout probe) | 96 | 0% | 2.2 | 4 | **6** | 15 | 15 | 2.2 | 6 |
 
 > `elapsed` (avg/p95) là **toàn bộ** thời gian request; `latency` là tới byte đầu tiên.
 > Chênh lệch lớn giữa hai cột = thời gian nằm ở truyền/nhận body, không ở xử lý server.
@@ -117,9 +117,9 @@ Không có sample lỗi nào trong lượt này.
 
 | Endpoint | Code | Số lần | Tỉ lệ |
 |---|---|---|---|
-| 5 PUT /api/admin/orders/:id/status | `400` | 7,129 | 94.7% |
+| 5 PUT /api/admin/orders/:id/status | `400` | 7,143 | 94.7% |
 | 5 PUT /api/admin/orders/:id/status | `200` | 400 | 5.3% |
-| 6 POST /api/login (sai mat khau — lockout probe) | `403` | 91 | 95.8% |
+| 6 POST /api/login (sai mat khau — lockout probe) | `403` | 92 | 95.8% |
 | 6 POST /api/login (sai mat khau — lockout probe) | `401` | 4 | 4.2% |
 
 > Bước 5 hợp lệ ở **cả 200 và 400**: FR-10 chỉ cho một order chuyển tiếp một lần
@@ -182,6 +182,7 @@ Không có sample lỗi nào trong lượt này.
 | `23127178_Stress_20260815-143439.jtl` | 2026-08-15T07:34:40.520Z | 270848 | 0% | 7 |
 | `23127178_Spike_20260815-144416.jtl` | 2026-08-15T07:44:18.135Z | 38388 | 0% | 6 |
 | `23127178_Soak_20260815-144951.jtl` | 2026-08-15T07:49:52.791Z | 45220 | 0% | 6 |
+| `23127178_Spike_20260815-154700.jtl` | 2026-08-15T08:47:02.046Z | 38160 | 0% | 7 |
 
 > Giữ lại để minh bạch quá trình. Bảng chính chỉ lấy **lượt mới nhất của mỗi scenario**.
 

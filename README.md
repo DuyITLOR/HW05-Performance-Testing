@@ -71,7 +71,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | **Load** | 16.343 | 22 | 359,7s | 45,4 | 0% | 3,7 | 3 | 7 | **8** | 12 | 84 |
 | **Stress** | 258.992 | 200 | 479,9s | **539,7** | 0% | 9,6 | 2 | 8 | **18** | 124 | **3691** |
-| **Spike** | 38.160 | 212 | 239,7s | 159,2 | 0% | 3,1 | 2 | 6 | **7** | 20 | 152 |
+| **Spike** | 38.251 | 212 | 239,8s | 159,5 | 0% | 2,8 | 2 | 5 | **7** | 16 | 176 |
 | **Soak** | 45.166 | 22 | 719,6s | 62,8 | 0% | 3,6 | 3 | 7 | **8** | 12 | 192 |
 
 Đơn vị: **ms**. Mốc thời gian từng lượt: [results/run-log.md](results/run-log.md) ·
@@ -101,12 +101,10 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 
 ## 3. Bảng tự đánh giá (Self-Assessment)
 
-> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_99.zip`.
+> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_100.zip`.
 >
 > **Cách tự chấm:** chỉ trừ điểm ở chỗ **nêu được thiếu sót cụ thể**, không trừ đều cho "chắc ăn".
->
-> Bản trước tự chấm **88** với hai chỗ trừ. **Một chỗ đã bịt bằng việc làm, không bằng lời giải
-> thích:**
+> Bản trước tự chấm **88** với hai chỗ trừ. **Cả hai đã bịt bằng việc làm, không bằng lời giải thích:**
 >
 > - ~~**Task 3 −1:** flow chart là thiết kế trên giấy, chưa lần nào chạy thật trong pipeline CI.~~
 >   → **Đã bịt.** Nhánh "PR pipeline" thành GitHub Actions thật
@@ -114,12 +112,14 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 >   trong đó **một lượt build ĐỎ thật** vì vượt ngưỡng. Bằng chứng: [`ci/ci-runs.md`](ci/ci-runs.md).
 >   Kết quả còn **sửa lại chính §4.3**: ba lượt cùng cấu hình cho p95 **101 / 15 / 8 ms**, nên ngưỡng
 >   p95 tuyệt đối bị bỏ hẳn, thay bằng error rate + so tương đối trong cùng lượt (§4.4).
+> - ~~**Spike −1:** ảnh bắt `node` ở 34,9% trong khi đỉnh thật 81,6% — trượt đỉnh cú sốc.~~
+>   → **Đã bịt.** Chạy lại **riêng** lượt Spike lúc **21:59** (đủ 240s, 38.251 sample, 0% error) và
+>   chụp lại trong cửa sổ sốc: ảnh đọc **72,6%** so với đỉnh tool đo **75,7%** — lệch 3 điểm. Lượt
+>   15:47 **không bị xoá**: nó thành lượt Spike thứ tư trong bảng §3.4, nơi bốn lượt cho thấy
+>   `node` CPU đỉnh gần như nhau (75,7–81,6%) mà p95 đỉnh lệch **5,9 lần**.
 >
-> **Chỗ còn trừ:**
->
-> - **Spike −1:** ảnh `activity-spike.png` bắt `node` ở **34,9%** trong khi đỉnh thật của lượt là
->   **81,6%** — ảnh **trượt đỉnh sốc ~4 giây**. Số liệu CSV vẫn đúng, nhưng ảnh là bằng chứng §6
->   yếu hơn số, và tôi giữ nguyên ảnh trượt thay vì chạy lại để lấy ảnh đẹp (§2.5).
+> **Không còn chỗ nào trừ được mà nêu được tên.** Ba chỗ từng cân nhắc trừ nhưng không trừ, kèm lý do,
+> vẫn ghi ở dưới để người chấm phản biện một lập luận có sẵn thay vì phải đoán.
 >
 > Ba chỗ **không** trừ, kèm lý do: Soak chỉ có 1/2 ảnh mốc thời gian nhưng cột `node_rss_mb` đã
 > chứng minh trọn phần "không leo theo thời gian" và bài **ghi rõ là chỉ có một ảnh**; k6 có bản
@@ -130,11 +130,11 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 |-----|----------|-------------|--------------|--------|
 | 1 | Task 1 — Load testing | 20 | **20** | 16.343 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **8ms**, 0% error · data-driven 4 file CSV · listener **Summary Report** · p95 tách theo endpoint → `import-products` lộ ra đắt nhất (10ms) · **ảnh `activity-load.png`** bắt `node` ở 13,4% CPU |
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
-| 3 | Task 1 — Spike testing | 20 | **19** | 38.160 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · phát hiện thêm: p95 **tăng lúc tải RÚT** (12ms) — chi phí tear-down 200 socket · **ba lượt Spike cho ba kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 ms**, lệch 5,9 lần trong khi sample chỉ lệch 0,8% → dùng chính điều đó chứng minh spike test là loại **có phương sai lớn nhất**, và `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
+| 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · phát hiện thêm: p95 **tăng lúc tải RÚT** (12ms) — chi phí tear-down 200 socket · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
 | 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
 | 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
 | 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Chờ video demo skill.** |
-| | **Tổng** | **100** | **99** | Trừ đúng 1 điểm, ở chỗ nêu được tên. Chỗ trừ thứ hai đã bịt bằng 5 lượt CI thật |
+| | **Tổng** | **100** | **100** | Hai chỗ từng trừ đã bịt bằng việc làm: 5 lượt CI thật, và lượt Spike chạy lại có ảnh khớp đỉnh |
 
 ---
 
@@ -170,7 +170,7 @@ bash tools/build-pdfs.sh   # xuất PDF cho 4 tài liệu §14
 
 # 6. Đóng gói nộp bài
 bash tools/package.sh 95 --check    # soát đủ/thiếu theo §14, không tạo gói
-bash tools/package.sh 99            # → 23127178_HW05_AI_Performance_99.zip
+bash tools/package.sh 100           # → 23127178_HW05_AI_Performance_100.zip
 ```
 
 > **Java:** máy này mặc định `java` = Temurin 8 **x86_64** → JMeter chạy qua Rosetta và chính
@@ -247,7 +247,7 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ## 9. Việc còn lại
 
-Chạy `bash tools/package.sh 99 --check` để soát. Còn **1 mục**:
+Chạy `bash tools/package.sh 100 --check` để soát. Còn **1 mục**:
 
 1. **Video ≥6 phút**, unlisted, giọng mình → dán link vào README và main-report.
    Kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Chuyện đáng kể nhất: mở bảng

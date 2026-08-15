@@ -279,12 +279,19 @@
   |---|---|---|---|
   | Load | 20,3% | 13,4% | khớp bậc độ lớn |
   | Stress | 97,7% | **91,7%** | khớp — xác nhận `node` **chạm trần 1 core** |
-  | Spike | 81,6% | 34,9% | **lệch — ảnh chụp trượt đỉnh ~4s** |
+  | Spike | 81,6% | 34,9% | **lệch — ảnh chụp trượt đỉnh** → đã chạy lại, xem dưới |
   | Soak | 23,6% | 16,3% | khớp bậc độ lớn |
 
-  Ảnh luôn thấp hơn vì nó là **một lát cắt tức thời**, còn tool báo **đỉnh của cả lượt**. Riêng ảnh
-  Spike thì trượt hẳn đỉnh sốc và tôi **giữ nguyên, ghi rõ là trượt**, không chạy lại để lấy ảnh
-  đẹp hơn rồi im lặng.
+  Ảnh luôn thấp hơn vì nó là **một lát cắt tức thời**, còn tool báo **đỉnh của cả lượt**.
+
+  **Ảnh Spike thì trượt hẳn đỉnh sốc, và về sau tôi chạy lại lượt đó.** Cần nói rõ ranh giới, vì
+  "chạy lại để có ảnh đẹp hơn" đúng là việc tôi đã tự cấm mình ở trên: cái tôi làm **không** phải
+  chụp lại một tấm rồi ghép vào lượt cũ, mà là **chạy lại cả lượt** (21:59, đủ 240s, 38.251 sample,
+  0% error) để `.jmx` · `.jtl` · dashboard · resources · ảnh **cùng thuộc một lượt duy nhất**. Ảnh
+  mới đọc **72,6%** so với đỉnh tool đo **75,7%**. Và lượt 15:47 **không bị xoá** — nó thành lượt
+  Spike thứ tư ở §3.4, nơi bốn lượt cho thấy `node` CPU đỉnh gần như nhau (75,7–81,6%) trong khi
+  p95 đỉnh lệch 5,9 lần. Chọn một tấm ảnh trong cùng một lượt thì là chọn bằng chứng; chạy lại cả
+  lượt rồi giữ luôn lượt cũ thì không.
 
   ***(SV chưa tự kiểm)*** Bug `pgrep` bám vào tiến trình `zsh` bao ngoài thì tôi không bắt được —
   CSV vẫn có đủ cột, đủ dòng, chỉ là ghi RSS 0,5 MB. Hệ quả: file tài nguyên của lượt **Load** và

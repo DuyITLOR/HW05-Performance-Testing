@@ -9,10 +9,14 @@
 > **Quy tắc số liệu:** mọi con số lấy từ [`results/summary.md`](../results/summary.md), sinh tự
 > động bằng `npm run summary` đọc từ raw `.jtl`. Không con số nào đếm tay (§11).
 
-**Bộ số liệu chính là 4 lượt chạy ngày 15/08/2026, 15:29–16:04** — bộ duy nhất có **đủ 5 ảnh
-bằng chứng** khớp timestamp. Hai batch khác (13/08 và 15/08 14:26) được **giữ lại có chủ đích** và
-dùng ở §2.8, nơi ba batch cho ba mức tải nền khác nhau đã **bác bỏ** một kết luận mà chính tôi từng
-đưa ra. Đó là mục đáng đọc nhất của báo cáo.
+**Bộ số liệu chính:** Load · Stress · Soak chạy ngày **15/08/2026, 15:29–16:04**, và **Spike chạy
+lại lúc 21:59** cùng ngày. Lý do chạy lại đúng một lượt: ảnh Spike của batch chiều **trượt đỉnh cú
+sốc** (bắt 34,9% trong khi đỉnh thật 81,6%), nên lượt đó được chạy lại để có ảnh khớp — lần này ảnh
+đọc **72,6%** so với đỉnh tool đo **75,7%**. Cả 4 lượt đều có **ảnh bằng chứng khớp timestamp**.
+
+Các batch khác (13/08, 15/08 14:26, và lượt Spike 15:47) được **giữ lại có chủ đích**: §2.8 dùng
+chúng để **bác bỏ** một kết luận mà chính tôi từng đưa ra, và §3.4 dùng **bốn** lượt Spike để cho
+thấy phương sai giữa các lượt. Đó là hai mục đáng đọc nhất của báo cáo.
 
 ---
 
@@ -105,7 +109,7 @@ Bốn lượt tuần tự, cooldown 90s. Mốc thời gian: [`results/run-log.md
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Load** | 08:29:38 | 16.343 | 22 | 359,7s | 45,4 | **0%** | 3,7 | 3 | 7 | **8** | 12 | 84 |
 | **Stress** | 08:37:17 | 258.992 | 200 | 479,9s | **539,7** | **0%** | 9,6 | 2 | 8 | **18** | 124 | **3691** |
-| **Spike** | 08:47:00 | 38.160 | 212 | 239,7s | 159,2 | **0%** | 3,1 | 2 | 6 | **7** | 20 | 152 |
+| **Spike** | 14:59:39 | 38.251 | 212 | 239,8s | 159,5 | **0%** | 2,8 | 2 | 5 | **7** | 16 | 176 |
 | **Soak** | 08:52:47 | 45.166 | 22 | 719,6s | 62,8 | **0%** | 3,6 | 3 | 7 | **8** | 12 | 192 |
 
 Đơn vị: **ms**. Percentile nearest-rank từ raw `.jtl`.
@@ -127,8 +131,8 @@ còn dư sức.
 | 2 `GET /api/admin/orders` | 9 | **17** | 7 | 8 |
 | 3 `GET /api/admin/users` | 6 | **13** | 5 | 6 |
 | 4 `POST /api/admin/import-products` | **10** | **22** | **9** | **10** |
-| 5 `PUT /api/admin/orders/:id/status` | 6 | **14** | 6 | 5 |
-| 6 `POST /api/login` (lockout probe) | 6 | 4 | 5 | 5 |
+| 5 `PUT /api/admin/orders/:id/status` | 6 | **14** | 5 | 5 |
+| 6 `POST /api/login` (lockout probe) | 6 | 4 | 6 | 5 |
 
 p95, đơn vị **ms**. Sample mỗi endpoint: Load ~3.250 · Stress ~51.800 · Spike ~7.600 · Soak ~9.010.
 
@@ -213,7 +217,7 @@ Bằng chứng tài nguyên **dạng số** thì có đầy đủ và tính toá
 |---|---|---|---|---|
 | Load | 4,4 | 20,3% | 118,3% | 81,1 MB |
 | **Stress** | 5,7 | **97,7%** | 178,3% | **1373,2 MB** |
-| Spike | 6,0 | 81,6% | 182,6% | 92,0 MB |
+| Spike | 3,3 | 75,7% | 205,2% | 90,0 MB |
 | Soak | 4,6 | 23,6% | 49,3% | 83,1 MB |
 
 Ba điều trong bảng này quan trọng hơn bảng p95:
@@ -412,16 +416,24 @@ phí phục vụ tải.
 **Ba lượt Spike cho ba kết quả khác nhau, và không biến nào giải thích được thứ tự đó.** Đo lại
 p95 đỉnh của cửa sổ 10 giây trên cả ba `.jtl`, kèm `load_1m` trung bình lấy từ file resources tương ứng:
 
-| Lượt Spike | Sample | **p95 đỉnh cửa sổ** | `load_1m` tb |
-|---|---|---|---|
-| 13/08 13:29 | 38.069 | **47 ms** | 4,5 |
-| 15/08 14:44 | 38.388 | **8 ms** | **2,2** |
-| 15/08 15:47 *(bộ nộp)* | 38.160 | **12 ms** | **6,0** |
+| Lượt Spike | Sample | **p95 đỉnh cửa sổ** | `load_1m` tb | `node` CPU đỉnh |
+|---|---|---|---|---|
+| 13/08 13:29 | 38.069 | **47 ms** | 4,5 | 78,9% |
+| 15/08 14:44 | 38.388 | **8 ms** | **2,2** | 76,1% |
+| 15/08 15:47 | 38.160 | **12 ms** | **6,0** | 81,6% |
+| 15/08 21:59 *(bộ nộp)* | 38.251 | **9 ms** | 3,3 | 75,7% |
 
-Chênh lệch **5,9 lần** giữa lượt cao nhất và thấp nhất, trong khi số sample chỉ lệch **0,8%** — tức
-cùng một lượng công việc, ba kết quả. Nhưng `load_1m` **không xếp đúng thứ tự**: lượt tải nền **cao
-nhất** (6,0) cho **12ms**, còn lượt cho **47ms** chỉ ở 4,5. Nếu tải nền là nguyên nhân thì thứ tự
-phải là 2,2 < 4,5 < 6,0 → 8 < 47 < 12, và nó không phải vậy.
+Chênh lệch **5,9 lần** giữa lượt cao nhất và thấp nhất, trong khi số sample chỉ lệch **0,8%** —
+cùng một lượng công việc, bốn kết quả. `load_1m` **không xếp đúng thứ tự**: lượt tải nền **cao nhất**
+(6,0) cho **12ms**, còn lượt cho **47ms** chỉ ở 4,5, và lượt 3,3 cho 9ms. Nếu tải nền là nguyên nhân
+thì thứ tự phải là 2,2 < 3,3 < 4,5 < 6,0 → 8 < 9 < 47 < 12, và nó không phải vậy.
+
+**Cột cuối là chỗ đáng đọc nhất của bảng.** `node` CPU đỉnh gần **như nhau ở cả bốn lượt** —
+75,7 / 76,1 / 78,9 / 81,6%, lệch **4 điểm phần trăm** — trong khi p95 đỉnh lệch **5,9 lần**. Nghĩa
+là server làm **đúng lượng việc như nhau** mỗi lượt; cái nhảy 5,9 lần **không** nằm ở lượng công
+việc mà ở **thứ tự chờ**: request nào rơi vào đúng lúc CPU bị tiến trình khác chen ngang thì phải
+xếp hàng, và p95 đọc đúng cái xếp hàng đó. Đây là lý do một lượt Spike đơn lẻ **không** dùng làm
+baseline được, kể cả khi CPU nhìn hoàn toàn bình thường.
 
 > **Bản trước của mục này ghi "47 · 65 · 7ms" và quy nguyên nhân cho `load_1m`. Hai con số sai và
 > lập luận không đứng được.** Đây là **lỗi #17**: §2.8 đã thu hồi việc quy nhân quả cho một biến đơn
