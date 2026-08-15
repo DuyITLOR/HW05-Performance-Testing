@@ -1,3 +1,98 @@
+* 56ff1d8 2026-08-15 16:27:57 +0700 DuyITLOR
+|   test: final evidence batch, and a third data point that settles section 2.8
+| The submitted set is now the 15/08 15:29-16:04 batch - the only one with all five evidence
+| screenshots matching their run-log timestamps. Stress catches node at 91.7% CPU during the 200-VU
+| step, which is the visual proof for the claim the report rests on.
+| 
+| A third batch settles what two could not. Data grew monotonically across the three runs - 50k, 830k,
+| 900k products - while p95 went 26, 7, 18 ms. It does not track the data. It tracks load_1m: 5.2,
+| 3.1, 5.7. Background load moves p95 by 2.6x while raising VUs tenfold moves it 2.25x, so on this
+| machine the noise is larger than the signal. Section 2.8 keeps the retraction and now carries three
+| pairs of numbers instead of an argument.
+| 
+| Mistake #13: soak-drift.mjs computed RSS drift as last-sample over first-sample, and the first
+| sample is taken before warm-up finishes. It printed +228.9%, which reads as a leak. Comparing halves
+| gives +5.0%, and the per-minute table shows a step then a flat line. The tool now reports halves and
+| keeps the old figure with a warning beneath it.
+| 
+| Also retired: the 14:26 batch numbers everywhere, the 1373 MB RSS spike at Stress recorded as an
+| unexplained observation rather than attributed to anything, and the spike analysis noting p95 rises
+| when load is withdrawn - teardown cost for 200 sockets, not serving cost.
+| 
+|  README.md                                         |    131 +-
+|  ai-audit/ai-audit-report.md                       |     29 +-
+|  ai-audit/ai-audit-report.pdf                      |    Bin 439273 -> 464929 bytes
+|  ai-audit/ai-critique.pdf                          |    Bin 54238 -> 54238 bytes
+|  ai-audit/design-log.pdf                           |    Bin 249086 -> 249086 bytes
+|  bug-report/bug-report.md                          |     14 +-
+|  bug-report/bug-report.pdf                         |    Bin 290922 -> 285810 bytes
+|  .../screenshots/bug-evidence-verify-bugs.png      |    Bin 0 -> 581006 bytes
+|  docs/review-task1.md                              |     21 +-
+|  ...an-vi-du-chup-luc-cooldown-khong-dung-duoc.png |    Bin 0 -> 1545535 bytes
+|  endurance/endurance-threshold.md                  |    113 +-
+|  endurance/html/soak/content/js/dashboard.js       |      4 +-
+|  endurance/html/soak/content/js/graph.js           |     32 +-
+|  .../html/soak/content/pages/CustomsGraphs.html    |      6 +-
+|  endurance/html/soak/content/pages/OverTime.html   |      6 +-
+|  .../html/soak/content/pages/ResponseTimes.html    |      6 +-
+|  endurance/html/soak/content/pages/Throughput.html |      6 +-
+|  endurance/html/soak/index.html                    |      6 +-
+|  endurance/html/soak/statistics.json               |    136 +-
+|  .../jtl/23127178_Soak_20260815-155240.jmeter.log  |    238 +
+|  endurance/jtl/23127178_Soak_20260815-155240.jtl   |  45167 +++
+|  .../23127178_Soak_20260815-155240.resources.csv   |    343 +
+|  endurance/run-log.md                              |      1 +
+|  report/main-report.md                             |    311 +-
+|  report/main-report.pdf                            |    Bin 731136 -> 752487 bytes
+|  resource-monitor/screenshots/activity-load.png    |    Bin 0 -> 1407119 bytes
+|  resource-monitor/screenshots/activity-soak.png    |    Bin 0 -> 1429407 bytes
+|  resource-monitor/screenshots/activity-spike.png   |    Bin 0 -> 1436609 bytes
+|  resource-monitor/screenshots/activity-stress.png  |    Bin 0 -> 1412111 bytes
+|  resource-monitor/screenshots/hardware-spec.png    |    Bin 0 -> 1418194 bytes
+|  results/html/load/content/js/dashboard.js         |      4 +-
+|  results/html/load/content/js/graph.js             |     32 +-
+|  .../html/load/content/pages/CustomsGraphs.html    |      6 +-
+|  results/html/load/content/pages/OverTime.html     |      6 +-
+|  .../html/load/content/pages/ResponseTimes.html    |      6 +-
+|  results/html/load/content/pages/Throughput.html   |      6 +-
+|  results/html/load/index.html                      |      6 +-
+|  results/html/load/statistics.json                 |    138 +-
+|  results/html/spike/content/js/dashboard.js        |      4 +-
+|  results/html/spike/content/js/graph.js            |     32 +-
+|  .../html/spike/content/pages/CustomsGraphs.html   |      6 +-
+|  results/html/spike/content/pages/OverTime.html    |      6 +-
+|  .../html/spike/content/pages/ResponseTimes.html   |      6 +-
+|  results/html/spike/content/pages/Throughput.html  |      6 +-
+|  results/html/spike/index.html                     |      6 +-
+|  results/html/spike/statistics.json                |    122 +-
+|  results/html/stress/content/js/dashboard.js       |      6 +-
+|  results/html/stress/content/js/graph.js           |     32 +-
+|  .../html/stress/content/pages/CustomsGraphs.html  |      6 +-
+|  results/html/stress/content/pages/OverTime.html   |      6 +-
+|  .../html/stress/content/pages/ResponseTimes.html  |      6 +-
+|  results/html/stress/content/pages/Throughput.html |      6 +-
+|  results/html/stress/index.html                    |      6 +-
+|  results/html/stress/statistics.json               |    140 +-
+|  .../jtl/23127178_Load_20260815-152938.jmeter.log  |    212 +
+|  results/jtl/23127178_Load_20260815-152938.jtl     |  16344 ++
+|  .../jtl/23127178_Spike_20260815-154700.jmeter.log |    594 +
+|  results/jtl/23127178_Spike_20260815-154700.jtl    |  38161 +++
+|  .../23127178_Stress_20260815-153717.jmeter.log    |    599 +
+|  results/jtl/23127178_Stress_20260815-153717.jtl   | 258993 +++++++++++++++++
+|  .../23127178_Load_20260815-152938.resources.csv   |    172 +
+|  .../23127178_Spike_20260815-154700.resources.csv  |    117 +
+|  .../23127178_Stress_20260815-153717.resources.csv |    231 +
+|  results/run-log.md                                |      3 +
+|  results/summary.md                                |    106 +-
+|  tools/soak-drift.mjs                              |     17 +-
+|  66 files changed, 361977 insertions(+), 742 deletions(-)
+| 
+* 02aee5a 2026-08-15 15:15:03 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 288 +++++++++++++++++++++++++++++++++++++++++++----
+|  1 file changed, 269 insertions(+), 19 deletions(-)
+| 
 * e6b3a2a 2026-08-15 15:14:56 +0700 DuyITLOR
 |   test: rerun on a quiet machine, and retract the finding it disproves
 | The previous report had a section called 'the most important finding': comparing two batches two days
