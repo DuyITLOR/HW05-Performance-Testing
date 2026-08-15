@@ -18,6 +18,7 @@
     "capture": "bash tools/capture-run.sh",
     "drift": "node tools/soak-drift.mjs",
     "plans": "python3 tools/gen-test-plans.py",
-    "reset:orders": "node tools/reset-orders.mjs"
+    "reset:orders": "node tools/reset-orders.mjs",
+    "verify": "bash tools/verify-all.sh"
   }
 }

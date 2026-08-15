@@ -462,19 +462,40 @@ chart §4.
 Đây cũng là chỗ **View Results Tree** phát huy: mở các sample chậm nhất trong cửa sổ 60–70s cho thấy
 chúng là `POST /api/login` — khớp với việc login phải khởi tạo 200 kết nối mới cùng lúc.
 
-### 3.5 Đối chiếu chéo bằng k6 (bonus §8)
+### 3.5 Chi phí của load generator — và vì sao k6 vẫn chỉ là bản mirror (bonus §8)
 
-Bản mirror k6 dùng **cùng** workflow và cùng CSV: [`k6/`](../k6/). Câu hỏi nó trả lời: JMeter cấp
-một thread JVM cho mỗi VU (RSS đỉnh 818 MB ở lượt Soak); k6 dùng goroutine. Ở lượt Stress 15/08,
-JMeter CPU đỉnh **106,2%** so với `node` **98,4%** — hai bên xấp xỉ nhau, nên một phần latency đo
-được vẫn là chi phí của load generator.
+**Load generator tốn CPU nhiều hơn cả hệ thống đang được đo.** Ở lượt Stress **được nộp**
+(`23127178_Stress_20260815-153717`), JMeter CPU đỉnh **178,3%** so với `node` **97,7%** — tức
+**1,8 lần**. JMeter cấp một **thread JVM** cho mỗi VU, nên ở 200 VU nó ngốn 844 MB RSS và gần hai
+lõi chỉ để *sinh* tải.
+
+Hệ quả trực tiếp lên cách đọc mọi số p95 của bài: load generator và SUT **dùng chung 12 lõi**, nên
+một phần latency đo được là **thời gian JMeter tự chờ chính nó**, không phải thời gian server xử lý.
+Không tách được phần đó ra bằng dữ liệu đang có.
+
+Và chính tỉ lệ này cũng **không ổn định giữa các lượt** — thêm một trường hợp của §3.4:
+
+| Lượt Stress | `node` CPU đỉnh | JMeter CPU đỉnh | Tỉ lệ |
+|---|---|---|---|
+| 15/08 14:34 | 98,4% | 106,2% | **1,08×** |
+| 15/08 15:37 *(nộp)* | 97,7% | 178,3% | **1,83×** |
+
+Cùng plan, cùng số VU, cùng máy: SUT tiêu CPU **như nhau** (98,4 vs 97,7%) trong khi load generator
+lệch **1,7 lần**. Bản báo cáo trước trích cặp số của lượt 14:34 rồi viết *"hai bên xấp xỉ nhau"* —
+đúng với lượt đó, **sai với lượt được nộp**, và không nói đang trích lượt nào.
+
+**k6 để làm gì.** Bản mirror dùng **cùng** workflow và cùng CSV: [`k6/`](../k6/). k6 dùng goroutine
+thay vì thread JVM, nên nó là cách kiểm giả thuyết "một phần latency là chi phí của JMeter": nếu
+cùng workflow mà k6 cho p95 thấp hơn ở cùng `load_1m`, phần chênh đó là chi phí generator.
 
 ```bash
 k6 run --summary-export k6/summary-stress.json k6/stress.js
 ```
 
-*(Chưa chạy — bản JMeter là bản chính theo §14. Nếu chạy, phải chạy ở cùng mức `load_1m` mới so được,
-theo đúng bài học §2.8.)*
+**Chưa chạy lần nào.** §8 xếp k6 là bonus và bản JMeter là bản chính theo §14, nên bài này **không**
+khẳng định đã đối chiếu chéo — chỉ nêu phép kiểm và điều kiện của nó: phải chạy ở **cùng mức
+`load_1m`** mới so được, theo đúng bài học §2.8. Nói "đã đối chiếu chéo" khi chưa chạy thì đúng là
+loại khẳng định mà cả Task 2 của bài này đang đi soát.
 
 ## 4. Task 3 — Đề xuất Continuous Performance Testing
 
