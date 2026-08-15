@@ -1,0 +1,163 @@
+# ============================================================================
+# Continuous Performance Testing — hiện thực nhánh "PR pipeline" của flow chart Task 3.
+#
+# Báo cáo §4 lập luận rằng ngưỡng hiệu năng TUYỆT ĐỐI mang từ máy này sang máy khác là vô nghĩa,
+# vì nhiễu môi trường lớn hơn tín hiệu. Workflow này tồn tại để **kiểm lập luận đó bằng một lượt
+# CI thật** thay vì để nó là suy đoán trên giấy: chạy hai lần với hai bộ ngưỡng —
+#
+#   Lần 1: p95 ≤ 8ms   ← ngưỡng lấy từ số đo LOCAL (MacBook 12 lõi, p95 Load = 8ms)
+#   Lần 2: p95 ≤ 200ms ← ngưỡng lấy từ chính runner này
+#
+# Nếu lần 1 fail thì đó không phải sự cố của workflow, đó là **kết quả**: cùng test plan, cùng
+# SUT, cùng số VU, chỉ khác máy chạy.
+#
+# Chạy tay:  gh workflow run perf-smoke.yml -f p95_ms=8
+# ============================================================================
+name: perf-smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      p95_ms:
+        description: 'Ngưỡng p95 (ms) — vượt là fail build'
+        required: true
+        default: '200'
+      threads:
+        description: 'Số VU'
+        required: true
+        default: '5'
+      duration:
+        description: 'Thời lượng (giây)'
+        required: true
+        default: '60'
+  push:
+    branches: [main]
+    paths:
+      - 'test-plans/**'
+      - 'tools/gen-test-plans.py'
+      - 'tools/ci-gate.mjs'
+      - '.github/workflows/perf-smoke.yml'
+
+# Hai lượt chạy song song sẽ tranh cùng một cổng 3000 và tranh CPU của runner — mà tranh CPU thì
+# đúng là thứ làm số đo mất nghĩa. Xếp hàng, không cancel-in-progress: một lượt đang đo dở bị
+# huỷ giữa đường để lại .jtl cụt.
+concurrency:
+  group: perf-smoke
+  cancel-in-progress: false
+
+env:
+  JMETER_VERSION: '5.6.3'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout bài làm HW05
+        uses: actions/checkout@v4
+
+      - name: Checkout SUT (eshop-sut)
+        uses: actions/checkout@v4
+        with:
+          repository: ttbhanh/eshop-sut
+          path: eshop-sut
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Bản binary được kiểm bằng chính file .sha512 của Apache, không hardcode hash trong file
+      # này — hash hardcode sai thì build fail vì lý do không liên quan gì tới hiệu năng.
+      - name: Cache JMeter
+        id: cache-jmeter
+        uses: actions/cache@v4
+        with:
+          path: apache-jmeter-${{ env.JMETER_VERSION }}
+          key: jmeter-${{ env.JMETER_VERSION }}
+
+      - name: Tải JMeter ${{ env.JMETER_VERSION }}
+        if: steps.cache-jmeter.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          base="https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
+          curl -fsSLO "$base"
+          curl -fsSLO "$base.sha512"
+          sha512sum -c "apache-jmeter-${JMETER_VERSION}.tgz.sha512"
+          tar xzf "apache-jmeter-${JMETER_VERSION}.tgz"
+
+      - name: Khởi động SUT
+        working-directory: eshop-sut/backend
+        run: |
+          set -euo pipefail
+          npm ci --omit=dev 2>/dev/null || npm install --omit=dev
+          node server.js > "$GITHUB_WORKSPACE/sut.log" 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS http://localhost:3000/api/products >/dev/null 2>&1; then
+              echo "SUT sẵn sàng sau ${i}s"; exit 0
+            fi
+            sleep 1
+          done
+          echo "SUT không lên sau 40s:"; cat "$GITHUB_WORKSPACE/sut.log"; exit 1
+
+      # DB của runner là database.sqlite sạch trong repo SUT (36 KB), KHÁC hẳn DB local
+      # ~900.000 dòng products. Ghi lại con số này — nó là một điểm dữ liệu cho §2.8.
+      - name: Ghi điều kiện đo
+        run: |
+          {
+            echo "### Điều kiện lượt đo trên CI"
+            echo ""
+            echo '| | |'
+            echo '|---|---|'
+            echo "| Runner | \`$(uname -sm)\` · **$(nproc) vCPU** · RAM $(free -g | awk '/^Mem:/{print $2}') GB |"
+            echo "| load_1m lúc bắt đầu | **$(cut -d' ' -f1 /proc/loadavg)** |"
+            echo "| Node | $(node -v) · Java $(java -version 2>&1 | head -1 | grep -oE '\"[^\"]+\"') |"
+            echo "| \`products\` trong DB | **$(curl -fsS http://localhost:3000/api/products | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).length))')** dòng |"
+            echo "| Ngưỡng p95 áp dụng | **${{ inputs.p95_ms || 200 }} ms** · VU ${{ inputs.threads || 5 }} · ${{ inputs.duration || 60 }}s |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Seed dữ liệu test + sinh test plan
+        run: |
+          set -euo pipefail
+          node tools/seed-perf-data.mjs
+          python3 tools/gen-test-plans.py
+          ls -la data/ test-plans/
+
+      - name: Chạy JMeter (non-GUI)
+        run: |
+          set -euo pipefail
+          plan="$(ls -1 test-plans/23127178_Load_*.jmx | sort | tail -1)"
+          mkdir -p ci-out
+          "apache-jmeter-${JMETER_VERSION}/bin/jmeter" -n \
+            -t "$plan" \
+            -l ci-out/ci-load.jtl \
+            -e -o ci-out/dashboard \
+            -Jthreads=${{ inputs.threads || 5 }} \
+            -Jrampup=10 \
+            -Jduration=${{ inputs.duration || 60 }} \
+            -Jport=3000
+
+      # Cổng thật: bước này quyết định build đỏ hay xanh.
+      - name: Cổng ngưỡng
+        run: |
+          node tools/ci-gate.mjs ci-out/ci-load.jtl \
+            --p95 ${{ inputs.p95_ms || 200 }} \
+            --error-rate 1 \
+            --min-samples 200
+
+      # Chạy cả khi cổng fail — lúc fail mới là lúc cần bằng chứng nhất.
+      - name: Lưu bằng chứng
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-smoke-p95-${{ inputs.p95_ms || 200 }}-${{ github.run_number }}
+          path: |
+            ci-out/ci-load.jtl
+            ci-out/dashboard
+            sut.log
+          retention-days: 30
