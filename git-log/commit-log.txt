@@ -1,3 +1,52 @@
+* 3907728 2026-08-15 22:20:15 +0700 DuyITLOR
+|   docs(task2): the tear-down finding did not reproduce, so demote it
+| Recomputing the 10-second window table against the run that is actually submitted showed that §3.4's
+| headline observation does not hold. In the 15:47 run the 90-100s window - load withdrawing - gave p95
+| 12ms and p99 52ms, higher than while 212 VU were active, and the report explained it as tear-down
+| cost from 200 JVM threads closing sockets at once. The 21:59 run gives 8ms and 14ms for the same
+| window, about 1ms above the loaded windows, which is noise.
+| 
+| The mechanism is still plausible and may well be real. One run does not establish it, and the
+| evidence for saying so is in the same section: four Spike runs spanning 5.9x at peak-window p95. So
+| it is demoted to an observation that has not reproduced, with both runs' columns kept side by side
+| rather than the numbers quietly swapped. It is the most compact illustration of §3.4's own argument -
+| a single observation from a single Spike run is not a finding.
+| 
+| The window table now cites the submitted .jtl instead of the superseded one. Absorption of the shock
+| reads stronger, not weaker: p95 5-7ms across the three loaded windows against 7-8ms at baseline, on
+| 28,000 samples.
+| 
+| TASKS.md said three self-generated optimisation suggestions where the report lists four.
+| 
+|  README.md                    |   2 +-
+|  TASKS.md                     |   2 +-
+|  ai-audit/ai-audit-report.pdf | Bin 677859 -> 677859 bytes
+|  ai-audit/ai-critique.pdf     | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf    | Bin 296646 -> 296646 bytes
+|  report/main-report.md        |  37 +++++++++++++++++++++++--------------
+|  report/main-report.pdf       | Bin 874374 -> 888393 bytes
+|  7 files changed, 25 insertions(+), 16 deletions(-)
+| 
+* 77cee85 2026-08-15 22:13:20 +0700 DuyITLOR
+|   test(capture): say plainly that the extra Spike shots are insurance, not a requirement
+| §6 asks for one screenshot per scenario. The two extra capture moments exist only because the first
+| attempt landed outside the 30-second shock window - if the shot at second 72 reads low, there are two
+| more moments still inside the window. The comment read like a three-shot mandate, which is how I
+| described it, and that was wrong.
+| 
+| What is not allowed stays spelled out: taking several frames and quietly keeping the highest number
+| is selecting evidence. Keep them all and label which second each came from, or keep one. The 21:59
+| run needed only the first - 72.6% against a tool-measured peak of 75.7%.
+| 
+|  tools/capture-run.sh | 11 +++++++----
+|  1 file changed, 7 insertions(+), 4 deletions(-)
+| 
+* 5c204fe 2026-08-15 22:10:02 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 57 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 57 insertions(+)
+| 
 * c419c7a 2026-08-15 22:10:01 +0700 DuyITLOR
 |   test(spike): re-run the whole scenario so the screenshot and the numbers come from one run
 | The Spike screenshot caught node at 34.9% against a real peak of 81.6% - it landed outside the
