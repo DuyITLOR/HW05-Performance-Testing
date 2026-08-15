@@ -392,26 +392,35 @@ Không lỗi nào do đọc sai con số; tất cả do đọc **thiếu** con s
 
 ### 3.4 Đo hồi phục sau cú sốc (Spike)
 
-p95 theo cửa sổ 10 giây quanh cú sốc ở giây 60 (`results/jtl/23127178_Spike_20260815-154700.jtl`):
+p95 theo cửa sổ 10 giây quanh cú sốc ở giây 60, **lượt nộp** (`results/jtl/23127178_Spike_20260815-215939.jtl`),
+kèm cột cuối là cùng cửa sổ đó ở lượt 15:47 để đối chiếu:
 
-| Giây | VU | Sample | **p95** | p99 |
-|---|---|---|---|---|
-| 40–50 | 12 | 474 | **9** | 18 |
-| 50–60 | 22 | 500 | **8** | 10 |
-| **60–70** | **212** | **7.912** | **7** | 46 |
-| **70–80** | **212** | **10.239** | **8** | 22 |
-| **80–90** | **212** | **10.002** | **7** | 15 |
-| 90–100 | 12 | 478 | **12** | 52 |
+| Giây | VU | Sample | **p95** | p99 | *(p95/p99 lượt 15:47)* |
+|---|---|---|---|---|---|
+| 40–50 | 12 | 485 | **7** | 10 | *9 / 18* |
+| 50–60 | 19 | 503 | **8** | 10 | *8 / 10* |
+| **60–70** | **212** | **7.885** | **5** | 9 | *7 / 46* |
+| **70–80** | **212** | **10.231** | **7** | 20 | *8 / 22* |
+| **80–90** | **212** | **10.121** | **7** | 18 | *7 / 15* |
+| 90–100 | 12 | 482 | **8** | 14 | *12 / 52* |
+| 100–110 | 12 | 501 | **6** | 8 | *6 / 10* |
 | 100–110 | 12 | 488 | **6** | 10 |
 
 **Server hấp thụ trọn cú sốc.** VU nhảy từ 12 lên **212 trong 5 giây**, sample/10s tăng từ 500 lên
 **10.239** (gấp **20 lần**), mà p95 đứng nguyên 7–8ms. Dấu hiệu duy nhất là p99 nhích lên 46ms ở cửa
 sổ đầu rồi về 15.
 
-Điều thú vị nằm ở cửa sổ **90–100s**: p95 **tăng lên 12ms và p99 lên 52ms** — tức lúc **tải rút đi**
-lại chậm hơn lúc đang chịu tải. Giải thích hợp lý: 200 thread JVM đóng kết nối cùng lúc, và `node`
-phải dọn 200 socket trong khi 12 VU nền vẫn gửi request. Đó là chi phí **tear-down**, không phải chi
-phí phục vụ tải.
+**Một "phát hiện" của bản báo cáo trước, và nó không lặp lại được.** Ở lượt 15:47, cửa sổ **90–100s**
+— lúc **tải rút đi** — cho p95 **12ms** và p99 **52ms**, cao hơn cả lúc đang chịu 212 VU. Báo cáo gọi
+đó là điều thú vị nhất của mục này và giải thích bằng chi phí **tear-down**: 200 thread JVM đóng kết
+nối cùng lúc, `node` phải dọn 200 socket trong khi 12 VU nền vẫn gửi request.
+
+Lượt 21:59 **không cho hiện tượng đó**: cùng cửa sổ 90–100s chỉ p95 **8ms** / p99 **14ms**, tức nhích
+1ms so với lúc chịu tải — trong ngưỡng nhiễu. Cơ chế tear-down vẫn **hợp lý về lý thuyết** và vẫn có
+thể đúng, nhưng **một lượt không chứng minh được nó**, và đúng bằng chứng để nói thế nằm ngay trong
+mục này: bốn lượt Spike lệch nhau 5,9 lần ở p95 đỉnh (bảng dưới). Giữ lại cả hai cột thay vì im lặng
+thay số, vì chỗ này là ví dụ gọn nhất cho toàn bộ luận điểm §3.4 — **một quan sát đơn lẻ trên một
+lượt Spike không phải là một phát hiện.**
 
 **Ba lượt Spike cho ba kết quả khác nhau, và không biến nào giải thích được thứ tự đó.** Đo lại
 p95 đỉnh của cửa sổ 10 giây trên cả ba `.jtl`, kèm `load_1m` trung bình lấy từ file resources tương ứng:

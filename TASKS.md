@@ -45,7 +45,7 @@ vì thế là **ba chương của báo cáo**, còn bằng chứng thì nằm th
 |---|---|
 | **AI phân tích** `.jtl` + đề xuất ngưỡng | [`report/main-report.md §3.1`](report/main-report.md) — nguyên văn, **chưa sửa** |
 | **Soát lỗi đọc metric**, kèm *"correct value from your raw `.jtl` log"* | [`report/main-report.md §3.2`](report/main-report.md) — 7 lỗi, mỗi lỗi kèm giá trị đúng **và tên file** · trong đó có **lỗi của chính báo cáo ở lượt trước**, bị bác bỏ ở [`§2.8`](report/main-report.md) |
-| Phân loại đề xuất tối ưu **feasible / hallucinated** | [`report/main-report.md §3.3`](report/main-report.md) — 6 đề xuất + **cách kiểm chứng** từng cái, + 3 đề xuất AI không nêu |
+| Phân loại đề xuất tối ưu **feasible / hallucinated** | [`report/main-report.md §3.3`](report/main-report.md) — 6 đề xuất + **cách kiểm chứng** từng cái, + **4 đề xuất AI không nêu** |
 | Bản tính độc lập từ raw log để đối chất | [`results/summary.md`](results/summary.md) sinh bởi [`tools/summarize-jtl.mjs`](tools/summarize-jtl.mjs) · độ trôi: [`tools/soak-drift.mjs`](tools/soak-drift.mjs) |
 | Quy trình tái dùng được | [`.claude/skills/jtl-analysis/SKILL.md`](.claude/skills/jtl-analysis/SKILL.md) |
 
