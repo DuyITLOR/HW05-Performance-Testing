@@ -62,6 +62,7 @@ need "ai-audit/ai-critique.md"            "AI Critique (MD) — phải 200–300
 need "ai-audit/ai-critique.pdf"           "AI Critique (PDF)"
 need "bug-report/bug-report.md"           "Bug report"
 need "README.md"                          "README + self-assessment + test summary"
+need "TASKS.md"                           "Bản đồ yêu cầu → file (supporting)"
 need "git-log/commit-log.txt"             "Git commit log (text)"
 needglob "test-plans/${MSSV}_*.jmx" 3     "Test plan {MSSV}_{Scenario}_{YYYYMMDD}"
 needglob "results/jtl/*.jtl" 3            "Raw .jtl (nộp ĐẦY ĐỦ)"
@@ -122,7 +123,7 @@ mkdir -p "$NAME"
 
 # Đúng những gì §14 đòi, cộng supporting material có lý do rõ ràng.
 for item in \
-  report ai-audit bug-report git-log \
+  report ai-audit bug-report git-log TASKS.md \
   test-plans data results endurance resource-monitor k6 tools \
   README.md package.json .claude
 do

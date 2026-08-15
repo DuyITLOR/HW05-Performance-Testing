@@ -18,6 +18,7 @@
 | **SUT (hệ thống được kiểm thử)** | https://github.com/ttbhanh/eshop-sut |
 | **GitHub Issues** | *(chờ mở — xem §9)* |
 | **Video demo (≥6 phút, unlisted)** | *(chờ quay — kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md))* |
+| **Bản đồ yêu cầu → file** | [TASKS.md](TASKS.md) — từng yêu cầu Task 1/2/3 nằm ở đâu |
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
 | **Test summary sinh tự động** | [results/summary.md](results/summary.md) |
 | **Endurance threshold** | [endurance/endurance-threshold.md](endurance/endurance-threshold.md) |
@@ -166,6 +167,7 @@ endurance/           lượt soak 12 phút + endurance-threshold.md (§6)
 resource-monitor/    hardware-report.md (spec + hostname) + screenshots/
 k6/                  bản mirror k6 (bonus §8) — cùng workflow, để đối chiếu chéo
 tools/               13 script — xem §6
+TASKS.md             bản đồ: từng yêu cầu của đề → file + section
 report/ ai-audit/ bug-report/ git-log/
 docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PLAYBOOK + kịch bản video KHÔNG nộp
 .claude/skills/      4 Agent Skill (§7)
