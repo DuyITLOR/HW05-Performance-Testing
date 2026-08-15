@@ -5,20 +5,24 @@
 # vì nhiễu môi trường lớn hơn tín hiệu. Workflow này tồn tại để **kiểm lập luận đó bằng lượt CI
 # thật** thay vì để nó là suy đoán trên giấy.
 #
-# KẾT QUẢ THẬT (3 lượt, ghi lại ở ci/ci-runs.md) — và nó không giống dự đoán ban đầu:
+# KẾT QUẢ THẬT — 5 lượt, số liệu đầy đủ ở ci/ci-runs.md. Ba lượt CÙNG 20 VU, cùng plan, cùng runner
+# spec, không khác nhau một tham số nào:
 #
-#   Lượt 1   5 VU · ngưỡng 200ms  → PASS, p95 **7ms**   (local 20 VU: 8ms)
-#   Lượt 2  20 VU · ngưỡng   8ms  → FAIL, p95 **101ms**  ← ngưỡng của local, chạy trên runner
-#   Lượt 3  20 VU · ngưỡng 200ms  → PASS, p95 ~100ms     ← ngưỡng của runner, cùng tải lượt 2
+#   p95 = 101 ms  ·  15 ms  ·  8 ms          ← lệch 12,6 lần giữa hai lượt y hệt nhau
 #
-# Dự đoán ban đầu viết ở đây là "runner 2 vCPU sẽ chậm hơn nên lượt ngưỡng-8ms fail". Sai một nửa:
-# ở **5 VU** runner nhanh **bằng** máy 12 lõi (7 vs 8ms) — ngưỡng 8ms đã **PASS**, tức cho tín hiệu
-# xanh giả. Chỉ khi ép **cùng 20 VU** như lượt local thì mới lộ: p95 8 → 101ms (**12,6 lần**),
-# p99 12 → 1186ms (**99 lần**). Sai chỗ nào: so lượt 1 với local trong khi hai lượt khác nhau CẢ
-# máy CẢ số VU — đúng họ lỗi #12 của bài này. Ghi thành lỗi #16 trong ai-audit.
+# Ngưỡng 8ms làm build ĐỎ ở lượt đầu thì ở lượt thứ ba VỪA ĐỦ XANH. Cùng code, cùng ngưỡng. Một
+# cổng hiệu năng đặt bằng số tuyệt đối trên runner dùng chung là một cổng tung đồng xu.
 #
-# Bài học đi vào §4: ngưỡng phải **đi kèm mức tải**. Một smoke test nhỏ hơn thiết kế sẽ **đi qua**
-# đúng cái ngưỡng mà nó lẽ ra phải chặn.
+# Hai dự đoán tôi viết ở đây trước khi chạy, cả hai đều SAI, và sai theo cách đáng ghi lại:
+#   - "runner 2 vCPU sẽ chậm hơn máy 12 lõi" → ở 5 VU nó nhanh BẰNG (7 vs 8ms), tức ngưỡng của
+#     local **PASS** và cho tín hiệu xanh giả.
+#   - "p95 trên CI chậm hơn local 12,6 lần" → rút từ MỘT lượt. Lượt thứ ba cho 8ms, đúng bằng local.
+#     Chênh lệch giữa hai máy **nhỏ hơn** phương sai của chính CI, nên không quy cho máy được.
+# Cùng họ lỗi #12 của bài (nhân quả từ so sánh không kiểm soát biến), lần thứ ba. Ghi thành lỗi #16.
+#
+# Điều ổn định qua cả 5 lượt: **error rate 0%** và **thứ tự endpoint đắt nhất** (`import-products`
+# luôn đứng đầu). Vậy cổng CI nên chặn bằng error rate và bằng so sánh **tương đối trong cùng một
+# lượt**, không bằng ngưỡng p95 tuyệt đối — đó là kết luận đi vào §4.
 #
 # Chạy tay:  gh workflow run perf-smoke.yml -f p95_ms=8 -f threads=20
 # ============================================================================

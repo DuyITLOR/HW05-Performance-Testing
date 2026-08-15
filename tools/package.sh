@@ -69,6 +69,8 @@ needglob "test-plans/${MSSV}_*.jmx" 3     "Test plan {MSSV}_{Scenario}_{YYYYMMDD
 needglob "results/jtl/*.jtl" 3            "Raw .jtl (nộp ĐẦY ĐỦ)"
 needglob "results/html/*/index.html" 3    "HTML report folder"
 need "endurance/endurance-threshold.md"   "Endurance threshold (§6)"
+need "ci/ci-runs.md"                      "5 lượt CI thật + output cổng ngưỡng (§4.4)"
+need ".github/workflows/perf-smoke.yml"   "Workflow CI hiện thực flow chart Task 3"
 need "resource-monitor/hardware-report.md" "Hardware report (hostname khớp HW trước)"
 needglob "resource-monitor/screenshots/activity-*.png" 4 "Ảnh resource monitor + tool CÙNG khung"
 need "resource-monitor/screenshots/hardware-spec.png" "Ảnh spec phần cứng"
@@ -125,7 +127,7 @@ mkdir -p "$NAME"
 # Đúng những gì §14 đòi, cộng supporting material có lý do rõ ràng.
 for item in \
   report ai-audit bug-report git-log TASKS.md \
-  test-plans data results endurance resource-monitor k6 tools \
+  test-plans data results endurance resource-monitor k6 tools ci .github \
   README.md package.json .claude
 do
   [ -e "$item" ] && cp -R "$item" "$NAME/"

@@ -26,7 +26,7 @@
 > - ***(SV chưa tự kiểm)*** — chỗ tôi **nhận theo bằng chứng AI đưa ra** mà không kiểm độc lập,
 >   kèm việc cụ thể lẽ ra phải làm để kiểm.
 >
-> Ghi nhãn thứ hai là có chủ ý. Viết cả 11 lượt thành "đã kiểm hết" thì nhanh hơn, nhưng đó đúng
+> Ghi nhãn thứ hai là có chủ ý. Viết cả 12 lượt thành "đã kiểm hết" thì nhanh hơn, nhưng đó đúng
 > là loại bằng chứng dựng mà §11 phạt — và một bản audit không có dòng nào tự nhận là chưa kiểm
 > thì tự nó đáng ngờ.
 
@@ -400,7 +400,7 @@
   sai mà không có gì báo lỗi": tool tự viết in ra một tỉ lệ có đơn vị hợp lý, đọc như rò rỉ bộ nhớ
   trên một hệ thống **hoàn toàn ổn định** (~78 MB phẳng suốt 12 phút, nửa đầu so nửa sau chỉ
   **+5,0%**). Tôi rút ra: **output của tool tự viết phải bị nghi ngờ đúng như output của SUT** — cả
-  bài có 13 lỗi thì **3 lỗi nằm trong tooling đo** (#1, #8, #13), tức 1/4 lỗi đến từ chính dụng cụ
+  bài có 14 lỗi kỹ thuật thì **3 lỗi nằm trong tooling đo** (#1, #8, #13), tức ~1/5 lỗi đến từ dụng cụ
   đo chứ không từ hệ thống được đo. Đã sửa tool in **nửa đầu / nửa sau**, giữ lại dòng
   mẫu-đầu→mẫu-cuối kèm cảnh báo ngay dưới nó.
 - **Commit:** `test(soak): compare like with like when reporting RSS drift`
@@ -454,6 +454,48 @@
   "có nội dung nhưng nằm sai chỗ" — chỉ bắt được đúng hai chỗ này. `TASKS.md` là để bù cho việc đó.
 - **Commit:** `docs: move the §5 evidence into what actually gets submitted`
 
+### Interaction #12 — Chạy flow chart Task 3 thật, và mắc lại đúng lỗi cũ lần thứ ba
+
+- **Task / Scenario:** Task 3 §4 — hiện thực nhánh "PR pipeline" thành GitHub Actions
+- **Bước trong quy trình:** sau khi tự chấm — bịt hai chỗ bị trừ điểm
+- **AI tool:** Claude Code (Opus 5)
+- **Date & time:** 2026-08-15 17:00
+- **Prompt:**
+  ```
+  nếu bạn chấm 88 thì phải tự biết tại sao nó 88 rùi sửa lại cho uti
+  ```
+  ```
+  sửa lại làm sao tự chấm nó lên 100 nha
+  ```
+- **AI output (tóm tắt):** Dựng [`.github/workflows/perf-smoke.yml`](../.github/workflows/perf-smoke.yml)
+  (checkout SUT public → khởi động → seed qua API → sinh plan → JMeter non-GUI → cổng ngưỡng →
+  artifact) và [`tools/ci-gate.mjs`](../tools/ci-gate.mjs). Chạy **5 lượt**, một lượt build **đỏ
+  thật**. Ghi bằng chứng ở [`ci/ci-runs.md`](../ci/ci-runs.md).
+- **AI sai / bỏ sót:**
+  16. **Rút kết luận về máy từ một lượt chạy — lần thứ ba của cùng một lỗi.** Hai câu đã **viết vào
+      chú thích workflow và commit message** trước khi có điểm dữ liệu thứ ba: *"runner 2 vCPU sẽ
+      chậm hơn nên lượt ngưỡng-8ms fail"* và *"p95 trên CI chậm hơn local 12,6 lần"*. Chạy thêm hai
+      lượt **cùng 20 VU, cùng plan, cùng runner spec, không khác một tham số nào** thì p95 ra
+      **101 / 15 / 8 ms**. Tức: (a) ở 5 VU runner nhanh **bằng** máy 12 lõi nên ngưỡng của local
+      **PASS** và cho tín hiệu xanh giả; (b) chênh lệch giữa hai máy **nhỏ hơn phương sai của chính
+      CI**, nên không quy cho máy được.
+- **Vì sao bỏ sót:** **phương pháp**, y hệt #9 và #12. Ba lần cùng một hình dạng: có một quan sát,
+  có một cơ chế nghe hợp lý (runner yếu hơn thì chậm hơn — đúng về lý thuyết), và **không có lượt
+  thứ hai cùng cấu hình**. Điều đáng ghi là lần này lỗi xảy ra **ngay trong lúc đang viết mục Task 2
+  về đúng loại lỗi đó** — biết tên lỗi không ngăn được việc mắc nó; chỉ thêm một điểm dữ liệu mới
+  ngăn được.
+- **Human review:** ***(SV đã kiểm)*** Chỗ tôi can thiệp là **bắt phải sửa, không phải bắt phải giải
+  thích**: tôi tự chấm bài 88 mà hai điểm trừ nằm đó không ai bịt thì trừ điểm để làm gì. Yêu cầu của
+  tôi là *"phải tự biết tại sao nó 88 rồi sửa lại"* — và tôi kiểm được kết quả bằng thứ không cần
+  tin lời ai: **có một lượt build ĐỎ thật** (`31878612141`) và bốn lượt xanh, xem được trong tab
+  Actions. Một flow chart chưa từng chạy thì không có gì phân biệt nó với một hình vẽ đẹp.
+  ***(SV chưa tự kiểm)*** Tôi không tự đọc lại từng dòng YAML của workflow, cũng không tự tính lại
+  phương sai 12,6 lần từ ba file `.jtl` của CI. Nhưng tôi giữ nguyên yêu cầu về hình thức bằng chứng:
+  repo bài làm là **private** nên link Actions người chấm **không mở được** → output cổng ngưỡng phải
+  được chép nguyên văn vào `ci/ci-runs.md` trong repo, đúng cùng lý do như lỗi #14 (bằng chứng nằm
+  ngoài bản nộp thì coi như không có).
+- **Commit:** `ci: run the Task 3 pipeline for real instead of describing it`
+
 <!-- NEW_INTERACTION_MARKER -->
 
 ---
@@ -475,6 +517,10 @@
 | 11 | #8 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
 | 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà nhanh hơn 10 lần; biến thật là `load_1m`. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
 | 13 | #10 | `soak-drift.mjs` tính "trôi RSS" bằng mẫu-cuối / mẫu-đầu, mà mẫu đầu lấy trước warm-up → in **+228,9%**, đọc như rò rỉ. Thực tế nửa-đầu/nửa-sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so nửa đầu với nửa sau; giữ dòng cũ kèm cảnh báo |
+| 16 | #12 | Hai kết luận về lượt CI, rút từ **một** lượt mỗi kết luận: "runner 2 vCPU chậm hơn máy 12 lõi" (ở 5 VU nó nhanh **bằng**) và "CI chậm hơn local **12,6 lần**" (lượt sau cho **8ms**, đúng bằng local). Cả hai đã **viết vào chú thích workflow** trước khi có điểm dữ liệu thứ ba | phương pháp: nhân quả từ so sánh không kiểm soát biến — **lần thứ ba**, sau #9 và #12 | chạy thêm 2 lượt cùng 20 VU → phương sai **12,6 lần** giữa các lượt y hệt nhau; sửa chú thích + đổi hẳn đề xuất §4.3 |
+
+*(Số 14–15 nằm ở bảng "lỗi bản nộp" ngay dưới. Lỗi #16 là lỗi **kỹ thuật** nhưng phát hiện muộn
+nhất — lúc chạy CI thật — nên nó ở bảng này.)*
 
 **Hai lỗi nữa, cố ý KHÔNG đánh số vào bảng trên**, vì chúng không làm sai một con số nào — chúng
 làm sai **bản nộp**, tức một loại thiệt hại khác:
@@ -484,16 +530,16 @@ làm sai **bản nộp**, tức một loại thiệt hại khác:
 | 14 | #11 | Bằng chứng §5 (bảng đăng ký endpoint của nhóm) chỉ nằm trong `docs/`, mà `docs/` **không có trong danh sách §14** → yêu cầu có bằng chứng đủ nhưng người chấm không đọc được, §17 tính **0 điểm** cho mục đó | **sinh viên** | chép bảng vào `report/main-report.md §1.1`; ship thêm `docs/endpoint-selection.md` |
 | 15 | #11 | Lỗ ở §2 *"step by step"* được AI **tự ghi ra rồi để nguyên** — coi việc thừa nhận hạn chế là đã xử lý hạn chế | **sinh viên** | `ai-audit/design-log.md` ghi 7 bước quy trình, kèm câu ranh giới với prompt của sinh viên |
 
-Tính cả hai thì con số đáng nói nhất của phụ lục này là: **2 trong 15 lỗi là do người bắt, không
+Tính cả hai thì con số đáng nói nhất của phụ lục này là: **2 trong 16 lỗi là do người bắt, không
 phải do AI tự soát ra** — và cả hai đều là loại lỗi mà **không script nào phát hiện được**, vì
 không có gì sai về mặt kỹ thuật để mà báo.
 
-**Nhận xét xuyên suốt:** 10 trong 13 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
+**Nhận xét xuyên suốt:** 11 trong 14 lỗi kỹ thuật **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
 có chạy không" thì cả 10 lỗi này đều lọt.
 
-**Chi phí thật của 13 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
+**Chi phí thật của các lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
 phút chạy lại. Nếu không đọc `.jtl` giữa lượt mà chờ đến khi viết báo cáo mới đọc, thì cái phải
 làm lại là **cả bốn lượt cộng phần phân tích**.
 

@@ -5,9 +5,9 @@
 
 > **Trạng thái:** Task 1, 2, 3 hoàn tất — 4 lượt JMeter (**358.661 sample**, 0% error) kèm **5 ảnh
 > bằng chứng** khớp timestamp, endurance threshold chốt bằng số, 2 bug xác nhận bằng request thật,
-> **13 lỗi của AI ghi đầy đủ** — trong đó một kết luận nhân quả sai mà bài này **tự bác bỏ bằng ba
+> **16 lỗi của AI ghi đầy đủ** — trong đó một kết luận nhân quả sai mà bài này **tự bác bỏ bằng ba
 > điểm dữ liệu** (§2.8), và một con số do chính tool của tôi in ra sai (§2.7) — **cộng 2 lỗi bản nộp
-> do chính sinh viên bắt**, tức **2 trong 15 lỗi là do người soát ra, không phải AI tự thấy**.
+> do chính sinh viên bắt**, tức **2 trong 16 lỗi là do người soát ra, không phải AI tự thấy**.
 > **Còn thiếu:** chỉ **video demo** — xem [§9](#9-việc-còn-lại).
 > Quy trình làm bài: [docs/PLAYBOOK.md](docs/PLAYBOOK.md) (trong repo, không kèm bản nộp).
 
@@ -23,7 +23,7 @@
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
 | **Test summary sinh tự động** | [results/summary.md](results/summary.md) |
 | **Endurance threshold** | [endurance/endurance-threshold.md](endurance/endurance-threshold.md) |
-| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **11 lượt**, 13 lỗi kỹ thuật + 2 lỗi bản nộp, mỗi lượt có **Human review** ghi rõ *đã kiểm* / *chưa tự kiểm* |
+| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **12 lượt**, 14 lỗi kỹ thuật + 2 lỗi bản nộp, mỗi lượt có **Human review** ghi rõ *đã kiểm* / *chưa tự kiểm* |
 | **Bug report** | [bug-report/bug-report.md](bug-report/bug-report.md) |
 
 ---
@@ -62,7 +62,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | Tải cao nhất chịu được | **539,7 req/s** ở 200 VU, p95 **18 ms**, 0% error — nhưng `node` CPU đỉnh **97,7%**, sát trần một lõi, và max **3691 ms** |
 | Hồi phục sau spike | **không cần hồi phục** — 212 VU dội trong 5s mà p95 đứng nguyên 7–8 ms |
 | Bug chức năng | **2** xác nhận (+1 ứng viên đã loại kèm bảng kiểm chứng) |
-| Lỗi của AI đã bắt và sửa | **13** kỹ thuật (10 trong số đó **không làm test plan báo lỗi**) + **2** lỗi bản nộp do sinh viên bắt |
+| Lỗi của AI đã bắt và sửa | **14** kỹ thuật (11 trong số đó **không làm test plan báo lỗi**) + **2** lỗi bản nộp do sinh viên bắt |
 | Ảnh bằng chứng | **5** ảnh khớp timestamp + 1 ảnh bug |
 
 ### Bốn lượt chạy
@@ -101,17 +101,25 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 
 ## 3. Bảng tự đánh giá (Self-Assessment)
 
-> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_88.zip`.
+> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_99.zip`.
 >
 > **Cách tự chấm:** chỉ trừ điểm ở chỗ **nêu được thiếu sót cụ thể**, không trừ đều cho "chắc ăn".
-> Có **hai** chỗ như vậy, cả hai đã ghi trong báo cáo chứ không chỉ ghi ở đây:
+>
+> Bản trước tự chấm **88** với hai chỗ trừ. **Một chỗ đã bịt bằng việc làm, không bằng lời giải
+> thích:**
+>
+> - ~~**Task 3 −1:** flow chart là thiết kế trên giấy, chưa lần nào chạy thật trong pipeline CI.~~
+>   → **Đã bịt.** Nhánh "PR pipeline" thành GitHub Actions thật
+>   ([`.github/workflows/perf-smoke.yml`](.github/workflows/perf-smoke.yml)) và **đã chạy 5 lượt**,
+>   trong đó **một lượt build ĐỎ thật** vì vượt ngưỡng. Bằng chứng: [`ci/ci-runs.md`](ci/ci-runs.md).
+>   Kết quả còn **sửa lại chính §4.3**: ba lượt cùng cấu hình cho p95 **101 / 15 / 8 ms**, nên ngưỡng
+>   p95 tuyệt đối bị bỏ hẳn, thay bằng error rate + so tương đối trong cùng lượt (§4.4).
+>
+> **Chỗ còn trừ:**
 >
 > - **Spike −1:** ảnh `activity-spike.png` bắt `node` ở **34,9%** trong khi đỉnh thật của lượt là
 >   **81,6%** — ảnh **trượt đỉnh sốc ~4 giây**. Số liệu CSV vẫn đúng, nhưng ảnh là bằng chứng §6
 >   yếu hơn số, và tôi giữ nguyên ảnh trượt thay vì chạy lại để lấy ảnh đẹp (§2.5).
-> - **Task 3 −1:** flow chart 15 nút và 7 trade-off là **thiết kế trên giấy**, chưa lần nào chạy
->   thật trong một pipeline CI — nên phần "ngưỡng nào làm fail build" vẫn là đề xuất chưa được
->   kiểm bằng một lượt CI thật.
 >
 > Ba chỗ **không** trừ, kèm lý do: Soak chỉ có 1/2 ảnh mốc thời gian nhưng cột `node_rss_mb` đã
 > chứng minh trọn phần "không leo theo thời gian" và bài **ghi rõ là chỉ có một ảnh**; k6 có bản
@@ -124,9 +132,9 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
 | 3 | Task 1 — Spike testing | 20 | **19** | 38.160 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** · bảng p95 theo cửa sổ 10s: server **hấp thụ trọn cú sốc** (sample/10s tăng 20 lần, p95 đứng nguyên 7–8ms) · phát hiện thêm: p95 **tăng lúc tải RÚT** (12ms) — chi phí tear-down 200 socket · **ba lượt Spike cho ba kết quả** (47/65/7ms) → dùng chính điều đó chứng minh spike test nhạy nhất với tải nền |
 | 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
-| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **9** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
+| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
 | 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **Chờ video demo skill.** |
-| | **Tổng** | **100** | **88** | Trừ 2 điểm ở hai chỗ nêu tên phía trên |
+| | **Tổng** | **100** | **99** | Trừ đúng 1 điểm, ở chỗ nêu được tên. Chỗ trừ thứ hai đã bịt bằng 5 lượt CI thật |
 
 ---
 
@@ -162,7 +170,7 @@ bash tools/build-pdfs.sh   # xuất PDF cho 4 tài liệu §14
 
 # 6. Đóng gói nộp bài
 bash tools/package.sh 95 --check    # soát đủ/thiếu theo §14, không tạo gói
-bash tools/package.sh 88            # → 23127178_HW05_AI_Performance_88.zip
+bash tools/package.sh 99            # → 23127178_HW05_AI_Performance_99.zip
 ```
 
 > **Java:** máy này mặc định `java` = Temurin 8 **x86_64** → JMeter chạy qua Rosetta và chính
@@ -239,15 +247,15 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ## 9. Việc còn lại
 
-Chạy `bash tools/package.sh 88 --check` để soát. Còn **1 mục**:
+Chạy `bash tools/package.sh 99 --check` để soát. Còn **1 mục**:
 
 1. **Video ≥6 phút**, unlisted, giọng mình → dán link vào README và main-report.
    Kịch bản: [docs/kich-ban-video-demo.md](docs/kich-ban-video-demo.md). Chuyện đáng kể nhất: mở bảng
    ba batch ở §2.8, giải thích vì sao kết luận đầu tiên về nguyên nhân là sai.
 
-**Đã xong:** Human review của cả **11 lượt** trong
+**Đã xong:** Human review của cả **12 lượt** trong
 [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — dùng hai nhãn ***(SV đã kiểm)*** và
-***(SV chưa tự kiểm)***, cố ý tách nhau vì viết cả 11 lượt thành "đã kiểm hết" đúng là loại bằng
+***(SV chưa tự kiểm)***, cố ý tách nhau vì viết cả 12 lượt thành "đã kiểm hết" đúng là loại bằng
 chứng dựng mà §11 phạt · **cột điểm §3** đã điền, tổng **88**, chỉ trừ ở hai chỗ nêu được tên ·
 **Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) ·
 [#289](https://github.com/DuyITLOR/group05_eshop/issues/289)** đã mở kèm ảnh nhúng.

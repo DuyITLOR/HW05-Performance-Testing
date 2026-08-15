@@ -147,7 +147,7 @@ có thể không làm p95 tổng nhích lên đủ để vượt ngưỡng cản
 
 ### 2.4 Human review — AI sai gì, vì sao (§6 chấm mục này)
 
-Toàn bộ 13 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
+Toàn bộ 16 lỗi kèm prompt nguyên văn: [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
 Bảy bước của quy trình thiết kế — mỗi bước hỏi gì, căn cứ nào, quyết ra sao, và **bước nào bắt được
 lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 
@@ -167,8 +167,8 @@ lỗi nào**: [`ai-audit/design-log.md`](../ai-audit/design-log.md).
 | 12 | Kết luận **kích thước dữ liệu** gây suy giảm p95 2,4–6,4 lần, kèm cơ chế SQLite một writer | **Nhân quả rút từ một so sánh không kiểm soát biến nào.** Batch sạch bác bỏ: DB **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến thật là `load_1m`. Kết luận sai đã lan tới **headline README**, một **nhánh flow chart Task 3** và một dòng **self-assessment** | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` |
 | 13 | `soak-drift.mjs` tính "trôi RSS" = mẫu cuối / mẫu đầu | Mẫu đầu (19,7 MB) lấy **trước khi warm-up xong** → in **+228,9%**, đọc y như một vụ rò rỉ bộ nhớ. Thực tế RSS phẳng ~78 MB suốt 12 phút; nửa đầu so nửa sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so **nửa đầu / nửa sau**; giữ dòng cũ kèm cảnh báo |
 
-**10 trong 13 lỗi không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
-đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 10 đều lọt. Chi phí thật: **hai
+**11 trong 14 lỗi kỹ thuật không làm test plan báo lỗi.** Plan vẫn chạy, vẫn sinh `.jtl`, vẫn ra dashboard
+đẹp — chỉ con số là sai. Nếu chỉ kiểm "test có chạy không" thì cả 11 đều lọt. Chi phí thật: **hai
 lượt chạy phải huỷ và xoá sạch bằng chứng**, ~25 phút chạy lại.
 
 Phân bố ba nhóm lý do §6 yêu cầu phân loại lệch hẳn về một phía: **7 lỗi là đặc điểm
@@ -177,9 +177,9 @@ công cụ/endpoint/môi trường/dữ liệu**, 1 là chất lượng prompt, 
 và **không lỗi nào** thuộc "model không đủ khả năng". Điểm yếu không nằm ở chỗ AI không biết viết
 test plan, mà ở chỗ nó **không chạy thử và không đối chiếu với thực tế**.
 
-Một con số đáng chú ý riêng: **3 trong 13 lỗi nằm trong chính tooling đo** (#1 preflight, #8
+Một con số đáng chú ý riêng: **3 trong 14 lỗi kỹ thuật nằm trong chính tooling đo** (#1 preflight, #8
 sample-resources, #13 soak-drift) — gần **1/4 số lỗi đến từ dụng cụ đo, không từ hệ thống được
-đo**. Đó là lý do §6 của bài này đối chiếu chéo số của tool tự viết với ảnh Activity Monitor thay
+đo. Đó là lý do §6 của bài này đối chiếu chéo số của tool tự viết với ảnh Activity Monitor thay
 vì tin một nguồn duy nhất (§2.5).
 
 **Hai lỗi nữa không nằm trong bảng, vì chúng không làm sai con số nào — chúng làm sai bản nộp**,
@@ -187,7 +187,7 @@ và **cả hai do tôi bắt, không phải AI tự soát ra**: (14) bằng ch�
 folder **không có trong danh sách §14** → yêu cầu có bằng chứng đủ mà người chấm không đọc được,
 §17 tính 0 điểm cho mục đó, đã chép vào **§1.1** của chính báo cáo này; (15) lỗ ở §2 *"step by
 step"* được AI **tự ghi ra rồi để nguyên**, coi thừa nhận hạn chế là đã xử lý hạn chế, đã bịt bằng
-`ai-audit/design-log.md`. Tính cả hai: **2 trong 15 lỗi của cả bài là do người bắt** — và đó đúng
+`ai-audit/design-log.md`. Tính cả hai: **2 trong 16 lỗi của cả bài là do người bắt** — và đó đúng
 là hai lỗi **không script nào phát hiện được**, vì không có gì sai về mặt kỹ thuật để mà báo.
 
 ### 2.5 Bằng chứng chạy
@@ -497,6 +497,72 @@ cùng lúc với job của người khác. Nên baseline **không thể** là "p
 | **Nhiễu áp đảo tín hiệu** | Đây là trade-off quan trọng nhất và nó có số đo: §2.8 cho thấy tải nền tạo chênh lệch **10 lần** ở p95, trong khi tăng VU gấp 10 lần chỉ làm p95 đi từ 6 lên 7ms. Nghĩa là **trên môi trường không kiểm soát, nhiễu lớn hơn tín hiệu một bậc**. Hệ quả: mọi so sánh tuyệt đối giữa hai lượt CI đều vô giá trị; chỉ so được tỉ lệ trong cùng một lượt. Cái phải trả: gấp đôi thời gian CI cho mỗi PR |
 | **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **9,4 lần** avg. Nhưng p95 cũng không bắt được đuôi: max **363ms** trong khi p95 7ms, gấp **52 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load 3,4× → Stress 9,4×), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
 | **Perf test tự làm hỏng điều kiện đo của nó** | Chính bộ test này đã đẩy `products` từ ~50k lên 436k dòng. Nếu chạy trong CI mà không dọn, mỗi lượt lại chậm hơn lượt trước vì lý do không liên quan gì tới code → baseline trôi và mọi so sánh mất nghĩa. Bắt buộc: teardown dọn dữ liệu, hoặc restore snapshot DB trước mỗi lượt |
+
+### 4.4 Đã chạy thật trong CI — 5 lượt, và kết quả sửa lại chính §4.3
+
+Mọi thứ ở §4.1–4.3 là **thiết kế trên giấy**, nên nhánh "PR pipeline" được hiện thực thành GitHub
+Actions thật ([`.github/workflows/perf-smoke.yml`](../.github/workflows/perf-smoke.yml)) và **chạy
+5 lượt**: checkout SUT → khởi động → seed qua API → sinh test plan từ cùng một định nghĩa → JMeter
+non-GUI → **cổng ngưỡng quyết định build đỏ/xanh** ([`tools/ci-gate.mjs`](../tools/ci-gate.mjs)).
+Bằng chứng đầy đủ, output nguyên văn: [`ci/ci-runs.md`](../ci/ci-runs.md).
+
+Runner mọi lượt giống nhau: `Linux x86_64` · **2 vCPU** · 7 GB · Node 20 · Java 17 · JMeter 5.6.3 ·
+DB sạch **5 dòng `products`**. Cùng một file `.jmx`.
+
+| # | VU | Ngưỡng p95 | Sample | **p95** | p99 | max | Error | Build |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 5 | 200 ms | 785 | **7** | 14 | 728 | 0% | PASS |
+| 2 | **20** | **8 ms** | 2.621 | **101** | 1.186 | 1.879 | 0% | **FAIL** |
+| 3 | 5 | 200 ms | 779 | **8** | 223 | 395 | 0% | PASS |
+| 4 | **20** | 200 ms | 2.646 | **15** | 918 | 2.296 | 0% | PASS |
+| 5 | **20** | 200 ms | 2.763 | **8** | 32 | 720 | 0% | PASS |
+
+Local để đối chiếu: 20 VU · p95 **8** · p99 **12** · max **84** · 0%.
+
+**Điều được xác nhận.** Ngưỡng `p95 ≤ 8ms` lấy từ máy local làm build **đỏ thật** trên runner
+(lượt 2) — cùng plan, cùng SUT, cùng 20 VU, chỉ khác máy. Nút **F/G** của flow chart đứng vững.
+
+**Điều bị bác bỏ — và nó là dự đoán của chính §4.** Tôi dự đoán runner 2 vCPU sẽ chậm hơn máy 12
+lõi. Ở **5 VU** nó nhanh **bằng** (7–8ms), tức ngưỡng của local **PASS** và cho **tín hiệu xanh
+giả**. Rồi tôi rút từ lượt 2 con số "CI chậm hơn local 12,6 lần" — lượt 5 cho **8ms**, đúng bằng
+local. **Chênh lệch giữa hai máy nhỏ hơn phương sai của chính CI**, nên không quy cho máy được. Đây
+là lỗi #16, cùng họ lỗi #12, **lần thứ ba** trong bài.
+
+**Điều làm thay đổi thiết kế — phát hiện lớn nhất, và tôi không đi tìm nó.** Lượt 2, 4, 5 **giống
+nhau từng tham số**:
+
+> **p95 = 101 ms · 15 ms · 8 ms — lệch 12,6 lần giữa hai lượt không khác nhau một tham số nào.**
+
+Hệ quả trực tiếp: ngưỡng 8ms làm build **đỏ** ở lượt 2 thì ở lượt 5 **vừa đủ xanh**. Cùng code, cùng
+ngưỡng, cùng tải. **Một cổng hiệu năng đặt bằng số tuyệt đối trên runner dùng chung là một cổng tung
+đồng xu.** Ngay ở 5 VU đuôi cũng thế: p99 **14ms** (lượt 1) so với **223ms** (lượt 3), **16 lần**,
+trong khi p95 chỉ 7 vs 8.
+
+Điều này **nâng nút I** ("đòi lặp lại được trước khi báo động") từ một bộ lọc phòng xa thành **nút
+không thể bỏ**: không có nó, lượt 2 sẽ chặn một PR hoàn toàn vô tội. Nó cũng làm ngưỡng 20% ở nút G
+hoá ra **quá hẹp** — phương sai đo được là 1.160%, nên so tuyệt đối giữa hai lượt CI phải bị **cấm
+hẳn**, không phải nới ngưỡng.
+
+Và `load_1m` đo lúc **bắt đầu** lượt **không dự báo được** (0,34 → 15ms; 0,88 → 8ms, ngược chiều).
+Nhiễu đến **trong lúc** đo. Bài này **không có** dữ liệu lấy mẫu tài nguyên xuyên lượt trên CI để
+chỉ ra thủ phạm, nên đây là **chưa biết**, không phải đã giải thích — đúng bài học của §2.8, chỗ mà
+một cơ chế nghe hợp lý đã được nhận làm nguyên nhân.
+
+**Hai thứ ổn định qua cả 5 lượt**, và đây là phần dùng được:
+
+1. **Error rate 0%** ở mọi lượt, kể cả lượt p95 vọt lên 101ms, và hình dạng phân bố mã trả về giữ
+   nguyên (`200` ~79% · `400` FR-10 ~18% · `403` lockout ~3%).
+2. **Thứ tự endpoint đắt nhất giữ nguyên** — `import-products` đứng đầu ở cả local (10ms) và CI
+   (166ms ở lượt 2), đúng vì nó là endpoint `INSERT` duy nhất.
+
+→ **Sửa lại đề xuất §4.3:** cổng CI chặn theo **error rate** (mang được qua môi trường) và theo
+**thứ hạng/tỉ lệ giữa các endpoint trong cùng một lượt** (cũng mang được), **không** theo ngưỡng p95
+tuyệt đối (không mang được). Ngưỡng p95 chỉ dùng như **rào chắn thảm hoạ** đặt rất rộng — 200ms, tức
+25 lần baseline — để bắt sự cố sập hẳn, không để bắt hồi quy.
+
+Thêm một điều cổng phải có, học từ lượt 1 và 3: **ngưỡng luôn phải đi kèm mức tải**. Một smoke test
+5 VU đi qua đúng cái ngưỡng 8ms mà nó lẽ ra phải chặn; 785 sample là **đủ nhiều**, chỉ là đo ở mức
+tải sai — nên `--min-samples` không cứu được, phải chốt cả số VU.
 
 ---
 
