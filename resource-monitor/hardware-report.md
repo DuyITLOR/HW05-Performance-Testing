@@ -21,10 +21,20 @@
 
 | Công cụ | Version |
 |---|---|
-| JMeter | chưa cài |
-| Java (arm64, dùng để chạy JMeter) | /Library/Java/JavaVirtualMachines/temurin-26.jdk/Contents/Home |
+| JMeter | **Apache JMeter 5.6.3** — đúng bản mặc định §8 · `jmeter -v` |
+| Java **thực tế chạy JMeter** | openjdk version "26.0.1" 2026-04-21 · `os.arch = aarch64` · `JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-26.jdk/Contents/Home` |
 | k6 (bonus) | k6 v2.1.0 (commit/devel, go1.26.4, darwin/arm64) |
 | Node.js (backend SUT + tool) | v22.23.1 |
+
+> **Cập nhật:** bảng trên ghi lại **sau khi** JMeter đã cài và đã chạy đủ 4 scenario. Bản đầu ghi
+> *"JMeter | chưa cài"* vì hardware report được sinh **trước** khi cài công cụ, và dòng đó bị để
+> nguyên qua nhiều vòng sửa — một dấu vết trạng thái cũ, do người review ngoài bắt được.
+>
+> **Vì sao dòng Java quan trọng hơn nó trông:** `java` mặc định trên PATH của máy này là Temurin 8
+> **x86_64**, chạy qua Rosetta. Nếu JMeter chạy trên bản đó thì load generator tự nó thành điểm nghẽn
+> và mọi số đo nhiễu. `tools/run-scenario.sh` **ép** `JAVA_HOME` sang JDK arm64 trước khi gọi
+> `jmeter`, nên bản ghi ở đây là bản **thực tế đã dùng**, không phải bản mặc định của hệ thống. Lỗi
+> #1 trong AI audit chính là chỗ này: `preflight.mjs` từng báo `[OK] Java` với giá trị **rỗng**.
 
 ## Điều phải nói rõ khi đọc mọi con số của bài này
 

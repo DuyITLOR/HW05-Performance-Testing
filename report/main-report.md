@@ -652,6 +652,26 @@ Thêm một điều cổng phải có, học từ lượt 1 và 3: **ngưỡng l
 5 VU đi qua đúng cái ngưỡng 8ms mà nó lẽ ra phải chặn; 785 sample là **đủ nhiều**, chỉ là đo ở mức
 tải sai — nên `--min-samples` không cứu được, phải chốt cả số VU.
 
+#### Ranh giới: nút nào đã chạy thật, nút nào vẫn là đề xuất
+
+Flow chart §4.1 có 15 nút. Workflow chỉ hiện thực **một nhánh**. Ghi rõ để không ai đọc §4.4 thành
+"đã dựng xong toàn bộ mô hình":
+
+| Nút / cơ chế | Trạng thái | Bằng chứng |
+|---|---|---|
+| Kích hoạt theo `push`, lọc theo `paths` | **đã chạy thật** | 3 lượt do `push` trong [`ci/ci-runs.md`](../ci/ci-runs.md) |
+| Chạy plan rút gọn (`-Jthreads`, `-Jduration`) | **đã chạy thật** | 6 lượt, 5–20 VU |
+| **Cổng ngưỡng** p95 + error rate + sàn sample, `exit 1` khi vượt | **đã chạy thật** | lượt 2 build **ĐỎ** |
+| Lưu `.jtl` + HTML dashboard làm artifact, kể cả khi fail (`if: always()`) | **đã chạy thật** | artifact `perf-smoke-p95-*` |
+| **F — so p95 từng endpoint với baseline nhánh `main`** | **CHƯA — vẫn là đề xuất** | workflow **không** chạy `main` và PR trong cùng job. Ngưỡng hiện tại là **số tuyệt đối truyền vào**, không phải so với baseline |
+| **L→O — đo baseline hai lần trên cùng runner rồi so tỉ lệ** | **CHƯA — vẫn là đề xuất** | cần 2 lượt/job; chưa dựng |
+| **I — đòi lặp lại được trước khi báo động** | **CHƯA dựng, nhưng đã được số liệu chứng minh là cần** | ba lượt cùng cấu hình cho 101/15/8ms |
+| Chạy Stress theo lịch hằng tuần | **CHƯA — vẫn là đề xuất** | workflow chỉ có `push` + `workflow_dispatch` |
+| Chặn PR kèm comment dẫn link `.jtl` | **CHƯA — vẫn là đề xuất** | build đỏ thì fail job, chưa comment lên PR |
+
+Nói cách khác: phần **đo và chặn** đã chạy thật; phần **so với baseline** — chính là phần §4.4 chứng
+minh là *bắt buộc phải có* — thì chưa dựng. Đó là việc tiếp theo, không phải việc đã xong.
+
 ---
 
 ## 5. Bug và vấn đề hiệu năng

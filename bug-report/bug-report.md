@@ -9,7 +9,7 @@
 > high latency or elevated error rate is encouraged but not penalised if absent."*
 
 **Tóm tắt:** 2 bug chức năng đã xác nhận bằng request thật và **đã mở Issue #288, #289** · 1 ứng viên đã **bị loại sau khi
-kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · 0 lỗi hiệu năng (4 lượt chạy đều 0% error).
+kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · **0 lỗi hiệu năng** — không timeout, không 5xx — nhưng **có dấu hiệu bão hoà**: `node` CPU 97,7% và tail latency dãn (mục 5).
 
 ---
 
@@ -156,15 +156,49 @@ bash bug-report/create-github-issues.sh              # tạo thật (chỉ chạ
 Nội dung issue nằm ở [`issue-p1.md`](issue-p1.md) và [`issue-p2.md`](issue-p2.md) — sửa được như tài
 liệu bình thường, script chỉ chèn ảnh vào chỗ `__IMAGE__` rồi gửi lên.
 
-## 5. Vấn đề hiệu năng: **không có**
+## 5. Vấn đề hiệu năng: không có lỗi, nhưng có dấu hiệu bão hoà
 
-Cả 4 lượt chạy đều **0% error**, kể cả Stress ở 200 VU / 550 req/s. p95 cao nhất đo được là
-**26ms** (Stress, toàn workflow) và **40ms** (`POST /api/login` ở bậc 200 VU). Không có mẫu nào
-trả 500, không có timeout, không có connection refused.
+Số liệu dưới đây **của batch được nộp** (15/08, xem [`results/run-log.md`](../results/run-log.md)):
 
-Điều này **không** có nghĩa "SUT chịu tải tốt vô hạn" — nó có nghĩa **lượt Stress chưa chạm được
-giới hạn của SUT**, vì giới hạn gặp trước là của load generator: JMeter tiêu CPU đỉnh 60,9% trong
-khi `node` chỉ 19,7%. Phân tích đầy đủ ở [`report/main-report.md §3`](../report/main-report.md).
+| | Load | **Stress** | Spike | Soak |
+|---|---|---|---|---|
+| Sample | 16.343 | **258.992** | 38.251 | 45.166 |
+| RPS | 45,4 | **539,7** | 159,5 | 62,8 |
+| p95 | 8 ms | **18 ms** | 7 ms | 8 ms |
+| p99 | 12 | **124** | 16 | 12 |
+| max | 84 | **3.691** | 176 | 192 |
+| `node` CPU đỉnh | 20,3% | **97,7%** | 75,7% | 23,6% |
+| JMeter CPU đỉnh | 118,3% | **178,3%** | 205,2% | 49,3% |
+
+**Không có mẫu nào trả 500, không timeout, không connection refused** ở cả 4 lượt.
+
+**"0% error" ở đây là gì — phải nói rõ quy ước, nếu không con số vô nghĩa.** Test plan đánh dấu
+`success=true` cho **4xx hợp lệ theo đặc tả**: `400` của state machine FR-10 và `401`/`403` của nhánh
+account-lockout. Cụ thể ở lượt Stress, bước 5 `PUT /api/admin/orders/:id/status`:
+
+```
+200 →      400 mẫu   ← chạm được lệnh UPDATE thật
+400 →   51.301 mẫu   ← FR-10 chặn trước khi ghi, ĐÚNG đặc tả
+```
+
+Nghĩa là **539,7 req/s là throughput của toàn bộ HTTP workflow, KHÔNG phải throughput của giao dịch
+đổi trạng thái đơn hoàn tất.** Tải ghi thật của lượt đo đến từ **bước 4 `import-products`** (3 dòng
+`INSERT` mỗi request, chạy đủ ~51.800 lần) chứ không từ bước 5. Nếu cần con số business throughput
+thì phải đếm riêng số iteration hoàn tất trọn 6 bước — bài này **không** đếm, nên không phát biểu.
+
+**Kết luận đúng mức, thay cho câu "Stress chưa chạm giới hạn SUT" ở bản trước:** `node` đã **sát
+trần một lõi** (97,7% — Node chỉ có một luồng JS, nên ~100% của một lõi là trần kiến trúc), và đuôi
+đã dãn rõ: p99 đi 12 → **124ms**, max lên **3.691ms**, tức có request chờ gần 4 giây. Nhưng **chưa
+chạy thêm bậc trên 200 VU**, nên **điểm gãy chính xác vẫn chưa xác định** — chỉ biết nó ở gần. Nói
+"chưa chạm giới hạn" là nhẹ hơn dữ liệu; nói "đã tìm ra điểm gãy" là mạnh hơn dữ liệu.
+
+Thêm một giới hạn của phép đo: **JMeter tiêu CPU nhiều hơn cả SUT** (178,3% vs 97,7% ở lượt nộp),
+nên một phần latency đo được là chi phí của load generator. Phân tích đầy đủ:
+[`report/main-report.md §3.5`](../report/main-report.md).
+
+*(Các số **26 ms** / **40 ms** / `node` **19,7%** / JMeter **60,9%** ở bản báo cáo trước thuộc batch
+**13/08**, không phải kết quả chính. Chúng được giữ lại **chỉ** trong [`main-report §2.8`](../report/main-report.md)
+với tư cách điểm dữ liệu cho mục thu hồi.)*
 
 Theo §6 thì mục này *khuyến khích, không bắt buộc* — và báo cáo "không tìm thấy vấn đề hiệu năng,
 kèm lý do vì sao phép đo chưa đủ chạm giới hạn" trung thực hơn là nặn ra một con số để có cái mà
