@@ -300,7 +300,7 @@
               <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="cacheKey">true</stringProp>
-              <stringProp name="script">if (prev.getResponseCode() ==~ /400/) { prev.setSuccessful(true); prev.setResponseMessage('Expected lockout response ' + prev.getResponseCode()) }</stringProp>
+              <stringProp name="script">if (prev.getResponseCode() ==~ /400/) { prev.setSuccessful(true); prev.setResponseMessage('FR-10 invalid transition (hop le): ' + prev.getResponseCode()) }</stringProp>
             </JSR223PostProcessor>
             <hashTree/>
           </hashTree>
@@ -373,7 +373,7 @@
               <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="cacheKey">true</stringProp>
-              <stringProp name="script">if (prev.getResponseCode() ==~ /40[13]/) { prev.setSuccessful(true); prev.setResponseMessage('Expected lockout response ' + prev.getResponseCode()) }</stringProp>
+              <stringProp name="script">if (prev.getResponseCode() ==~ /40[13]/) { prev.setSuccessful(true); prev.setResponseMessage('Account lockout (hop le): ' + prev.getResponseCode()) }</stringProp>
             </JSR223PostProcessor>
             <hashTree/>
           </hashTree>

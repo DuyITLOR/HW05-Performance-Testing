@@ -62,7 +62,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | Thời gian hồi phục sau spike | **< 10 giây** sau khi tải rút; **không** hồi phục trong lúc còn chịu 212 VU |
 | Bug chức năng | **2** xác nhận (+1 ứng viên đã loại sau khi kiểm) |
 | **Phát hiện hiệu năng** | dữ liệu phình 8 lần → xấu đi **2,4–6,4 lần** ở tải cao, **0×** ở tải kỳ vọng |
-| Lỗi của AI đã bắt và sửa | **10** (7 trong số đó không làm test plan báo lỗi) |
+| Lỗi của AI đã bắt và sửa | **11** (8 trong số đó không làm test plan báo lỗi) |
 
 ### Bốn lượt chạy
 

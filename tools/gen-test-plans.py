@@ -91,6 +91,7 @@ STEP5_ASSERT = ("200|400", 1, "Assert — 200 hoac 400 (state machine FR-10)")
 # sample "lỗi" đều là 400 hợp lệ của state machine. Đúng cơ chế đã sửa cho lockout ở
 # mark_expected_4xx(), chỉ là quên áp cho bước 5.
 STEP5_EXPECTED_4XX = "400"
+STEP5_4XX_REASON = "FR-10 invalid transition (hop le)"
 
 # ── Cấu hình từng scenario ──────────────────────────────────────────────────────
 # steps: danh sách thread group của luồng chính — (tên, threads, ramp, delay, duration)
@@ -245,7 +246,7 @@ def assertion_body(substring, indent):
     ])
 
 
-def mark_expected_4xx(regex, indent):
+def mark_expected_4xx(regex, indent, reason="Expected response"):
     """Đánh dấu sample 4xx MONG ĐỢI là thành công.
 
     JMeter mặc định coi mọi 4xx/5xx là Fail, và assertion chỉ THÊM được lỗi chứ không xoá
@@ -254,9 +255,12 @@ def mark_expected_4xx(regex, indent):
     error rate ở đầu báo cáo mất hết ý nghĩa. Post-processor này sửa cờ về đúng bản chất.
     """
     p = " " * indent
+    # `reason` phải nói đúng VÌ SAO 4xx này hợp lệ. Bản đầu hardcode chữ "lockout" cho cả bước 5,
+    # nên cột responseMessage trong raw .jtl ghi "Expected lockout response 400" cho ~50.000 sample
+    # của một endpoint không liên quan gì tới lockout — nhãn sai nằm ngay trong bằng chứng gốc.
     script = (f"if (prev.getResponseCode() ==~ /{regex}/) {{ "
               f"prev.setSuccessful(true); "
-              f"prev.setResponseMessage('Expected lockout response ' + prev.getResponseCode()) }}")
+              f"prev.setResponseMessage('{reason}: ' + prev.getResponseCode()) }}")
     return "\n".join([
         f'{p}<JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Danh dau 4xx mong doi la thanh cong" enabled="true">',
         f'{p}  <stringProp name="scriptLanguage">groovy</stringProp>',
@@ -284,7 +288,7 @@ def json_extractor(indent):
 
 def sampler(name, method, path, body, need_token, body_assert, indent,
             assert_code="200", assert_type=8, assert_name=None, extract_token=False,
-            expected_4xx=None):
+            expected_4xx=None, expected_4xx_reason="Expected response"):
     p = " " * indent
     out = [f'{p}<HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{esc(name)}" enabled="true">']
     if body is not None:
@@ -323,7 +327,7 @@ def sampler(name, method, path, body, need_token, body_assert, indent,
     if extract_token:
         out.append(json_extractor(indent + 2))
     if expected_4xx:
-        out.append(mark_expected_4xx(expected_4xx, indent + 2))
+        out.append(mark_expected_4xx(expected_4xx, indent + 2, expected_4xx_reason))
     out.append(f'{p}</hashTree>')
     return "\n".join(out)
 
@@ -378,7 +382,7 @@ def lockout_group(indent):
                 False, None, indent + 2,
                 assert_code="40[13]", assert_type=1,
                 assert_name="Assert — 401 hoac 403 (lockout)",
-                expected_4xx="40[13]"),
+                expected_4xx="40[13]", expected_4xx_reason="Account lockout (hop le)"),
         timer(2000, 1000, indent + 2),
     ]
     return thread_group("TG-lockout — nhanh account-lockout (2 VU)", "2", "1", 10, "${__P(lockout_duration,120)}", children, indent)
@@ -403,13 +407,15 @@ def build(scenario, date):
     workflow_children = []
     for name, method, path, body, need_token, body_assert in WORKFLOW:
         code, atype, aname, expected_4xx = ("200", 8, None, None)
+        expected_4xx_reason = "Expected response"
         if name.startswith("5 PUT"):
             code, atype, aname = STEP5_ASSERT
             expected_4xx = STEP5_EXPECTED_4XX
+            expected_4xx_reason = STEP5_4XX_REASON
         workflow_children.append(sampler(
             name, method, path, body, need_token, body_assert, 10,
             assert_code=code, assert_type=atype, assert_name=aname,
-            expected_4xx=expected_4xx,
+            expected_4xx=expected_4xx, expected_4xx_reason=expected_4xx_reason,
             extract_token=path == "/api/login",
         ))
     workflow_children.append(timer(delay, rng, 10))

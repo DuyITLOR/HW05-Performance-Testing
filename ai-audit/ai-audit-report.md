@@ -246,13 +246,14 @@
 | 8 | #7 | `sample-resources.sh` bám vào tiến trình `zsh` bao ngoài thay vì `node` → ghi RSS 0,5MB / CPU 0% suốt lượt chạy | đặc điểm môi trường | lọc theo token đầu command line phải là `node` |
 | 9 | #8 | Khẳng định `import-products` báo sai số dòng insert — **bác bỏ** khi chạy thử (5/5, 60/60, 2/3 đều đúng). Đã lan vào 5 file | phương pháp: suy luận từ code trình bày như sự thật đã kiểm | giữ lại ở mục "đã loại" kèm bảng kiểm chứng; sửa lý do không assert theo `inserted` |
 | 10 | #8 | `Math.min(...array)` trong `summarize-jtl.mjs` tràn call stack với `.jtl` 264k sample — chạy qua bình thường ở lượt Load 16k | đặc điểm dữ liệu (chỉ lộ ở file lớn) | thay bằng `reduce` |
+| 11 | #9 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
 
-**Nhận xét xuyên suốt:** 7 trong 10 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
+**Nhận xét xuyên suốt:** 8 trong 11 lỗi **không làm test plan báo lỗi** — plan vẫn chạy, vẫn ra
 `.jtl`, vẫn sinh dashboard đẹp. Chúng chỉ làm con số **sai**. Đó là lý do bước "đọc kết quả
 trước khi tin nó" trong skill `perf-test-plan` không phải thủ tục hình thức: nếu chỉ kiểm "test
-có chạy không" thì cả 7 lỗi này đều lọt.
+có chạy không" thì cả 8 lỗi này đều lọt.
 
-**Chi phí thật của 10 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
+**Chi phí thật của 11 lỗi:** hai lượt chạy phải huỷ và xoá bỏ toàn bộ bằng chứng, cộng khoảng 25
 phút chạy lại. Nếu không đọc `.jtl` giữa lượt mà chờ đến khi viết báo cáo mới đọc, thì cái phải
 làm lại là **cả bốn lượt cộng phần phân tích**.
 
