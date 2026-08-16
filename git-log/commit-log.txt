@@ -1,3 +1,37 @@
+* 884c936 2026-08-16 18:29:15 +0700 DuyITLOR
+|   docs: rewrite the video script to say what files do instead of what they guarantee
+| The old script told the narrator to say gen-test-plans.py makes the shared workflow 'a structural
+| guarantee'. That is a slogan. A viewer - even a technical one - cannot tell from it what the file does,
+| and the user said so plainly: they could not follow what I was getting at.
+| 
+| Rewritten so every file gets three plain statements: what it does NOT do, what it does, and what breaks
+| without it. gen-test-plans.py now opens with 'this file tests nothing - run it and not a single request
+| is sent, it just types out four XML files.' The reason for generating instead of clicking through
+| JMeter's GUI is now the concrete failure: build one plan, copy it four times, fix an assertion later,
+| forget one copy, and Load and Stress are no longer measuring the same thing while a 425-line XML file
+| gives no sign of it. That already happened here - the 4xx fix reached the lockout branch and not step 5,
+| reporting 18% error on a healthy system.
+| 
+| Added a data-flow map read aloud in the first minute, before any file is opened, because nothing after
+| it makes sense without knowing that JMeter is the only thing that measures and every other script
+| either writes JMeter's input, cleans up before it runs, or reads its output.
+| 
+| Replaced the talk about the same workflow with a ten-second on-camera proof: hash each plan's endpoint
+| list and show four identical md5s. The machine says it, not the narrator.
+| 
+| Also opens with why the video is required at all - the three constraints the assignment names are
+| anti-fabrication measures, so a visible menu-bar clock and numbers moving live are worth more than
+| slides or reading the report aloud. Every command in the script was executed to confirm it runs.
+| 
+|  docs/kich-ban-video-demo.md | 410 ++++++++++++++++++++++++++----------------
+|  1 file changed, 252 insertions(+), 158 deletions(-)
+| 
+* 40880cf 2026-08-15 23:25:24 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 37 +++++++++++++++++++++++++++++++++++++
+|  1 file changed, 37 insertions(+)
+| 
 * ef9cc96 2026-08-15 23:25:22 +0700 DuyITLOR
 |   docs: rewrite the video script around what each file prevents
 | The old script walked the assignment's requirements. Rewritten to walk the files instead, because a
