@@ -49,9 +49,9 @@ c "test: environment checks and data-driven fixtures" \
 in HW04: a broken environment does not produce an obviously empty suite, it produces a .jtl
 full of fast 401s and a p95 that looks excellent.
 
-seed-perf-data.mjs gives every virtual user its own account. Sharing one account would put
-every login through the same users row - each successful login runs UPDATE login_attempts
-(server.js:47) - so the contention measured would belong to the load script, not the endpoint.
+seed-perf-data.mjs creates a pool of 50 valid accounts. Load and Soak have at least one account
+per VU; Stress and Spike recycle the pool, so the report explicitly records the remaining shared-row
+contention instead of claiming every VU always has a unique account.
 
 reset-lockout.mjs is the reset procedure section 6 asks to be documented. Lockout fires after
 two wrong passwords, not three, because login_attempts increments by 2 against a threshold of
@@ -66,9 +66,9 @@ bottleneck being measured.
 It also clears the -o dashboard folder before starting. JMeter refuses to write into a
 non-empty one and reports it only after the test has finished, which costs the whole run.
 
-jmeter-user.properties forces Latency and Connect into the .jtl. Without Latency there is no
-way to separate server think-time from transfer time, and that separation is the core of the
-Task 2 argument - adding it after the fact is too late.
+jmeter-user.properties forces Latency and Connect into the .jtl. Comparing elapsed with Latency
+shows whether body transfer after the first byte is material; neither field alone is pure internal
+server time, so the report keeps client scheduling/network stack as a limitation.
 
 run-all.sh runs the three scenarios in sequence with a 90s cooldown. Running them in parallel
 makes all three datasets meaningless; running Spike immediately after Stress measures a server
@@ -160,7 +160,7 @@ c "test(k6): mirror the workflow in k6 for cross-checking (bonus)" \
 at the same load, that difference belongs to the tool rather than to the server - which is a
 checkable argument for the Task 2 analysis, not just a bonus box ticked.
 
-Reads the same three CSVs and keeps the same five steps and assertions as the .jmx, including
+Reads the same CSV fixtures and keeps the same five steps and assertions as the .jmx, including
 not asserting on the inserted count, which is data-dependent rather than wrong. No jslib imports: a
 performance test should not need the network to compile."
 

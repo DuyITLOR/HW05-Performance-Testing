@@ -1,3 +1,61 @@
+* f8128d4 2026-08-17 00:38:05 +0700 DuyITLOR
+|   docs(task2): restore the real AI output and review it against raw logs
+| Replaces the reconstructed Task 2 passage with two verbatim Claude transcript extracts that were actually produced after JTL execution and during the student review. Records prompt/output timestamps and UUIDs, maps seven claims to raw JTL/resource evidence, and separates observations from unsupported causal conclusions. Also corrects the three-digit package format, stale account-pool wording, skill evidence, critique count, and PDF build interpreter selection.
+| 
+|  README.md                             |  67 ++++++---------
+|  TASKS.md                              |  24 +++---
+|  ai-audit/ai-audit-report.md           |  54 +++++++++---
+|  ai-audit/ai-audit-report.pdf          | Bin 690995 -> 711425 bytes
+|  ai-audit/ai-critique.md               |   4 +-
+|  ai-audit/ai-critique.pdf              | Bin 56510 -> 56495 bytes
+|  ai-audit/design-log.md                |   4 +-
+|  ai-audit/task2-ai-output-verbatim.md  | 145 ++++++++++++++++++++++++++++++++
+|  ai-audit/task2-ai-output-verbatim.pdf | Bin 0 -> 255022 bytes
+|  bug-report/bug-report.pdf             | Bin 349229 -> 349229 bytes
+|  docs/PLAYBOOK.md                      |   2 +-
+|  docs/endpoint-selection.md            |   7 +-
+|  docs/review-task1.md                  |   6 +-
+|  report/main-report.md                 | 125 +++++++++++++--------------
+|  report/main-report.pdf                | Bin 1046526 -> 1014776 bytes
+|  results/summary.md                    |   2 +-
+|  tools/build-pdfs.sh                   |  17 +++-
+|  tools/package.sh                      |  30 +++++--
+|  18 files changed, 339 insertions(+), 148 deletions(-)
+| 
+* a13b666 2026-08-16 21:30:45 +0700 DuyITLOR
+|   docs(task2): two checks from actually running the jtl-analysis skill, both clean
+| Invoking the skill rather than following it from memory surfaced two of its six misreading categories
+| that §3.2's seven findings never covered:
+| 
+| elapsed against Latency. JMeter's elapsed is the full round trip, Latency is time to first byte, and
+| conflating them lets someone argue the reported p95 includes transfer time. Measured: the two are equal
+| at p95 across all four runs, mean difference 0.04-0.07ms, Connect p95 of 1ms. So every p95 in the report
+| is server processing time. Small bodies over localhost, as expected - but now stated with numbers
+| instead of assumed.
+| 
+| Peak threads against configured threads. If the peak is lower, the bottleneck sits in the load
+| generator, not the system under test. Stress reached 200 of 200, Spike 212 of 212, Load and Soak 22 of
+| 22. JMeter costs more CPU than node does (§3.5), but it never starved the thread count, so the load
+| that was measured is the load that was designed.
+| 
+| Both came back clean, which is why they are worth recording: a check that finds nothing still removes a
+| way of attacking the table above it. Neither earns back the three points deducted from Task 2 - that
+| deduction is about §3.1's provenance, and no amount of extra analysis changes what did or did not happen
+| in a previous session.
+| 
+|  ai-audit/ai-audit-report.pdf | Bin 690995 -> 690995 bytes
+|  ai-audit/ai-critique.pdf     | Bin 56510 -> 56510 bytes
+|  bug-report/bug-report.pdf    | Bin 349229 -> 349229 bytes
+|  report/main-report.md        |  11 +++++++++++
+|  report/main-report.pdf       | Bin 1025513 -> 1046526 bytes
+|  5 files changed, 11 insertions(+)
+| 
+* c8c1ea1 2026-08-16 21:24:37 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 74 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 74 insertions(+)
+| 
 * cbe926c 2026-08-16 21:24:35 +0700 DuyITLOR
 |   docs: correct provenance, timestamps and nine numbers an external audit caught
 | A reviewer read the session transcript, not just the deliverables, and found things no check in this
