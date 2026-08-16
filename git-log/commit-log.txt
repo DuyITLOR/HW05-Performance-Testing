@@ -1,3 +1,77 @@
+* cbe926c 2026-08-16 21:24:35 +0700 DuyITLOR
+|   docs: correct provenance, timestamps and nine numbers an external audit caught
+| A reviewer read the session transcript, not just the deliverables, and found things no check in this
+| repo could catch. Every numeric claim they made was verified against raw data before changing anything,
+| and all of them held.
+| 
+| The serious one: §3.1 was labelled 'AI output, nguyen van, chua sua'. It is not. There was never a
+| separate AI session that was handed the .jtl and produced that analysis - the passage and the table
+| critiquing it were written in the same operation. So it is now labelled what it is, a reconstruction,
+| with the consequence stated: the chain the assignment asks for - prompt AI, AI proposes thresholds,
+| student reviews - was not performed or logged. What survives is stated too, because it is real: the
+| corrected values in §3.2 are all recomputed from raw .jtl and resources CSVs. The seven misreadings are
+| seven genuine ways to misread real data; what was fabricated is that a particular AI said them.
+| §3.3's four optimisations were attributed to that AI while actually coming from a skill template, now
+| credited correctly.
+| 
+| Second: 'four Agent Skills used for real in the work'. Zero Skill tool invocations exist in the
+| transcript. The files are real and their steps were followed, but they were never called through the
+| mechanism, so the claim is now what is true - built and followed, invoked live in the video.
+| 
+| Third: audit timestamps. #1 was off by a day (12/08 11:28, not 13/08 11:05), #3 by a day and a half
+| (15/08 15:17, not 13/08 11:40), #9 and #11 by hours, and #11 collapsed three prompts at 13:57, 14:01
+| and 14:18 into one entry. Corrected from the transcript with the old values kept visible. Also stated
+| plainly: #5 through #8 are four passages of interaction #4, not four independent prompts, so '12
+| interactions' counts entries in the file rather than student prompts; and 'AI output' fields are
+| summaries, which the assignment does not ask for.
+| 
+| Nine numbers were simply wrong. CI run 6's p99 and max were copied from run 3 (14/389, not 223/395),
+| which also killed the 'identical to run 3' reading - the honest version is stronger anyway: at 5 VU p95
+| reproduces and p99 differs 16-fold. §4.4's table claimed six runs and listed five. Lockout p95 was 4
+| and 5ms against a real 6. Spike's 400 count was 7,129 against 7,143. Stress step 5 was 0.7% against
+| 0.8%. JMeter CPU was given as 118-183% for four runs measuring 49.3-205.2%. load_1m was 4.4-6.0 against
+| 3.3-5.7. A conclusion quoted 564 req/s and 98.4% from a superseded batch without saying so. The
+| critique counted 16 mistakes where everything else counted 17.
+| 
+| Six conclusions outran their evidence. 'Mỗi VU một tài khoản riêng' is true at 20 VU and false at 200,
+| where 50 accounts serve 200 threads - the report already admitted this two sections later. 'Cái nhảy
+| nằm ở thứ tự chờ' has no scheduler trace behind it and is now a hypothesis. 'Cổng tung đồng xu' is
+| scoped to these six ubuntu-latest runs. And the manifest's sha256 does not make screenshots
+| untamperable - anyone editing an image can re-run stamp, since the manifest lives in the same repo. It
+| catches accidental change and packaging mistakes. Saying otherwise was the same kind of overclaim this
+| submission spends a chapter on.
+| 
+| Self-assessment drops 100 to 85: three off Task 2 for the provenance label, two off Agent Skills. Both
+| were found by someone else, which is recorded as such.
+| 
+| Still open and not mine to fix: §14 wants a public repository and this one is private. Turning it
+| public directly is unsafe - commit 88d27a1 once held five screenshots leaking an internal IP, Zalo and
+| Gmail windows, and a customer phone number; purged from history but reachable by SHA until GitHub
+| collects it. A fresh repo without the old history is the safe route. README §10 now says this instead
+| of claiming §14 is complete.
+| 
+|  README.md                                  |  42 +++++++++-----
+|  TASKS.md                                   |   2 +-
+|  ai-audit/ai-audit-report.md                |  26 ++++++---
+|  ai-audit/ai-audit-report.pdf               | Bin 677856 -> 690995 bytes
+|  ai-audit/ai-critique.md                    |  21 ++++---
+|  ai-audit/ai-critique.pdf                   | Bin 55844 -> 56510 bytes
+|  bug-report/bug-report.pdf                  | Bin 349229 -> 349229 bytes
+|  ci/ci-runs.md                              |  13 +++--
+|  docs/review-task1.md                       |   2 +-
+|  report/main-report.md                      |  84 ++++++++++++++++++++-------
+|  report/main-report.pdf                     | Bin 986410 -> 1025513 bytes
+|  resource-monitor/screenshots/manifest.json |   2 +-
+|  tools/stamp-screenshots.mjs                |   8 ++-
+|  tools/verify-all.sh                        |   4 +-
+|  14 files changed, 140 insertions(+), 64 deletions(-)
+| 
+* 09be4eb 2026-08-16 19:48:08 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 53 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 53 insertions(+)
+| 
 * 65b98fa 2026-08-16 19:48:06 +0700 DuyITLOR
 |   docs: file the demo video link, and clean up what recording it left behind
 | Video is up: https://youtu.be/hCf4bXwzx2A - 709 seconds, so 11:49 against a 6:00 minimum. Checked
