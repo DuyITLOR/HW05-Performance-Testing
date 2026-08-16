@@ -1,3 +1,18 @@
+* 6b1bb57 2026-08-17 01:37:53 +0700 DuyITLOR
+|   build: keep the Moodle submission below 20 MB
+| Packages only the three required Load, Stress, and Spike raw JTL files plus the submitted Soak evidence, while retaining older runs in the public repository for audit. Uses maximum ZIP compression and fixes the submitted Soak evidence filenames in the endurance report.
+| 
+|  endurance/endurance-threshold.md |  4 ++--
+|  results/summary.md               |  4 +++-
+|  tools/package.sh                 | 25 ++++++++++++++++++++++++-
+|  3 files changed, 29 insertions(+), 4 deletions(-)
+| 
+* a374600 2026-08-17 01:31:19 +0700 DuyITLOR
+|   docs: refresh the final submission commit log
+| 
+|  git-log/commit-log.txt | 32 ++++++++++++++++++++++++++++++++
+|  1 file changed, 32 insertions(+)
+| 
 * 35a5d65 2026-08-17 01:31:09 +0700 DuyITLOR
 |   docs: finalize the HW05 submission package
 | Fixes the Task 3 PDF flowchart so it fits on one page, distinguishes the CI prototype that actually ran from proposal-only extensions, and removes the optional design-log PDF and retrospective section. Rewrites the AI critique in the student's voice while preserving the 200-300 word requirement. Converts SUT source references to public GitHub links, synchronizes the repository status, and rebuilds every affected PDF.
