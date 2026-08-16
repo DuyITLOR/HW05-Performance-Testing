@@ -425,6 +425,17 @@ Nội dung dựng lại — cố ý viết theo lối "nghe hợp lý mà sai", 
 | 6 | *"Đề xuất ngưỡng p95 < 50ms"* | p95 đo được 18ms | Ngưỡng rộng gấp **2,8 lần** giá trị hiện tại → không phát hiện được hồi quy nào cho tới khi hệ thống xấu đi gần 3 lần. Ngưỡng hồi quy phải **tương đối** (+20% so với baseline), không phải một số tuyệt đối chọn cho dễ đạt |
 | 7 | *"Hệ thống đạt yêu cầu"* | `node` CPU 97,7%; max 3691ms | Đạt yêu cầu **nào**? Không có SLA nào được nêu trước. Kết luận "đạt" khi chưa có ngưỡng là kết luận rỗng |
 
+**Hai phép kiểm nữa, chạy ngày 16/08, và cả hai đều SẠCH.** Ghi lại vì một phép kiểm không tìm ra
+lỗi vẫn là bằng chứng — nó loại bỏ hai cách phản biện bảng trên:
+
+| Phép kiểm | Kết quả | Ý nghĩa |
+|---|---|---|
+| **`elapsed` có bị thổi bởi thời gian truyền body không?** JMeter ghi `elapsed` = trọn vòng, `Latency` = tới byte đầu tiên | p95 của hai cột **bằng nhau** ở cả 4 lượt (8/18/7/8 ms); hiệu trung bình **0,04–0,07 ms**; `Connect` p95 = **1 ms** | Mọi con số p95 trong báo cáo **là thời gian server xử lý**, không phải chi phí mạng. Body nhỏ và cả hai đầu ở `localhost`, nên không có chỗ cho ai nói "p95 của bạn gồm cả truyền dữ liệu" |
+| **Thread đỉnh có chạm mức cấu hình không?** Nếu peak thread < cấu hình thì nghẽn nằm ở **load generator**, không ở SUT | Stress **200/200** · Spike **212/212** · Load và Soak **22/22** | JMeter **cấp đủ** thread đã yêu cầu ở mọi lượt. Nên tuy JMeter tốn CPU nhiều hơn `node` (§3.5), nó **không** làm hụt mức tải — mức tải đo được là mức tải thiết kế |
+
+*(Hai phép kiểm này lấy từ bảng 6 kiểu đọc sai trong [`.claude/skills/jtl-analysis/SKILL.md`](../.claude/skills/jtl-analysis/SKILL.md)
+mục 3 và mục 6 — hai mục mà bảy lỗi ở trên **chưa** phủ. Chạy skill thật thì thấy chỗ hở đó.)*
+
 **Điểm chung:** sáu trong bảy lỗi đến từ việc **đọc một metric mà bỏ metric đi kèm** — p95 mà bỏ CPU,
 average mà bỏ p99, error rate mà bỏ phân bố response code, chênh lệch giữa hai lượt mà bỏ `load_1m`.
 Không lỗi nào do đọc sai con số; tất cả do đọc **thiếu** con số.
