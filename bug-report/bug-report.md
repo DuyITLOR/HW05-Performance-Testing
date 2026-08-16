@@ -22,7 +22,7 @@ kiểm** · 3 defect cũ ảnh hưởng tới cách đọc số liệu · **0 l�
 | **Endpoint** | `GET /api/orders/:id` |
 | **Đặc tả nói** | `api_specification.md` §4 xếp endpoint này dưới dòng *"Yêu cầu Header: `Authorization: Bearer <token>`"* |
 | **Thực tế** | Không có middleware `authenticateToken` → **không cần token**, và đọc được đơn hàng của **bất kỳ** người dùng nào chỉ bằng cách đổi `:id` |
-| **Nguyên nhân** | [`server.js:344`](../../eshop-sut/backend/server.js#L344) — thiếu `authenticateToken`, trong khi mọi route order khác đều có |
+| **Nguyên nhân** | [`server.js:344`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L344) — thiếu `authenticateToken`, trong khi mọi route order khác đều có |
 | **Loại** | bảo mật (IDOR) + lệch đặc tả |
 | **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — ảnh chụp toàn bộ output `verify-bugs.sh`, gồm cả ba khối |
 | **GitHub Issue** | [**#288**](https://github.com/DuyITLOR/group05_eshop/issues/288) — có ảnh nhúng sẵn |
@@ -56,7 +56,7 @@ vốn công khai" mà là **một route bị bỏ sót**, vì route order ngay b
 |---|---|
 | **Endpoint** | `POST /api/coupon-usage` |
 | **Đặc tả nói** | Không đề cập. `api_specification.md` §5 chỉ có `POST /api/apply-coupon` (dòng 154) và `GET /api/coupons` (dòng 166) |
-| **Thực tế** | Route tồn tại, cần token, **ghi thật vào bảng `coupon_usage`** ([`server.js:444`](../../eshop-sut/backend/server.js#L444)) |
+| **Thực tế** | Route tồn tại, cần token, **ghi thật vào bảng `coupon_usage`** ([`server.js:444`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L444)) |
 | **Loại** | tài liệu thiếu — ảnh hưởng trực tiếp tới việc chọn phạm vi kiểm thử: không ai test được endpoint mình không biết là có |
 | **Ảnh** | [`screenshots/bug-evidence-verify-bugs.png`](screenshots/bug-evidence-verify-bugs.png) — cùng ảnh, khối thứ hai |
 | **GitHub Issue** | [**#289**](https://github.com/DuyITLOR/group05_eshop/issues/289) — có ảnh nhúng sẵn |
@@ -75,7 +75,7 @@ vốn công khai" mà là **một route bị bỏ sót**, vì route order ngay b
 
 Đáng lưu ý thêm: endpoint này ghi `coupon_usage` mà **không kiểm** coupon có tồn tại hay
 người dùng đã dùng quá `max_uses_per_user` chưa — trong khi `POST /api/apply-coupon` thì có kiểm
-([`server.js:391`](../../eshop-sut/backend/server.js#L391)). Tức là ghi thẳng vào bảng này bỏ qua
+([`server.js:391`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L391)). Tức là ghi thẳng vào bảng này bỏ qua
 được toàn bộ luật giới hạn số lần dùng coupon. Chưa đưa vào bug riêng vì cần đọc kỹ hơn phần
 nghiệp vụ coupon, nhưng đã ghi lại ở đây.
 
@@ -89,7 +89,7 @@ report.
 ### ĐÃ LOẠI — "`import-products` báo số dòng đã insert nhỏ hơn thực tế"
 
 **Nhận định ban đầu (từ ĐỌC CODE):** `stmt.finalize(() => res.json(...))`
-([`server.js:234`](../../eshop-sut/backend/server.js#L234)) trả response trước khi các callback
+([`server.js:234`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L234)) trả response trước khi các callback
 của `stmt.run(...)` chạy xong, nên biến `inserted` vẫn còn 0 lúc serialize JSON.
 
 **Kiểm bằng request thật → nhận định đó SAI:**
@@ -117,9 +117,9 @@ trong [`ai-audit/ai-audit-report.md`](../ai-audit/ai-audit-report.md).
 
 | Ứng viên | Vì sao KHÔNG phải bug |
 |---|---|
-| `PUT /api/admin/orders/:id/status` trả **400** cho phần lớn request trong lượt dài | Đúng đặc tả FR-10: một order chỉ chuyển tiếp một lần cho mỗi trạng thái ([`server.js:537-551`](../../eshop-sut/backend/server.js#L537)). Con số "18,25% error" ở một lượt chạy trước là lỗi của **test plan của tôi**, không phải của SUT |
+| `PUT /api/admin/orders/:id/status` trả **400** cho phần lớn request trong lượt dài | Đúng đặc tả FR-10: một order chỉ chuyển tiếp một lần cho mỗi trạng thái ([`server.js:537-551`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L537)). Con số "18,25% error" ở một lượt chạy trước là lỗi của **test plan của tôi**, không phải của SUT |
 | Hàng loạt `403` ở lượt chạy đầu | Account lockout hoạt động đúng như code. Nguyên nhân thật: `users.csv` của tôi chứa 2 dòng mật khẩu sai và luồng chính đọc chính file đó → tự khoá tài khoản của mình |
-| `GET /api/admin/orders` chậm hơn `GET /api/admin/users` (p95 17ms vs 13ms ở Stress) | Đúng như thiết kế: JOIN `orders` × `users`, không phân trang ([`server.js:510`](../../eshop-sut/backend/server.js#L510)). Chậm **hơn** không có nghĩa là **sai** — và 17ms còn cách rất xa mọi ngưỡng đã đặt |
+| `GET /api/admin/orders` chậm hơn `GET /api/admin/users` (p95 17ms vs 13ms ở Stress) | Đúng như thiết kế: JOIN `orders` × `users`, không phân trang ([`server.js:510`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L510)). Chậm **hơn** không có nghĩa là **sai** — và 17ms còn cách rất xa mọi ngưỡng đã đặt |
 
 ---
 
@@ -129,8 +129,8 @@ Không mở Issue mới, chỉ ghi vì chúng **thay đổi cách đọc kết q
 
 | Defect | Vị trí | Ảnh hưởng tới bài đo |
 |---|---|---|
-| `login_attempts` cộng **2** thay vì 1 → lockout sau **2** lần sai, không phải 3 | [`server.js:54`](../../eshop-sut/backend/server.js#L54) | Mọi `403` trong lượt chạy gần như luôn là lockout — **hành vi chức năng**. Phải tách khỏi error rate |
-| Mật khẩu lưu **plaintext**, so sánh bằng `===` | [`server.js:46`](../../eshop-sut/backend/server.js#L46) | **Đây là giới hạn quan trọng nhất của toàn bộ bài đo.** Không có bcrypt/argon2 nên login không tốn CPU băm. p95 24ms của `POST /api/login` ở mức 200 VU **không** đại diện cho một hệ thống băm mật khẩu đúng cách — ở đó login thường là endpoint đắt nhất, không phải rẻ nhất |
+| `login_attempts` cộng **2** thay vì 1 → lockout sau **2** lần sai, không phải 3 | [`server.js:54`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L54) | Mọi `403` trong lượt chạy gần như luôn là lockout — **hành vi chức năng**. Phải tách khỏi error rate |
+| Mật khẩu lưu **plaintext**, so sánh bằng `===` | [`server.js:46`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L46) | **Đây là giới hạn quan trọng nhất của toàn bộ bài đo.** Không có bcrypt/argon2 nên login không tốn CPU băm. p95 24ms của `POST /api/login` ở mức 200 VU **không** đại diện cho một hệ thống băm mật khẩu đúng cách — ở đó login thường là endpoint đắt nhất, không phải rẻ nhất |
 | Không có rate limiting ở bất kỳ route nào | toàn bộ `server.js` | Mọi 4xx đến từ credential/token/body, **không** phải throttling |
 
 ---

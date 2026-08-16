@@ -23,19 +23,19 @@ Một virtual user đăng nhập admin, đọc hai danh sách quản trị, rồ
 
 | Bước | Endpoint | Nhóm §5 | Vì sao bước này nằm trong workflow |
 |---|---|---|---|
-| 1 | `POST /api/login` (admin) | **auth-heavy** | Bắt buộc để có JWT cho 4 bước sau. Mỗi login thành công còn kèm một lệnh ghi: `UPDATE users SET login_attempts=0, locked_until=NULL` ([`server.js:47`](../../eshop-sut/backend/server.js#L47)) → endpoint auth của SUT này **không phải read-only**, đó là điều làm nó đáng đo |
-| 2 | `GET /api/admin/orders` | **read-heavy** | JOIN `orders` × `users`, không phân trang, không index ([`server.js:510`](../../eshop-sut/backend/server.js#L510)) → chi phí tăng theo số order mà lượt Stress vừa sinh ra |
-| 3 | `GET /api/admin/users` | **read-heavy** | `SELECT *` toàn bảng `users`, không phân trang ([`server.js:494`](../../eshop-sut/backend/server.js#L494)) |
-| 4 | `POST /api/admin/import-products` | **transactional** | Bulk INSERT nhiều dòng qua một prepared statement ([`server.js:199`](../../eshop-sut/backend/server.js#L199)). SQLite ghi tuần tự → **đây là chỗ ngưỡng chịu tải thật sẽ lộ ra** |
-| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | Ghi có điều kiện, đổi trạng thái trong state machine FR-10 ([`server.js:525`](../../eshop-sut/backend/server.js#L525)) |
+| 1 | `POST /api/login` (admin) | **auth-heavy** | Bắt buộc để có JWT cho 4 bước sau. Mỗi login thành công còn kèm một lệnh ghi: `UPDATE users SET login_attempts=0, locked_until=NULL` ([`server.js:47`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L47)) → endpoint auth của SUT này **không phải read-only**, đó là điều làm nó đáng đo |
+| 2 | `GET /api/admin/orders` | **read-heavy** | JOIN `orders` × `users`, không phân trang, không index ([`server.js:510`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L510)) → chi phí tăng theo số order mà lượt Stress vừa sinh ra |
+| 3 | `GET /api/admin/users` | **read-heavy** | `SELECT *` toàn bảng `users`, không phân trang ([`server.js:494`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L494)) |
+| 4 | `POST /api/admin/import-products` | **transactional** | Bulk INSERT nhiều dòng qua một prepared statement ([`server.js:199`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L199)). SQLite ghi tuần tự → **đây là chỗ ngưỡng chịu tải thật sẽ lộ ra** |
+| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | Ghi có điều kiện, đổi trạng thái trong state machine FR-10 ([`server.js:525`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L525)) |
 
 Endpoint bổ sung để tăng tỉ lệ đọc trong mix (đều **chưa ai đăng ký**):
 
 | Endpoint | Nhóm | Ghi chú |
 |---|---|---|
-| `GET /api/coupons` | read-heavy | Cần token ([`server.js:356`](../../eshop-sut/backend/server.js#L356)) |
-| `POST /api/coupon-usage` | transactional | **Không có trong `api_specification.md`**, chỉ tồn tại trong code ([`server.js:444`](../../eshop-sut/backend/server.js#L444)) → tài liệu API thiếu endpoint, ghi vào bug report |
-| `GET /api/orders/:id` | read-heavy | **Không có `authenticateToken`** ([`server.js:344`](../../eshop-sut/backend/server.js#L344)) → dùng làm baseline "read không xác thực" để so với các endpoint có auth |
+| `GET /api/coupons` | read-heavy | Cần token ([`server.js:356`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L356)) |
+| `POST /api/coupon-usage` | transactional | **Không có trong `api_specification.md`**, chỉ tồn tại trong code ([`server.js:444`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L444)) → tài liệu API thiếu endpoint, ghi vào bug report |
+| `GET /api/orders/:id` | read-heavy | **Không có `authenticateToken`** ([`server.js:344`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L344)) → dùng làm baseline "read không xác thực" để so với các endpoint có auth |
 
 ## 3. Xác nhận không trùng
 
@@ -47,7 +47,7 @@ xuất hiện trong đăng ký của bất kỳ ai**, nên workflow là duy nh�
 ## 4. Ba đặc điểm của SUT quyết định cách thiết kế test plan
 
 1. **Lockout kích hoạt sau 2 lần sai, không phải 3.** `login_attempts + 2` với ngưỡng 3
-   ([`server.js:54-58`](../../eshop-sut/backend/server.js#L54)) → 2 lần sai mật khẩu là khoá
+   ([`server.js:54-58`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L54)) → 2 lần sai mật khẩu là khoá
    180 giây. Ở Stress/Spike, dùng chung vài tài khoản là tự tạo ra một đợt 403 hàng loạt và
    rất dễ đọc sai thành "server sụp". Cách xử lý: dùng pool **50 tài khoản hợp lệ** từ
    [`data/users.csv`](../data/users.csv) (một tài khoản/VU ở Load/Soak; tái sử dụng theo vòng ở
@@ -57,7 +57,7 @@ xuất hiện trong đăng ký của bất kỳ ai**, nên workflow là duy nh�
    body sai — không phải throttling. Đừng giải thích 403 bằng "server tự bảo vệ".
 3. **`inserted` của `import-products` là con số phụ thuộc dữ liệu, không phải con số sai.**
    Ban đầu tôi đọc code và kết luận `stmt.finalize()` trả response trước khi các callback
-   `stmt.run` chạy xong ([`server.js:234`](../../eshop-sut/backend/server.js#L234)) nên `inserted`
+   `stmt.run` chạy xong ([`server.js:234`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L234)) nên `inserted`
    bị nhỏ hơn thực tế. **Kiểm bằng request thật thì kết luận đó SAI**: 5/5, 60/60, và 2/3 khi có
    một dòng thiếu `name` — cả ba đều đúng, vì `node-sqlite3` xếp các lệnh trên cùng một handle
    theo thứ tự và callback của `finalize` chạy sau chúng.

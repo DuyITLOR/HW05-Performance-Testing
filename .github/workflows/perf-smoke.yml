@@ -5,7 +5,7 @@
 # vì nhiễu môi trường lớn hơn tín hiệu. Workflow này tồn tại để **kiểm lập luận đó bằng lượt CI
 # thật** thay vì để nó là suy đoán trên giấy.
 #
-# KẾT QUẢ THẬT — 5 lượt, số liệu đầy đủ ở ci/ci-runs.md. Ba lượt CÙNG 20 VU, cùng plan, cùng runner
+# KẾT QUẢ THẬT — 6 lượt, số liệu đầy đủ ở ci/ci-runs.md. Ba lượt CÙNG 20 VU, cùng plan, cùng runner
 # spec, không khác nhau một tham số nào:
 #
 #   p95 = 101 ms  ·  15 ms  ·  8 ms          ← lệch 12,6 lần giữa hai lượt y hệt nhau
@@ -20,7 +20,7 @@
 #     Chênh lệch giữa hai máy **nhỏ hơn** phương sai của chính CI, nên không quy cho máy được.
 # Cùng họ lỗi #12 của bài (nhân quả từ so sánh không kiểm soát biến), lần thứ ba. Ghi thành lỗi #16.
 #
-# Điều ổn định qua cả 5 lượt: **error rate 0%** và **thứ tự endpoint đắt nhất** (`import-products`
+# Điều ổn định qua cả 6 lượt: **error rate 0%** và **thứ tự endpoint đắt nhất** (`import-products`
 # luôn đứng đầu). Vậy cổng CI nên chặn bằng error rate và bằng so sánh **tương đối trong cùng một
 # lượt**, không bằng ngưỡng p95 tuyệt đối — đó là kết luận đi vào §4.
 #

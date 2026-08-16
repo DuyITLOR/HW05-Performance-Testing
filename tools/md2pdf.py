@@ -33,6 +33,12 @@ a { color: #0b5fff; text-decoration: none; word-break: break-all; }
 hr { border: none; border-top: 1px solid #ddd; margin: 14px 0; }
 h1, h2, h3, h4 { page-break-after: avoid; }
 img { max-width: 100%; }
+.pdf-page-break { break-before: page; page-break-before: always; }
+.task3-flowchart { break-inside: avoid; page-break-inside: avoid; margin: 6px 0 10px;
+                   text-align: center; }
+.task3-flowchart img { display: block; width: auto; max-width: 100%; max-height: 205mm;
+                       margin: 0 auto; }
+.task3-flowchart figcaption { margin-top: 4px; font-size: 8.5pt; color: #555; }
 """
 
 def convert(md_path, pdf_path):

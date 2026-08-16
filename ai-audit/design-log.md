@@ -25,10 +25,10 @@
 | Phát hiện | Vị trí | Ảnh hưởng tới thiết kế |
 |---|---|---|
 | Backend là **một process Node, một luồng JS + SQLite một writer** | toàn file | Tăng VU quá một mức chỉ làm dài hàng đợi. Trần thật là ~100% của **một** lõi |
-| **Lockout kích hoạt sau 2 lần sai**, không phải 3 — `login_attempts + 2`, ngưỡng 3 | [`server.js:54-58`](../../eshop-sut/backend/server.js#L54) | Mọi nhánh "login sai" phải dùng tài khoản **tách riêng**, và phải reset giữa các lượt |
+| **Lockout kích hoạt sau 2 lần sai**, không phải 3 — `login_attempts + 2`, ngưỡng 3 | [`server.js:54-58`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L54) | Mọi nhánh "login sai" phải dùng tài khoản **tách riêng**, và phải reset giữa các lượt |
 | **Không có rate limiting** ở bất kỳ route nào | toàn file | Mọi 4xx đến từ credential/token/body — không được giải thích bằng "server tự bảo vệ" |
-| Login **có ghi DB**: `UPDATE users SET login_attempts=0` | [`server.js:47`](../../eshop-sut/backend/server.js#L47) | Endpoint auth **không** read-only → mỗi VU phải có tài khoản riêng, nếu không sẽ đo write-contention do chính mình tạo ra |
-| `PUT /orders/:id/status` là **state machine** FR-10 | [`server.js:537-551`](../../eshop-sut/backend/server.js#L537) | Một order chỉ chuyển tiếp một lần/trạng thái → assert cứng 200 sẽ sai |
+| Login **có ghi DB**: `UPDATE users SET login_attempts=0` | [`server.js:47`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L47) | Endpoint auth **không** read-only → mỗi VU phải có tài khoản riêng, nếu không sẽ đo write-contention do chính mình tạo ra |
+| `PUT /orders/:id/status` là **state machine** FR-10 | [`server.js:537-551`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L537) | Một order chỉ chuyển tiếp một lần/trạng thái → assert cứng 200 sẽ sai |
 
 **Quyết định:** không bắt đầu sinh `.jmx` cho tới khi 5 điều trên được viết ra. Bốn trong số đó
 về sau trực tiếp gây ra lỗi khi bị bỏ qua (bước 5 và 6).

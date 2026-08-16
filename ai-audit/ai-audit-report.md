@@ -64,7 +64,7 @@
   (lockout kích hoạt sau 2 lần sai; không có rate limiting; `import-products` báo sai số dòng).
 - **AI sai / bỏ sót:** **Một kết luận sai do chỉ đọc code, không chạy thử.** AI khẳng định
   `POST /api/admin/import-products` "báo số dòng đã insert nhỏ hơn thực tế" vì `stmt.finalize()`
-  trả response trước các callback `stmt.run` ([`server.js:234`](../../eshop-sut/backend/server.js#L234)).
+  trả response trước các callback `stmt.run` ([`server.js:234`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L234)).
   Kiểm bằng request thật ở lượt #8 thì **sai hoàn toàn**: 5/5, 60/60, và 2/3 khi có dòng thiếu
   `name` — đều đúng, vì `node-sqlite3` xếp các lệnh trên cùng handle theo thứ tự và callback của
   `finalize` chạy sau chúng. Kết luận này đã lan vào 5 file tài liệu trước khi bị bắt.
@@ -325,7 +325,7 @@
   9. **Một "bug" AI khẳng định từ lượt #1 bị bác bỏ khi chạy thử.** AI đã nói
      `POST /api/admin/import-products` "báo số dòng đã insert nhỏ hơn thực tế" vì
      `stmt.finalize()` trả response trước các callback `stmt.run`
-     ([`server.js:234`](../../eshop-sut/backend/server.js#L234)). Kiểm bằng ba lô request thật:
+     ([`server.js:234`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L234)). Kiểm bằng ba lô request thật:
      5/5, 60/60, và 2/3 khi có một dòng thiếu `name` — **cả ba đều đúng**. `node-sqlite3` xếp
      các lệnh trên cùng handle theo thứ tự và callback của `finalize` chạy sau chúng.
      Kết luận sai này đã lan vào **5 file** (bug report, endpoint-selection, PLAYBOOK, SKILL
@@ -507,13 +507,13 @@
 - **Human review:** ***(SV đã kiểm)*** Chỗ tôi can thiệp là **bắt phải sửa, không phải bắt phải giải
   thích**: tôi tự chấm bài 88 mà hai điểm trừ nằm đó không ai bịt thì trừ điểm để làm gì. Yêu cầu của
   tôi là *"phải tự biết tại sao nó 88 rồi sửa lại"* — và tôi kiểm được kết quả bằng thứ không cần
-  tin lời ai: **có một lượt build ĐỎ thật** (`31878612141`) và bốn lượt xanh, xem được trong tab
+  tin lời ai: **có một lượt build ĐỎ thật** (`31878612141`) và các lượt xanh, xem được trong tab
   Actions. Một flow chart chưa từng chạy thì không có gì phân biệt nó với một hình vẽ đẹp.
   ***(SV chưa tự kiểm)*** Tôi không tự đọc lại từng dòng YAML của workflow, cũng không tự tính lại
   phương sai 12,6 lần từ ba file `.jtl` của CI. Nhưng tôi giữ nguyên yêu cầu về hình thức bằng chứng:
-  repo bài làm là **private** nên link Actions người chấm **không mở được** → output cổng ngưỡng phải
-  được chép nguyên văn vào `ci/ci-runs.md` trong repo, đúng cùng lý do như lỗi #14 (bằng chứng nằm
-  ngoài bản nộp thì coi như không có).
+  tại thời điểm tương tác, repo bài làm còn **private**, nên link Actions người chấm không mở được.
+  Repo hiện đã chuyển sang public, nhưng output cổng ngưỡng vẫn được giữ nguyên văn trong
+  `ci/ci-runs.md` để bằng chứng không phụ thuộc vào link ngoài hoặc thời hạn lưu artifact.
 - **Commit:** `ci: run the Task 3 pipeline for real instead of describing it`
 
 <!-- NEW_INTERACTION_MARKER -->

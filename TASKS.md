@@ -69,7 +69,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 | Yêu cầu của đề | Nơi đáp ứng | **Tự kiểm bằng** |
 |---|---|---|
 | **Mô hình** theo dõi commit, khi nào chạy, cảnh báo hồi quy p95 | [`§4.1`](report/main-report.md) | — |
-| **Flow chart** | [`§4.1`](report/main-report.md) — mermaid **15 nút**, render sẵn trong PDF | mở `report/main-report.pdf` |
+| **Flow chart** | [`§4.1`](report/main-report.md) — mermaid **16 nút**, render sẵn trong PDF | mở `report/main-report.pdf` |
 | Giải thích **từng** nhánh | [`§4.2`](report/main-report.md) — 8 nhánh | — |
 | **Trade-off** (chi phí, báo động giả) | [`§4.3`](report/main-report.md) — **7 trade-off**, mỗi cái nói rõ *cái phải trả* | — |
 | Liên kết về số liệu thật của bài | [`§2.8`](report/main-report.md) và [`§3.4`](report/main-report.md) | `npm run summary` |
@@ -100,5 +100,5 @@ Nói ra để không tạo cảm giác mọi thứ đều đã được máy xá
 3. **Nội dung nói trong video** — script kiểm được *link có trong README*, không kiểm được *trong video nói gì*. Link: https://youtu.be/hCf4bXwzx2A
 4. **k6** — có bản mirror, **chưa chạy lần nào**. §8 xếp k6 là bonus nên không tính điểm, nhưng cũng
    không được nói là đã đối chiếu chéo.
-5. **Repo public** — `gh` hiện mất đăng nhập và repo cũ từng có dữ liệu nhạy cảm trong history. Chỉ
-   nộp sau khi mở link repo sạch ở cửa sổ ẩn danh và thấy được README/test-plans/data.
+5. **Repo public** — `gh repo view` đã xác nhận `DuyITLOR/HW05-Performance-Testing` ở trạng thái
+   `PUBLIC` ngày 17/08/2026; trước khi nộp vẫn mở cửa sổ ẩn danh để kiểm README/test-plans/data.

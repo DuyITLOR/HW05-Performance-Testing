@@ -1,0 +1,27 @@
+%%{init: {"theme":"base","themeVariables":{"fontSize":"13px","primaryColor":"#f8f5ff","primaryBorderColor":"#7950f2","lineColor":"#333333"},"flowchart":{"htmlLabels":true,"nodeSpacing":24,"rankSpacing":30,"diagramPadding":6}}}%%
+flowchart LR
+    subgraph PR["Theo mỗi commit / pull request"]
+        direction TB
+        A[Commit vào SUT] --> B{Diff có chạm<br/>backend/ hay database.js?}
+        B -- không --> Z[Bỏ qua perf test]
+        B -- có --> C{Loại commit?}
+        C -- hotfix/docs --> D[Chỉ smoke perf 60s]
+        C -- feature/refactor --> E[Load test rút gọn 3 phút]
+        E --> F[So p95 từng endpoint<br/>với baseline nhánh main]
+        D --> F
+        F --> G{p95 tăng > 20%<br/>ở ≥1 endpoint?}
+        G -- không --> H[Cập nhật baseline · pass]
+        G -- có --> I{Lặp lại được<br/>sau 2 lượt chạy?}
+        I -- không --> J[Nhiễu — ghi log,<br/>không cảnh báo]
+        I -- có --> K[Chặn PR + cảnh báo kèm<br/>link .jtl và dashboard]
+    end
+
+    subgraph WEEKLY["Kiểm tra theo lịch"]
+        direction TB
+        L{Lịch hàng tuần?}
+        L -- có --> M[Chạy lại baseline main + PR<br/>trên CÙNG runner, CÙNG lượt CI]
+        M --> N{Chênh p95 > 20%<br/>giữa hai lần đo?}
+        N -- có --> O[Nghi runner nhiễu —<br/>không chặn PR, ghi log]
+    end
+
+    H --> L

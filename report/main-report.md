@@ -55,11 +55,11 @@ khác tham số tải (§6 đòi đúng điều này):
 
 | Bước | Endpoint | Nhóm §5 | Vì sao đáng đo |
 |---|---|---|---|
-| 1 | `POST /api/login` (admin) | **auth-heavy** | Mỗi login thành công kèm lệnh ghi `UPDATE users SET login_attempts=0` ([`server.js:47`](../../eshop-sut/backend/server.js#L47)) → endpoint auth ở SUT này **không** read-only |
-| 2 | `GET /api/admin/orders` | **read-heavy** | JOIN `orders` × `users`, không phân trang, không index ([`server.js:510`](../../eshop-sut/backend/server.js#L510)) |
-| 3 | `GET /api/admin/users` | **read-heavy** | `SELECT *` toàn bảng ([`server.js:494`](../../eshop-sut/backend/server.js#L494)) |
-| 4 | `POST /api/admin/import-products` | **transactional** | Bulk INSERT 3 dòng/request qua prepared statement ([`server.js:199`](../../eshop-sut/backend/server.js#L199)) |
-| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | Ghi có điều kiện qua state machine FR-10 ([`server.js:525`](../../eshop-sut/backend/server.js#L525)) |
+| 1 | `POST /api/login` (admin) | **auth-heavy** | Mỗi login thành công kèm lệnh ghi `UPDATE users SET login_attempts=0` ([`server.js:47`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L47)) → endpoint auth ở SUT này **không** read-only |
+| 2 | `GET /api/admin/orders` | **read-heavy** | JOIN `orders` × `users`, không phân trang, không index ([`server.js:510`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L510)) |
+| 3 | `GET /api/admin/users` | **read-heavy** | `SELECT *` toàn bảng ([`server.js:494`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L494)) |
+| 4 | `POST /api/admin/import-products` | **transactional** | Bulk INSERT 3 dòng/request qua prepared statement ([`server.js:199`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L199)) |
+| 5 | `PUT /api/admin/orders/:id/status` | **transactional** | Ghi có điều kiện qua state machine FR-10 ([`server.js:525`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L525)) |
 | 6 | `POST /api/login` (mật khẩu sai) | **auth-heavy** | Nhánh riêng 2 VU phủ **account-lockout**, thứ §5 nói đích danh phải tính tới |
 
 ### 1.3 Dữ liệu data-driven (§6)
@@ -147,7 +147,7 @@ Ba điều đọc ra:
 nhất chạm `INSERT` thật — đúng dự đoán ở bước 1 của thiết kế: SQLite một writer.
 
 **2. Ở Stress thì `login` vượt lên đầu (24ms).** Login cũng ghi DB (`UPDATE users SET
-login_attempts=0`, [`server.js:47`](../../eshop-sut/backend/server.js#L47)), và ở 200 VU với 50 tài
+login_attempts=0`, [`server.js:47`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L47)), và ở 200 VU với 50 tài
 khoản thì trung bình 4 VU cùng ghi vào một dòng `users`. Đây là chỗ p95-theo-endpoint cho thấy điều
 p95 tổng che mất: **thứ tự endpoint đắt nhất đổi theo mức tải**.
 
@@ -273,7 +273,7 @@ npm run reset:orders       # UPDATE orders SET status='pending'
 `tools/run-scenario.sh` tự chạy cả hai ở đầu mỗi lượt và in trạng thái trước/sau.
 
 **Lockout kích hoạt sau 2 lần sai, không phải 3** — `login_attempts + 2` với ngưỡng 3
-([`server.js:54-58`](../../eshop-sut/backend/server.js#L54)), khoá 180 giây.
+([`server.js:54-58`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L54)), khoá 180 giây.
 
 | Scenario | bước 6: 401 (sai lần đầu) | bước 6: 403 (đã khoá) | bước 5: 200 (ghi thật) | bước 5: 400 (FR-10 chặn) |
 |---|---|---|---|---|
@@ -577,29 +577,17 @@ khẳng định đã đối chiếu chéo — chỉ nêu phép kiểm và điề
 `load_1m`** mới so được, theo đúng bài học §2.8. Nói "đã đối chiếu chéo" khi chưa chạy thì đúng là
 loại khẳng định mà cả Task 2 của bài này đang đi soát.
 
+<div class="pdf-page-break"></div>
+
 ## 4. Task 3 — Đề xuất Continuous Performance Testing
 
 ### 4.1 Mô hình
 
-```mermaid
-flowchart TD
-    A[Commit vào SUT] --> B{Diff có chạm<br/>backend/ hay database.js?}
-    B -- không --> Z[Bỏ qua perf test]
-    B -- có --> C{Loại commit?}
-    C -- hotfix/docs --> D[Chỉ smoke perf 60s]
-    C -- feature/refactor --> E[Load test rút gọn 3 phút]
-    E --> F[So p95 từng endpoint<br/>với baseline nhánh main]
-    D --> F
-    F --> G{p95 tăng > 20%<br/>ở ≥1 endpoint?}
-    G -- không --> H[Cập nhật baseline · pass]
-    G -- có --> I{Lặp lại được<br/>sau 2 lượt chạy?}
-    I -- không --> J[Nhiễu — ghi log, không cảnh báo]
-    I -- có --> K[Chặn PR + cảnh báo kèm<br/>link .jtl và dashboard]
-    H --> L{Lịch hàng tuần?}
-    L -- có --> M[Chạy lại baseline main + PR<br/>trên CÙNG runner, CÙNG lượt CI]
-    M --> N{Chênh p95 > 20%<br/>giữa hai lần đo?}
-    N -- có --> O[Nghi runner nhiễu —<br/>không chặn PR, ghi log]
-```
+<figure class="task3-flowchart">
+  <img src="assets/task3-flowchart.svg" alt="Flowchart Continuous Performance Testing gồm 16 nút">
+  <figcaption>Mô hình Continuous Performance Testing — nguồn Mermaid:
+  <a href="task3-flowchart.mmd"><code>report/task3-flowchart.mmd</code></a>.</figcaption>
+</figure>
 
 Nhánh `L → O` **được viết lại sau khi §2.8 bị bác bỏ**. Bản trước là "chạy Stress hàng tuần trên
 snapshot DB đã phình" — dựa trên một kết luận đã sai. Bản này giải quyết vấn đề **thật sự** đo được:
@@ -714,25 +702,27 @@ Thêm một điều cổng phải có, học từ lượt 1 và 3: **ngưỡng l
 5 VU đi qua đúng cái ngưỡng 8ms mà nó lẽ ra phải chặn; 785 sample là **đủ nhiều**, chỉ là đo ở mức
 tải sai — nên `--min-samples` không cứu được, phải chốt cả số VU.
 
-#### Ranh giới: nút nào đã chạy thật, nút nào vẫn là đề xuất
+#### Phạm vi Task 3: phần đã chạy thật và phần thuộc mô hình đề xuất
 
-Flow chart §4.1 có 15 nút. Workflow chỉ hiện thực **một nhánh**. Ghi rõ để không ai đọc §4.4 thành
-"đã dựng xong toàn bộ mô hình":
+Task 3 yêu cầu **đề xuất** mô hình Continuous Performance Testing; không yêu cầu hiện thực toàn bộ
+16 nút. Ngoài phần thiết kế, bài đã dựng một prototype CI và chạy thật 6 lượt để kiểm chứng các
+quyết định quan trọng. Bảng dưới tách bằng chứng chạy thật khỏi phần mở rộng của mô hình:
 
 | Nút / cơ chế | Trạng thái | Bằng chứng |
 |---|---|---|
-| Kích hoạt theo `push`, lọc theo `paths` | **đã chạy thật** | 3 lượt do `push` trong [`ci/ci-runs.md`](../ci/ci-runs.md) |
-| Chạy plan rút gọn (`-Jthreads`, `-Jduration`) | **đã chạy thật** | 6 lượt, 5–20 VU |
-| **Cổng ngưỡng** p95 + error rate + sàn sample, `exit 1` khi vượt | **đã chạy thật** | lượt 2 build **ĐỎ** |
-| Lưu `.jtl` + HTML dashboard làm artifact, kể cả khi fail (`if: always()`) | **đã chạy thật** | artifact `perf-smoke-p95-*` |
-| **F — so p95 từng endpoint với baseline nhánh `main`** | **CHƯA — vẫn là đề xuất** | workflow **không** chạy `main` và PR trong cùng job. Ngưỡng hiện tại là **số tuyệt đối truyền vào**, không phải so với baseline |
-| **L→O — đo baseline hai lần trên cùng runner rồi so tỉ lệ** | **CHƯA — vẫn là đề xuất** | cần 2 lượt/job; chưa dựng |
-| **I — đòi lặp lại được trước khi báo động** | **CHƯA dựng, nhưng đã được số liệu chứng minh là cần** | ba lượt cùng cấu hình cho 101/15/8ms |
-| Chạy Stress theo lịch hằng tuần | **CHƯA — vẫn là đề xuất** | workflow chỉ có `push` + `workflow_dispatch` |
-| Chặn PR kèm comment dẫn link `.jtl` | **CHƯA — vẫn là đề xuất** | build đỏ thì fail job, chưa comment lên PR |
+| Kích hoạt theo `push`, lọc theo `paths` | **ĐÃ CHẠY THẬT** | 3 lượt do `push` trong [`ci/ci-runs.md`](../ci/ci-runs.md) |
+| Chạy plan rút gọn (`-Jthreads`, `-Jduration`) | **ĐÃ CHẠY THẬT** | 6 lượt, 5–20 VU |
+| **Cổng ngưỡng** p95 + error rate + sàn sample, `exit 1` khi vượt | **ĐÃ CHẠY THẬT** | lượt 2 build **ĐỎ** |
+| Lưu `.jtl` + HTML dashboard làm artifact, kể cả khi fail (`if: always()`) | **ĐÃ CHẠY THẬT** | artifact `perf-smoke-p95-*` |
+| **F — so p95 từng endpoint với baseline nhánh `main`** | **ĐỀ XUẤT MỞ RỘNG** | prototype dùng ngưỡng tuyệt đối truyền vào; §4.4 chứng minh vì sao bước so baseline cần được bổ sung |
+| **L→O — đo baseline hai lần trên cùng runner rồi so tỉ lệ** | **ĐỀ XUẤT MỞ RỘNG** | thiết kế yêu cầu 2 lượt/job để kiểm soát nhiễu runner |
+| **I — đòi lặp lại được trước khi báo động** | **ĐỀ XUẤT, ĐÃ CÓ DỮ LIỆU KIỂM CHỨNG** | ba lượt thật cùng cấu hình cho p95 101/15/8ms |
+| Chạy Stress theo lịch hằng tuần | **ĐỀ XUẤT MỞ RỘNG** | mô hình bổ sung nhánh định kỳ ngoài prototype `push` + `workflow_dispatch` |
+| Chặn PR kèm comment dẫn link `.jtl` | **ĐỀ XUẤT MỞ RỘNG** | prototype đã làm build đỏ và lưu artifact; comment PR là kênh thông báo tiếp theo |
 
-Nói cách khác: phần **đo và chặn** đã chạy thật; phần **so với baseline** — chính là phần §4.4 chứng
-minh là *bắt buộc phải có* — thì chưa dựng. Đó là việc tiếp theo, không phải việc đã xong.
+Kết luận phạm vi: **prototype đo, chặn và lưu bằng chứng đã chạy thật**; các hàng “đề xuất mở rộng”
+là thành phần của mô hình Task 3, không phải deliverable còn thiếu. Bài không gắn nhãn “đã chạy” cho
+cơ chế chưa có log hoặc workflow tương ứng.
 
 ---
 
@@ -768,18 +758,10 @@ Năm giới hạn, xếp theo mức ảnh hưởng tới kết luận:
    mọi số phải kèm điều kiện `load_1m` ≈ 3,3–5,7.
 2. **Load generator và SUT chạy trên cùng một máy.** JMeter tiêu CPU đỉnh **49,3–205,2%** tuỳ lượt (Load 118,3 · Stress 178,3 · Spike 205,2 · Soak 49,3) —
    nhiều hơn `node` ở cả bốn lượt. Latency có thể bị ảnh hưởng bởi tranh chấp tài nguyên với JMeter.
-3. **Mật khẩu lưu plaintext, so sánh bằng `===`** ([`server.js:46`](../../eshop-sut/backend/server.js#L46)).
+3. **Mật khẩu lưu plaintext, so sánh bằng `===`** ([`server.js:46`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L46)).
    Không có bcrypt/argon2 nên login không tốn CPU băm. p95 24ms của `POST /api/login` ở 200 VU
    **không** đại diện cho hệ thống băm mật khẩu đúng cách.
 4. **Bước 5 chỉ ghi thật 400 lần mỗi lượt**; 99,2% sample ở Stress trả 400 do FR-10 chặn trước lệnh
    `UPDATE`. p95 14ms của bước 5 **không** đại diện cho chi phí ghi — tín hiệu đó ở bước 4.
 5. **Đỉnh RSS 1373 MB ở Stress chưa giải thích được** (§2.5). Hai mẫu trên 230, dưới 4 giây. Không đủ
    để kết luận, và tôi không gán nguyên nhân.
-
-### 6.1 Nếu làm lại, tôi đổi ba thứ
-
-| Đổi gì | Vì sao |
-|---|---|
-| Đóng mọi ứng dụng khác, ghi `load_1m` trước/sau, chỉ so lượt có tải nền tương đương | §2.8 — tương quan mạnh nhất đo được, và tôi đã suýt công bố một kết luận **nhân quả** sai vì bỏ qua nó |
-| Restore snapshot DB trước mỗi lượt | `products` trôi từ 5 lên 830.139 dòng **do chính bộ test**; không cô lập được biến này thì không trả lời được câu hỏi về kích thước dữ liệu |
-| Tách load generator sang máy khác | JMeter và `node` tiêu CPU xấp xỉ nhau ở Stress, nên không tách được chi phí của hai bên |

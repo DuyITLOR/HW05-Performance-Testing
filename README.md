@@ -8,8 +8,8 @@
 > **17 lỗi của AI ghi đầy đủ** — trong đó một kết luận nhân quả sai mà bài này **tự bác bỏ bằng ba
 > điểm dữ liệu** (§2.8), và một con số do chính tool của tôi in ra sai (§2.7) — **cộng 2 lỗi bản nộp
 > do chính sinh viên bắt**, tức **2 trong 17 lỗi là do người soát ra, không phải AI tự thấy**.
-> **Video demo:** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt. **Chưa nộp
-> cho tới khi link repo public ở §10 được thay bằng repo sạch công khai.**
+> **Video demo:** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt. **Repo bài
+> làm đã được xác nhận ở trạng thái public (§10).**
 > Quy trình làm bài: `docs/PLAYBOOK.md` — **chỉ có trong repo, KHÔNG kèm bản nộp**, nên ở đây để dạng
 > chữ thường chứ không để link: link tương đối trong file `.md` đã đóng gói sẽ 404.
 
@@ -118,7 +118,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
 | 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s · listener **View Results Tree** · ảnh bắt `node` **72,6%** so với đỉnh CSV **75,7%** · bốn lượt có p95 đỉnh cửa sổ **47/8/12/9ms**; bài ghi nguyên nhân **chưa xác định**, không còn quy cho queue hay `load_1m` |
 | 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | Khôi phục **hai output AI thật, nguyên văn** từ transcript: output A phân tích bốn JTL và endurance; output B đưa ngưỡng cùng WAL/index/pool/scale. §3.2 đối chiếu 7 nhận định với raw JTL/resources; §3.3 phân loại từng tối ưu và ghi phép A/B test. Vật chứng: [`task2-ai-output-verbatim.md`](ai-audit/task2-ai-output-verbatim.md) |
-| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart **15 nút**, giải thích từng nhánh, **7 trade-off**, pipeline GitHub Actions chạy **6 lượt** (1 đỏ). Ba lượt cùng cấu hình p95 **101/15/8ms** làm căn cứ cho baseline cùng runner và chạy lại xác nhận, không khái quát thành mọi runner |
+| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart **16 nút**, giải thích từng nhánh, **7 trade-off**, pipeline GitHub Actions chạy **6 lượt** (1 đỏ). Ba lượt cùng cấu hình p95 **101/15/8ms** làm căn cứ cho baseline cùng runner và chạy lại xác nhận, không khái quát thành mọi runner |
 | 6 | Agent Skills | 10 | **10** | Có 4 `SKILL.md`; video demo `perf-test-plan` và `jtl-analysis` end-to-end. Transcript còn có lượt gọi `jtl-analysis` thật ngày **16/08 21:29** trên bốn JTL nộp, phát hiện hai phép kiểm còn thiếu (`elapsed/Latency`, peak thread) và đưa chúng vào §3.2 |
 | | **Tổng theo mẫu đề** | **100** | **100** | Tất cả sáu tiêu chí đã có deliverable và bằng chứng; dòng Total dùng đúng mẫu đề dù các dòng tối đa cộng thành 90 |
 
@@ -226,7 +226,7 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 | [resource-monitor/hardware-report.md](resource-monitor/hardware-report.md) | **Đạt** — hostname `Le-Nhut-Duy.local` khớp HW trước |
 | Ảnh Activity Monitor (JMeter + monitor **cùng khung**) | **Đạt** — 4 ảnh: Load 13,4% · Stress **91,7%** · Spike **72,6%** · Soak 16,3% · mỗi ảnh khớp khoảng chạy trong `run-log.md`, kiểm bằng `npm run verify` mục 4 |
 | Ảnh spec phần cứng | **Đạt** — `hardware-spec.png`, screenfetch với hostname `Le-Nhut-Duy` |
-| Video demo ≥6 phút, unlisted, tiếng Việt | **Đạt** — https://youtu.be/hCf4bXwzx2A · **11:49** (yêu cầu ≥6:00) · `isUnlisted:true`, **không** Private · tool + Activity Monitor cùng khung · có đoạn **Agent Skill end-to-end** (§7) |
+| Video demo ≥6 phút, unlisted, tiếng Việt | **Đạt** — https://youtu.be/hCf4bXwzx2A · **11:49** (yêu cầu ≥6:00) · `isUnlisted:true`, xem được bằng link · tool + Activity Monitor cùng khung · có đoạn **Agent Skill end-to-end** (§7) |
 | GitHub Issues cho 2 bug | **Đạt** — [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289), **có ảnh nhúng sẵn** |
 | Task 3 — flow chart + trade-off | **Đạt** — main-report §4 · **§4.4: đã chạy 6 lượt CI thật, 1 lượt build ĐỎ** ([`ci/ci-runs.md`](ci/ci-runs.md)) |
 | [git-log/commit-log.txt](git-log/) | Xuất bằng `bash tools/commit-plan.sh log` |
@@ -238,8 +238,8 @@ bash tools/verify-all.sh          # 34 PASS · 0 FAIL
 bash tools/package.sh 100 --check # kiểm bộ tài liệu; repo public vẫn phải kiểm bên ngoài
 ```
 
-**Còn một mục CHƯA đạt và nó cần bạn, không phải script:** đề §14 đòi **link repo công khai**, repo
-HW05 hiện là **private**. Xem [§10](#10-repo-đang-private--phải-xử-lý-trước-khi-nộp).
+**Trạng thái §14:** repo bài làm đã được chuyển sang **public** và link công khai đã được kiểm tra.
+Xem [§10](#10-repo-công-khai).
 
 Video demo: https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt, có tool và
 Activity Monitor trong cùng khung và một đoạn Agent Skill end-to-end.
@@ -251,18 +251,10 @@ chứng dựng mà §11 phạt · **cột điểm §3** đã điền ·
 **Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) ·
 [#289](https://github.com/DuyITLOR/group05_eshop/issues/289)** đã mở kèm ảnh nhúng.
 
-## 10. Repo đang PRIVATE — phải xử lý trước khi nộp
+## 10. Repo công khai
 
-Đề §14 đòi **link GitHub repository công khai**. Repo [HW05-Performance-Testing](https://github.com/DuyITLOR/HW05-Performance-Testing)
-hiện là **private**, nên yêu cầu này **chưa đạt**.
-
-**Đừng bật public trực tiếp.** Lịch sử repo từng có commit `88d27a1` chứa 5 ảnh chụp toàn màn hình lọt
-dữ liệu riêng tư (IP nội bộ, cửa sổ Zalo/Gmail, số điện thoại khách hàng trong một CRM). Chúng đã bị
-xoá khỏi cả history bằng `reflog expire` + `gc --prune=now` + `push --force-with-lease`, **nhưng
-GitHub vẫn có thể trả về commit theo SHA cho tới khi nó tự dọn**. Bật public là mở luôn cửa đó.
-
-**Cách an toàn:** tạo repo mới, push bản làm việc hiện tại (không mang history cũ), rồi dùng link đó
-cho §14.
+Repo [HW05-Performance-Testing](https://github.com/DuyITLOR/HW05-Performance-Testing) đã được xác
+nhận ở trạng thái **PUBLIC** ngày 17/08/2026. Link này đáp ứng yêu cầu repository công khai của §14.
 
 ## 11. Năm điều quyết định cách đọc mọi con số của bài này
 
@@ -272,9 +264,9 @@ cho §14.
    Xem [§2.8](report/main-report.md).
 2. **Load generator và SUT cùng một máy.** JMeter CPU đỉnh **118,3 / 178,3 / 205,2 / 49,3%** (Load/Stress/Spike/Soak), nhiều hơn `node` ở cả bốn
    lượt.
-3. **Mật khẩu lưu plaintext** ([`server.js:46`](../eshop-sut/backend/server.js#L46)) — login không tốn
+3. **Mật khẩu lưu plaintext** ([`server.js:46`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L46)) — login không tốn
    CPU băm, nên p95 24ms của nó **không** đại diện cho hệ thống băm mật khẩu đúng cách.
 4. **Lockout kích hoạt sau 2 lần sai, không phải 3** (`login_attempts + 2`, ngưỡng 3 —
-   [`server.js:54`](../eshop-sut/backend/server.js#L54)). Mọi `403` là **hành vi chức năng**.
+   [`server.js:54`](https://github.com/ttbhanh/eshop-sut/blob/main/backend/server.js#L54)). Mọi `403` là **hành vi chức năng**.
 5. **Bước 5 chỉ ghi thật 400 lần mỗi lượt**; 99,2% sample ở Stress trả 400 do FR-10 chặn trước lệnh
    `UPDATE`. Tín hiệu ghi nặng nằm ở **bước 4**.

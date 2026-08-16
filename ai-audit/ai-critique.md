@@ -2,30 +2,24 @@
 
 - **Sinh viên:** Lê Nhựt Duy — **MSSV:** 23127178
 
-> §10 đòi một đoạn **200–300 từ** trả lời ba câu: AI sai ở đâu · vì sao nó không tự bắt được ·
-> nguyên tắc rút ra. Đếm lại số từ:
-> ```bash
-> sed -n '/^## Critique/,$p' ai-audit/ai-critique.md | sed '1d' | wc -w
-> ```
-
 ## Critique
 
-AI Audit ghi mười bảy lỗi, nhưng chỉ **một loại** đáng viết. Nhiều lỗi lộ khi đối chiếu `.jtl`, code
-và resource CSV: dữ liệu test tự khoá tài khoản, 4xx hợp lệ bị tính thành lỗi, số chép nhầm giữa hai lượt.
+Trong bài này, AI giúp em tổng hợp log. Tuy nhiên, AI khá dễ
+kết luận khi số liệu chưa đủ. Lỗi rõ nhất là khi nó so sánh hai lượt chạy cách nhau hai ngày, thấy
+p95 chênh lệch rồi cho rằng nguyên nhân đến từ kích thước database. Giải thích về SQLite một writer
+nghe hợp lý nên lúc đầu em gần như tin theo. Nhưng lượt chạy sau cho kết quả ngược
+lại: database lớn hơn khoảng mười sáu lần mà p95 giảm từ 26ms xuống 7ms. Vì vậy kết luận trước đó
+không đủ bằng chứng.
 
-Ba lỗi còn lại cùng một hình dạng. Lần rõ nhất: AI so hai lượt cách nhau hai ngày, thấy p95 chênh
-vài lần, kết luận **kích thước dữ liệu** là nguyên nhân, kèm cơ chế thuyết phục về SQLite một writer.
-Nó gọi đó là "phát hiện quan trọng nhất của bài". Lượt sạch hôm sau bác bỏ: database lớn hơn mười sáu
-lần mà p95 vẫn **thấp hơn** — 26 xuống 7ms. Biến tương quan mạnh nhất nằm ở cột `load_1m` mà AI tự
-ghi ra nhưng không đọc — vẫn chưa đủ gọi là nguyên nhân.
+Theo em, AI không phát hiện lỗi này vì nó ưu tiên tạo một lời giải thích hợp lý từ kiến thức có sẵn,
+thay vì kiểm tra các biến đã được kiểm soát hay chưa. Prompt ban đầu của em cũng chỉ yêu cầu phân
+tích kết quả, chưa yêu cầu AI tìm giả thuyết ngược lại hoặc đề nghị chạy thêm để xác nhận.
 
-Vì sao không tự bắt được? Vì cơ chế nó viện ra **đúng về lý thuyết** — SQLite thật sự có một writer.
-Nhưng cơ chế đúng không chứng minh được nó gây ra con số đang xét.
+Một lỗi tương tự xuất hiện với kết quả CI. Từ một lượt đo, AI nói runner chậm hơn máy local 12,6
+lần. Ba lượt cùng cấu hình sau đó lại có p95 là 101, 15 và 8ms. Độ dao động giữa các lượt lớn hơn
+chênh lệch mà AI vừa quy cho phần cứng.
 
-Rút ra nguyên tắc cũng không bảo vệ được ai: lần thứ ba xảy ra **trong lúc đang viết mục này**. Đo
-**một** lượt CI, AI viết ngay "runner chậm hơn local 12,6 lần". Ba lượt cùng cấu hình sau cho p95
-101, 15 và 8ms — phương sai lớn hơn hiệu số nó vừa quy cho phần cứng.
-
-Nghi ngờ mạnh nhất phải dành cho kết luận **nghe hay nhất**. Lỗi kỹ thuật tự lộ khi chạy; một giải
-thích nhân quả sai sống lâu vì nó thoả mãn người đọc. Biết tên lỗi không ngăn được việc mắc nó — chỉ
-thêm một điểm dữ liệu mới ngăn được.
+Bài học em rút ra là không nên tin ngay một kết luận chỉ vì phần giải thích nghe hợp lý. Với
+performance testing, em cần xem log gốc, ghi lại điều kiện chạy và có thêm lượt đo trước khi kết
+luận nguyên nhân. AI phù hợp để gợi ý và hỗ trợ đọc dữ liệu, còn quyết định cuối cùng vẫn phải do em
+tự kiểm chứng.

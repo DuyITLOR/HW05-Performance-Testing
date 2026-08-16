@@ -5,8 +5,9 @@
 - **Cổng ngưỡng:** [`tools/ci-gate.mjs`](../tools/ci-gate.mjs)
 - **Ngày chạy:** 2026-08-15
 
-> **Vì sao có file này thay vì chỉ dẫn link Actions:** repo bài làm là **private**, nên URL của
-> Actions run người chấm không mở được. Toàn bộ output cổng ngưỡng chép nguyên văn vào đây.
+> **Vì sao vẫn giữ file này dù repo đã public:** link Actions và artifact là bằng chứng bên ngoài,
+> có thể hết hạn hoặc thay đổi quyền truy cập. Toàn bộ output cổng ngưỡng được chép nguyên văn vào
+> đây để bản ZIP tự chứa đủ bằng chứng.
 
 Workflow hiện thực nhánh **"PR pipeline"** của flow chart §4: checkout SUT → khởi động → seed qua
 API → sinh test plan từ **cùng một** định nghĩa workflow → JMeter non-GUI → **cổng ngưỡng quyết
