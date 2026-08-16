@@ -1,3 +1,35 @@
+* 35a5d65 2026-08-17 01:31:09 +0700 DuyITLOR
+|   docs: finalize the HW05 submission package
+| Fixes the Task 3 PDF flowchart so it fits on one page, distinguishes the CI prototype that actually ran from proposal-only extensions, and removes the optional design-log PDF and retrospective section. Rewrites the AI critique in the student's voice while preserving the 200-300 word requirement. Converts SUT source references to public GitHub links, synchronizes the repository status, and rebuilds every affected PDF.
+| 
+|  .github/workflows/perf-smoke.yml      |   4 +-
+|  README.md                             |  30 +++++-------
+|  TASKS.md                              |   6 +--
+|  ai-audit/ai-audit-report.md           |  12 ++---
+|  ai-audit/ai-audit-report.pdf          | Bin 711425 -> 711211 bytes
+|  ai-audit/ai-critique.md               |  44 ++++++++---------
+|  ai-audit/ai-critique.pdf              | Bin 56495 -> 37175 bytes
+|  ai-audit/design-log.md                |   6 +--
+|  ai-audit/design-log.pdf               | Bin 249086 -> 0 bytes
+|  ai-audit/task2-ai-output-verbatim.pdf | Bin 255022 -> 255022 bytes
+|  bug-report/bug-report.md              |  16 +++----
+|  bug-report/bug-report.pdf             | Bin 349229 -> 349075 bytes
+|  ci/ci-runs.md                         |   5 +-
+|  docs/endpoint-selection.md            |  20 ++++----
+|  report/assets/task3-flowchart.svg     |   1 +
+|  report/main-report.md                 |  82 +++++++++++++-------------------
+|  report/main-report.pdf                | Bin 1014776 -> 1043719 bytes
+|  report/task3-flowchart.mmd            |  27 +++++++++++
+|  tools/md2pdf.py                       |   6 +++
+|  19 files changed, 131 insertions(+), 128 deletions(-)
+| 
+* a574c72 2026-08-17 00:38:10 +0700 DuyITLOR
+|   docs: refresh the submission commit log
+| 
+|  git-log/commit-log.txt | 58 ++++++++++++++++++++++++++++++++++++++++++++++++
+|  tools/commit-plan.sh   | 14 ++++++------
+|  2 files changed, 65 insertions(+), 7 deletions(-)
+| 
 * f8128d4 2026-08-17 00:38:05 +0700 DuyITLOR
 |   docs(task2): restore the real AI output and review it against raw logs
 | Replaces the reconstructed Task 2 passage with two verbatim Claude transcript extracts that were actually produced after JTL execution and during the student review. Records prompt/output timestamps and UUIDs, maps seven claims to raw JTL/resource evidence, and separates observations from unsupported causal conclusions. Also corrects the three-digit package format, stale account-pool wording, skill evidence, critique count, and PDF build interpreter selection.
