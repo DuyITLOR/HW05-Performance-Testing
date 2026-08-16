@@ -1,6 +1,6 @@
 # Test summary — HW05 Performance Testing
 
-> **Sinh tự động** bởi `npm run summary` lúc 2026-08-16T12:46:45.263Z, đọc từ raw `.jtl`.
+> **Sinh tự động** bởi `npm run summary` lúc 2026-08-16T17:34:20.226Z, đọc từ raw `.jtl`.
 > Đừng sửa tay. Mọi con số trong `report/main-report.md` và `README.md` phải khớp bảng này.
 > Percentile tính theo **nearest-rank**; JMeter dashboard nội suy khác một chút nên chênh
 > vài ms ở p99 là bình thường — không phải dấu hiệu file `.jtl` sai.

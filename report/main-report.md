@@ -322,7 +322,7 @@ con số đó thì kết luận "có rò rỉ bộ nhớ". Sự thật: RSS leo 
 **phẳng suốt 12 phút** — nửa đầu 74,5 MB, nửa sau 78,3 MB, chênh **+5,0%**. Đã sửa tool để so
 nửa-đầu/nửa-sau; ghi thành lỗi #13 trong AI audit.
 
-### 2.8 Một phát hiện tôi đã tự bác bỏ — và biến số thật hiện ra sau ba lượt
+### 2.8 Một phát hiện tôi đã tự bác bỏ — và biến gây nhiễu hiện ra sau ba lượt
 
 Bản báo cáo trước của chính tôi có một mục mang tên *"phát hiện quan trọng nhất của bài"*: so hai
 batch chạy cách nhau hai ngày, thấy p95 chênh **2,4–6,4 lần**, và kết luận rằng **kích thước dữ liệu
@@ -342,8 +342,8 @@ phải tăng theo. Thực tế p95 đi **26 → 7 → 18 ms** — không theo d�
 
 Đọc theo cột `load_1m`: **5,2 → 3,1 → 5,7**, và p95 đi **26 → 7 → 18**. Cùng chiều, cả ba điểm.
 
-Biến số thật là **tải nền của máy**. Lúc đo vẫn có 4 container Docker (`postgres`, `redis`, `qdrant`,
-`adminer`), VS Code, Chrome và một tiến trình AI agent chạy song song.
+Biến **tương quan mạnh nhất trong ba lượt** là tải nền của máy. Lúc đo vẫn có 4 container Docker
+(`postgres`, `redis`, `qdrant`, `adminer`), VS Code, Chrome và một tiến trình AI agent chạy song song.
 
 **Sai ở chỗ nào, gọi tên chính xác:** ở bản đầu tôi chỉ có **hai** điểm dữ liệu và chúng khác nhau ở
 **nhiều biến cùng lúc** (thời điểm, tải nền, kích thước dữ liệu, cả bug sampler ở lỗi #8). Tôi chọn
@@ -362,8 +362,9 @@ Mức độ lan của lỗi: kết luận đó từng là **headline của READM
 
 > Trên máy cá nhân dùng chung với công việc khác, `load_1m` là **biến tương quan mạnh nhất trong ba
 > điểm dữ liệu này** — chưa đủ để gọi là nguyên nhân. Nó chênh 1,8 lần (3,1 → 5,7) trong khi p95 chênh
-> **2,6 lần**; để so sánh, tăng số VU **gấp 10 lần** (20 → 200) chỉ làm p95 đi từ 8 lên 18 ms, tức
-> **2,25 lần**. Điều nói được: **nhiễu môi trường lớn hơn tín hiệu mình chủ động tạo ra.**
+> **2,6 lần**; để so sánh, tăng số VU **gấp 10 lần** (20 → 200) đi kèm p95 từ 8 lên 18 ms, tức
+> **2,25 lần**. Điều nói được: trong các lượt không kiểm soát này, độ dao động đi kèm môi trường đủ
+> lớn để che tín hiệu tải; chưa thể quy phần chênh lệch cho riêng `load_1m`.
 
 **Vì sao không gọi `load_1m` là nguyên nhân, dù rất muốn.** Ba điểm dữ liệu, không có lượt nào **giữ
 mọi biến khác cố định rồi chỉ đổi tải nền** — tức vẫn là *tương quan*, đúng loại lập luận mà mục này
@@ -384,83 +385,78 @@ thực hơn là giữ một kết luận không đứng được.
 
 ## 3. Task 2 — AI phân tích và soát lỗi đọc metric
 
-### 3.1 Phân tích kiểu-AI dùng làm đối tượng soát — **bản dựng lại, KHÔNG phải log thật**
+### 3.1 Phân tích của AI — khôi phục nguyên văn từ transcript thật
 
-> **Phải đọc trước khi chấm mục này.** Đoạn dưới **không phải** output được ghi lại từ một phiên AI
-> độc lập. Nó do chính phiên làm việc này **viết ra** cùng lúc với bảng soát lỗi ở §3.2 — tức một
-> bản *dựng lại* đại diện cho kiểu kết luận mà AI thường đưa ra khi được cho `.jtl`.
->
-> Bản báo cáo trước gắn nhãn *"nguyên văn, chưa sửa"*. **Đó là một khẳng định sai về nguồn gốc**, và
-> nó bị một người review ngoài phát hiện bằng cách đọc lại lịch sử phiên làm việc. Sửa nhãn thay vì
-> để nguyên, vì để nguyên là bằng chứng dựng — đúng thứ §11 cấm.
->
-> **Phần nào của mục 3 vẫn đứng vững:** mọi **giá trị đúng** ở cột giữa của §3.2 đều được **tính lại
-> từ raw `.jtl` và `results/resources/*.csv`**, kiểm được bằng `npm run verify` và
-> `node tools/ci-gate.mjs`. Bảy lỗi đọc metric là bảy **cách đọc sai thật** trên **số liệu thật** —
-> cái không thật là việc có một AI cụ thể đã nói đúng bảy câu đó.
->
-> **Phần bị mất:** đề đòi chuỗi *prompt AI → AI đề xuất ngưỡng → sinh viên review*. Chuỗi đó **chưa
-> được thực hiện và ghi lại**. Tự trừ điểm ở §3 của README vì lý do này.
->
-> **Cách làm đúng, nếu còn thời gian:** mở một phiên AI **mới chưa đọc báo cáo này**, đưa `.jtl` kèm
-> prompt *"phân tích các file này và đề xuất ngưỡng"*, **giữ nguyên output**, rồi soát lại đúng cái
-> nó nói. Phiên hiện tại không làm được việc đó một cách trung thực vì nó đã biết trước mọi kết luận.
+Phần này dùng **hai output Claude Code có thật**, không dùng đoạn dựng lại của bản báo cáo cũ:
 
-Nội dung dựng lại — cố ý viết theo lối "nghe hợp lý mà sai", đúng kiểu hay gặp:
+1. Ngày **13/08 14:12**, sau khi bốn JTL đầu tiên đã chạy xong, AI trả bảng Load/Stress/Spike/Soak,
+   nhận định về bottleneck, hồi phục Spike và ngưỡng endurance.
+2. Ngày **15/08 22:20**, sau prompt *"nguyên cái task 2 thì bạn đã xử lý nó ntn"*, AI đưa ngưỡng
+   `p95 < 50ms` và bốn đề xuất WAL/index/connection-pool/scale ngang.
 
-> Kết quả tốt. Cả bốn scenario 0% error. Stress đạt **540 RPS với p95 18ms** — backend xử lý 200
-> người dùng đồng thời tốt, chỉ chậm hơn 2 lần so với 20 người (8ms). Average 9,6ms. Soak 12 phút
-> không rò rỉ bộ nhớ (RSS 19,7 → 64,8 MB là bình thường). So với batch trước p95 tăng từ 7 lên 18ms,
-> có thể do database đã lớn hơn. Đề xuất ngưỡng: p95 < 50ms, error < 1%. Hệ thống đạt yêu cầu.
+Prompt, timestamp và **toàn bộ output nguyên văn** được giữ riêng tại
+[`ai-audit/task2-ai-output-verbatim.md`](../ai-audit/task2-ai-output-verbatim.md). File đó còn ghi
+SHA-256 của transcript nguồn tại thời điểm trích. Các câu sai không được sửa trong vật chứng; phần
+đính chính chỉ nằm ở §3.2–§3.3 dưới đây.
+
+Trích output A đúng như AI đã viết sau lượt chạy đầu:
+
+> **Phát hiện chính:** Stress không tìm được điểm gãy — nhưng không phải vì SUT mạnh. JMeter ngốn
+> CPU đỉnh **158%** ở 200 VU trong khi `node` chỉ đỉnh **79%**. Giới hạn nằm ở load generator.
+>
+> **Spike hồi phục < 20 giây** [...] Nghĩa là 47ms là chi phí khởi tạo 200 thread + 200 login đồng
+> thời, không phải server nghẽn.
+>
+> **Endurance threshold:** 63,0 req/s ổn định 12 phút, p95 trôi **−14,3%** [...].
+
+Đây là output AI thật trên **batch 13/08**, không phải batch cuối. Các JTL của batch đó vẫn được giữ
+nguyên trong bộ nộp, nên từng số có thể tính lại. Dùng batch cũ làm đối tượng review là hợp lệ; dùng
+nó làm số chính của báo cáo hiện tại thì không — bảng chính vẫn lấy batch cuối 15/08.
 
 ### 3.2 Soát lại — chỗ AI đọc sai metric
 
-| # | AI nói | Giá trị đúng từ raw `.jtl` / resources | Sai ở đâu |
+| # | AI nói thật trong transcript | Giá trị đúng từ raw `.jtl` / resources | Human review — sai hoặc thiếu ở đâu |
 |---|---|---|---|
-| 1 | *"p95 tăng từ 7 lên 18ms, có thể do database đã lớn hơn"* | DB tăng từ ~830k lên ~900k dòng (**+8%**), nhưng `load_1m` tăng từ **3,1 lên 5,7** (+84%). Ba batch: `load_1m` 5,2/3,1/5,7 → p95 26/7/18 | **Lỗi nặng nhất, và là đúng lỗi tôi từng tự mắc (§2.8).** Chênh 2,6 lần p95 không thể do dữ liệu tăng 8%. AI chọn giả thuyết nghe hợp lý thay vì đọc cột `load_1m` trong file resources mà chính bộ tool này đã ghi ra |
-| 2 | *"backend xử lý 200 người dùng đồng thời tốt"* | p95 8 → 18ms là đúng, **nhưng** `node` CPU đi từ **20,3% → 97,7%** (`results/resources/23127178_Stress_20260815-153717.resources.csv`) | Đọc p95 mà bỏ CPU thì kết luận ngược. Server giữ được p95 bằng cách **dùng gần hết một lõi**, tức đang sát trần chứ không "tốt" |
-| 3 | *"Average 9,6ms"* | avg 9,6 nhưng p99 **124ms**, max **3691ms** | p99 gấp **12,9 lần** avg, max gấp **384 lần**. Có request phải chờ **gần 4 giây**. Ở lượt Load tỉ lệ p99/avg chỉ 3,2 — nghĩa là đuôi **dãn theo tải**, và average xoá sạch điều đó |
-| 4 | *"Cả bốn scenario 0% error"* | Đúng, nhưng **99,2%** sample bước 5 ở Stress trả `400`, và **95,7%** bước 6 trả `403` | 0% đúng **nhờ test plan đã sửa** để coi hai loại 4xx đó là hợp lệ. Chỉ **0,8%** request bước 5 chạm tới lệnh ghi thật |
-| 5 | *"RSS 19,7 → 64,8 MB là bình thường"* | Kết luận đúng nhưng **lập luận rỗng**. Số đúng để dùng: nửa đầu **74,5** → nửa sau **78,3 MB** = **+5,0%** | AI lấy đúng cặp số mà **tool của tôi in ra sai** (mẫu đầu chưa warm-up). Nó không kiểm lại, chỉ gắn chữ "bình thường". Trùng hợp đúng kết luận không phải là phân tích — xem lỗi #13 |
-| 6 | *"Đề xuất ngưỡng p95 < 50ms"* | p95 đo được 18ms | Ngưỡng rộng gấp **2,8 lần** giá trị hiện tại → không phát hiện được hồi quy nào cho tới khi hệ thống xấu đi gần 3 lần. Ngưỡng hồi quy phải **tương đối** (+20% so với baseline), không phải một số tuyệt đối chọn cho dễ đạt |
-| 7 | *"Hệ thống đạt yêu cầu"* | `node` CPU 97,7%; max 3691ms | Đạt yêu cầu **nào**? Không có SLA nào được nêu trước. Kết luận "đạt" khi chưa có ngưỡng là kết luận rỗng |
+| 1 | *"Giới hạn nằm ở load generator"* | Batch 13/08: Stress `264.141` sample, p95 **26ms**; file resources cùng lượt ghi `node_cpu_pct=0` suốt lượt do lỗi bắt sai PID, còn Java đỉnh **157,5%** | Con số `node 79%` trong output **không truy ngược được từ file resources đã giữ**, nên chưa đủ định vị bottleneck. Batch cuối đo được `node 97,7%` và JMeter `178,3%`, nhưng vì hai process cùng máy, dữ liệu chỉ chứng minh **cả generator lẫn SUT đều tiêu tài nguyên**, không tách được phần latency của từng bên |
+| 2 | *"47ms là chi phí khởi tạo 200 thread + 200 login đồng thời, không phải server nghẽn"* | Raw Spike 13/08 có p95 tổng **9ms**, p95 đỉnh cửa sổ **47ms**; bốn lượt cho đỉnh **47/8/12/9ms** trong khi CPU `node` gần nhau | Label chậm nhất là login làm giả thuyết này hợp lý, nhưng không có scheduler/network trace để gán nguyên nhân hay loại trừ server. Kết luận đúng phải là: **có spike ngắn, nguyên nhân chưa xác định** |
+| 3 | *"Endurance threshold: 63,0 req/s"* | Soak 13/08 chạy 12 phút ở **63,0 RPS**, p95 **6ms**, error 0%, p95 không trôi xấu | Đây là **mức ổn định cao nhất đã kiểm chứng**, chưa phải ngưỡng tối đa phần cứng: bài không chạy soak theo nhiều bậc cao hơn cho tới khi vi phạm tiêu chí |
+| 4 | *"364.011 sample, 0% error"* | Raw batch 13/08 đúng 0% theo cờ assertion; tuy nhiên Stress bước 5 có nhiều `400` hợp lệ và nhánh lockout có `401/403` hợp lệ | 0% không có nghĩa toàn bộ response là 2xx. Phải đọc phân bố response code và assertion; nếu không sẽ hiểu sai mức tải ghi thật |
+| 5 | Interaction B nhắc lại *"ngưỡng p95 < 50ms"* như output AI | Batch cuối p95 Stress **18ms**; 50ms rộng gấp **2,8 lần**. Ba lượt CI cùng cấu hình còn dao động **101/15/8ms** | Ngưỡng tuyệt đối 50ms không có SLA làm căn cứ và quá rộng để bắt hồi quy local. Đề xuất dùng **error <1%**, đủ sample và cờ hồi quy p95 **>20% so với baseline đo cùng runner**, sau đó chạy lại xác nhận |
+| 6 | *"server hấp thụ trọn cú sốc"* | Lượt nộp có p95 5–7ms trong cửa sổ sốc, nhưng bốn lượt Spike có p95 đỉnh **47/8/12/9ms** | Một lượt sạch chỉ cho phép nói **không quan sát thấy suy giảm trong lượt đó**; không đủ khái quát khả năng hấp thụ mọi spike |
+| 7 | *"chạy `node` nhiều worker [...] trần hiện tại là trần một-luồng"* | Batch cuối: `node` đỉnh **97,7% một lõi**, máy 12 lõi; workload có SQLite một writer | Nhiều worker là giả thuyết kiểm được, không phải tối ưu đã chứng minh. Nó có thể tăng read concurrency nhưng cũng có thể làm write contention nặng hơn; phải A/B test cùng snapshot DB và tải nền tương đương |
 
 **Hai phép kiểm nữa, chạy ngày 16/08, và cả hai đều SẠCH.** Ghi lại vì một phép kiểm không tìm ra
 lỗi vẫn là bằng chứng — nó loại bỏ hai cách phản biện bảng trên:
 
 | Phép kiểm | Kết quả | Ý nghĩa |
 |---|---|---|
-| **`elapsed` có bị thổi bởi thời gian truyền body không?** JMeter ghi `elapsed` = trọn vòng, `Latency` = tới byte đầu tiên | p95 của hai cột **bằng nhau** ở cả 4 lượt (8/18/7/8 ms); hiệu trung bình **0,04–0,07 ms**; `Connect` p95 = **1 ms** | Mọi con số p95 trong báo cáo **là thời gian server xử lý**, không phải chi phí mạng. Body nhỏ và cả hai đầu ở `localhost`, nên không có chỗ cho ai nói "p95 của bạn gồm cả truyền dữ liệu" |
-| **Thread đỉnh có chạm mức cấu hình không?** Nếu peak thread < cấu hình thì nghẽn nằm ở **load generator**, không ở SUT | Stress **200/200** · Spike **212/212** · Load và Soak **22/22** | JMeter **cấp đủ** thread đã yêu cầu ở mọi lượt. Nên tuy JMeter tốn CPU nhiều hơn `node` (§3.5), nó **không** làm hụt mức tải — mức tải đo được là mức tải thiết kế |
+| **`elapsed` có bị thổi bởi thời gian nhận body sau byte đầu không?** JMeter ghi `elapsed` = trọn vòng, `Latency` = tới byte đầu tiên | p95 của hai cột bằng nhau ở cả 4 lượt (8/18/7/8 ms); hiệu trung bình **0,04–0,07 ms**; `Connect` p95 = **1 ms** | Phần truyền body **sau byte đầu** gần như không đáng kể trên localhost. Điều này **không biến elapsed thành thời gian nội bộ thuần của server**: nó vẫn gồm client scheduling, kết nối và network stack |
+| **Thread đỉnh có chạm mức cấu hình không?** | Stress **200/200** · Spike **212/212** · Load và Soak **22/22** | JMeter đã cấp đủ số thread cấu hình. Kết quả này không tự chứng minh generator không nghẽn hay mọi request đến đúng nhịp; phải đọc thêm RPS, CPU Java và phân bố theo thời gian |
 
 *(Hai phép kiểm này lấy từ bảng 6 kiểu đọc sai trong [`.claude/skills/jtl-analysis/SKILL.md`](../.claude/skills/jtl-analysis/SKILL.md)
 mục 3 và mục 6 — hai mục mà bảy lỗi ở trên **chưa** phủ. Chạy skill thật thì thấy chỗ hở đó.)*
 
-**Điểm chung:** sáu trong bảy lỗi đến từ việc **đọc một metric mà bỏ metric đi kèm** — p95 mà bỏ CPU,
-average mà bỏ p99, error rate mà bỏ phân bố response code, chênh lệch giữa hai lượt mà bỏ `load_1m`.
-Không lỗi nào do đọc sai con số; tất cả do đọc **thiếu** con số.
+**Điểm chung:** AI nhiều lần nâng một quan sát thành quan hệ nhân quả hoặc thành ngưỡng tổng quát.
+Human review phải truy ngược đúng file raw, kiểm metric đi kèm và tách **đã đo được** khỏi **giả
+thuyết cần A/B test**.
 
 ### 3.3 Đề xuất tối ưu — feasible hay hallucinated
 
-> **Nguồn gốc, nói cho đúng:** bốn đề xuất kỹ thuật dưới (WAL · index · connection pool · scale ngang)
-> **không** nằm trong đoạn dựng lại ở §3.1 — chúng là **danh mục đề xuất thường gặp** cho loại SUT này,
-> lấy từ mẫu trong `.claude/skills/jtl-analysis/SKILL.md`. Việc đáng chấm ở đây **không** phải "AI đã
-> nói gì", mà là **phân loại đúng/sai trên SUT cụ thể này kèm cách kiểm chứng** — và phần đó dựa trên
-> việc đọc `server.js` thật.
+> **Nguồn gốc:** WAL · index · connection pool · scale ngang xuất hiện thật trong Interaction B
+> ngày 15/08; xem output nguyên văn trong phụ lục. Bảng dưới là phần human review sau khi đọc
+> `server.js` và đối chiếu raw log.
 
 | Đề xuất | Phân loại | Lý do | Cách kiểm chứng |
 |---|---|---|---|
-| *"database đã lớn hơn"* (giải thích chênh lệch) | **hallucinated** | DB tăng 8%, `load_1m` tăng 84%. AI bịa nguyên nhân cho hiện tượng nó không đo | — |
-| *"hệ thống đạt yêu cầu, không cần tối ưu"* | **Sai** | `node` CPU 97,7% ở 200 VU, max 3691ms | Đẩy quá 200 VU ở `load_1m` thấp, xem error bật lên ở đâu |
-| Bật SQLite **WAL** | **feasible** | Đúng loại tải: bước 4 ghi 3 dòng/request, bước 1 ghi 1 dòng/login. Một dòng `PRAGMA journal_mode=WAL` | Chạy lại Stress ở **cùng `load_1m`**, so p95 của `import-products` và `login` |
-| Thêm index cho `orders.user_id` | **feasible** | `GET /api/admin/orders` JOIN theo `user_id`, không index | `CREATE INDEX` rồi chạy lại, so p95 đúng label đó |
-| Connection pool cho SQLite | **hallucinated** | `sqlite3` của Node mở handle trên file cục bộ, không phải client-server | — |
-| Scale ngang / replica | **hallucinated trong phạm vi bài** | SUT là một process trên máy cá nhân | — |
+| Bật SQLite **WAL** | **Feasible để thử, chưa chứng minh có lợi** | SUT dùng SQLite và có đọc/ghi xen kẽ; nhưng hiện dùng một handle nên lợi ích có thể nhỏ | A/B test cùng snapshot DB và `load_1m`, so p95/p99 riêng `login` và `import-products` |
+| Thêm index cho `orders.user_id` | **Ít căn cứ cho query hiện tại** | Route admin trả **toàn bộ orders**, `LEFT JOIN users` theo khóa chính rồi `ORDER BY orders.id`; index `orders.user_id` không chắc tránh được full scan | Chạy `EXPLAIN QUERY PLAN` trước/sau; chỉ giữ nếu plan hoặc p95 endpoint cải thiện |
+| Connection pool cho SQLite | **Hallucinated theo nghĩa pool DB client-server** | `sqlite3` đang mở file cục bộ; thêm nhiều connection không bỏ giới hạn một writer và có thể tăng lock contention | Nếu vẫn thử, đo `SQLITE_BUSY`, error rate và p99 ghi; không mặc định pool sẽ nhanh hơn |
+| Scale ngang / replica | **Ngoài phạm vi và thiếu thiết kế** | Nhiều process không thể chia sẻ một file SQLite như replica DB client-server một cách an toàn mặc định | Chỉ đánh giá sau khi đổi tầng lưu trữ hoặc thiết kế replication; không dùng làm kết luận của bài này |
 
-**Bốn đề xuất của tôi mà AI không nêu:**
+**Bốn đề xuất bổ sung sau human review:**
 
-1. **Chạy `node` với cluster / nhiều worker.** Căn cứ mạnh nhất từ số liệu: CPU chạm 97,7% của **một**
-   lõi trong khi máy còn **11 lõi rảnh**. Trần hiện tại là trần một-luồng, không phải trần phần cứng.
+1. **Thử `node` cluster / nhiều worker như một A/B test.** CPU chạm 97,7% của một lõi trong khi máy
+   có 12 lõi, nhưng SQLite một writer có thể làm kết quả xấu hơn; không gọi đây là tối ưu trước khi đo.
 2. **Kiểm soát tải nền khi đo.** §2.8: tương quan mạnh nhất đo được. Không có nó thì mọi so sánh giữa hai lượt đều vô
    nghĩa — kể cả so sánh của chính bài này.
 3. **Dọn dữ liệu test sau mỗi lượt.** Bộ test tự đẩy `products` từ 5 dòng lên ~900.000. Để một biến
@@ -554,8 +550,8 @@ chúng là `POST /api/login` — khớp với việc login phải khởi tạo 2
 lõi chỉ để *sinh* tải.
 
 Hệ quả trực tiếp lên cách đọc mọi số p95 của bài: load generator và SUT **dùng chung 12 lõi**, nên
-một phần latency đo được là **thời gian JMeter tự chờ chính nó**, không phải thời gian server xử lý.
-Không tách được phần đó ra bằng dữ liệu đang có.
+latency đo được có thể chứa thời gian phía load generator bị trì hoãn ngoài thời gian SUT xử lý.
+Dữ liệu hiện có không tách được hai phần đó.
 
 Và chính tỉ lệ này cũng **không ổn định giữa các lượt** — thêm một trường hợp của §3.4:
 
@@ -646,7 +642,7 @@ cùng lúc với job của người khác. Nên baseline **không thể** là "p
 | **Báo động giả** | Nguồn nhiễu lớn nhất là **máy chạy**. Bài này đo trên cấu hình load generator và SUT **cùng máy**; riêng việc `java` chạy qua Rosetta thay vì arm64 đã đủ làm sai lệch. Vì thế ngưỡng 20% chứ không phải 5%, và đòi lặp lại 2 lượt. Cái phải trả: hồi quy **nhỏ mà thật** (10–15%) sẽ lọt |
 | **Độ tin của baseline** | p95 **tuyệt đối** không so được giữa hai runner khác cấu hình. Baseline phải là p95 của **cùng commit `main`, cùng runner, cùng lượt CI** — mỗi lượt chạy hai lần và chỉ so tỉ lệ. Gấp đôi chi phí, và đó là giá của việc con số có nghĩa |
 | **Bỏ sót** | Lọc theo `backend/` bỏ sót ít nhất ba loại hồi quy: (1) frontend gọi API nhiều hơn — tải tăng mà backend không đổi dòng nào; (2) hồi quy chỉ hiện sau 10 phút chạy liên tục, mà lượt 3 phút không thấy; (3) hồi quy do **dữ liệu** phình chứ không do code. Mục (3) là thứ bài này **không chứng minh được** — xem §2.8 — nên nó ở đây với tư cách **giả thuyết chưa kiểm**, không phải phát hiện |
-| **Nhiễu áp đảo tín hiệu** | Trade-off quan trọng nhất, và nó có số đo — **cập nhật theo batch được nộp**: §2.8 cho thấy `load_1m` chênh 1,8 lần (3,1 → 5,7) làm p95 chênh **2,6 lần**, trong khi tăng VU **gấp 10 lần** (20 → 200) chỉ làm p95 đi từ **8 lên 18ms**, tức **2,25 lần**. Nhiễu môi trường **lớn hơn** tín hiệu chủ động tạo ra. §4.4 xác nhận độc lập trên CI: ba lượt **giống nhau từng tham số** cho p95 **101/15/8ms** (**12,6 lần**). Hệ quả: mọi so sánh **tuyệt đối** giữa hai lượt CI là vô giá trị; chỉ so tỉ lệ trong cùng một lượt. Cái phải trả: gấp đôi thời gian CI cho mỗi PR |
+| **Phương sai môi trường có thể che tín hiệu** | Trong các lượt của bài, `load_1m` 3,1 → 5,7 đi cùng p95 7 → 18ms (**2,6 lần**), còn Load 20 VU → Stress 200 VU đi cùng p95 8 → 18ms (**2,25 lần**); đây không phải phép thử cô lập biến. Trên CI, ba lượt cùng cấu hình cho p95 **101/15/8ms**. Vì vậy không chặn PR chỉ bằng hai số tuyệt đối từ hai runner khác nhau; ưu tiên baseline đo cùng runner và chạy lại xác nhận. Cái phải trả: tăng thời gian CI |
 | **Ngưỡng đo cái gì** | Đo p95, không đo average — §3.2 mục 3: ở Stress p99 gấp **13,0 lần** avg (124 vs 9,6ms). Nhưng p95 cũng không bắt được đuôi: max **3.691ms** trong khi p95 18ms, gấp **205 lần**. Và tỉ lệ p99/avg **dãn theo tải** (Load **3,2×** → Stress **13,0×**), nên chính tỉ lệ đó là chỉ số bão hoà tốt hơn cả p95 → theo dõi **p95, p99 và tỉ lệ p99/avg**, chỉ chặn PR theo p95 |
 | **Perf test tự làm hỏng điều kiện đo của nó** | Chính bộ test này đã đẩy `products` từ ~50k lên 436k dòng. Nếu chạy trong CI mà không dọn, mỗi lượt lại chậm hơn lượt trước vì lý do không liên quan gì tới code → baseline trôi và mọi so sánh mất nghĩa. Bắt buộc: teardown dọn dữ liệu, hoặc restore snapshot DB trước mỗi lượt |
 
@@ -766,13 +762,12 @@ còn 11 lõi rảnh. Đó là trần kiến trúc (một luồng JS), không ph�
 
 Năm giới hạn, xếp theo mức ảnh hưởng tới kết luận:
 
-1. **Tải nền của máy không được kiểm soát.** §2.8 chứng minh đây là biến **áp đảo** bằng ba điểm dữ
-   liệu: `load_1m` 5,2 / 3,1 / 5,7 → p95 Stress 26 / 7 / 18 ms. Chênh 1,8 lần tải nền tạo ra chênh
-   2,6 lần p95, trong khi tăng VU gấp 10 lần chỉ tạo chênh 2,25 lần. Lúc đo vẫn có 4 container Docker,
-   VS Code, Chrome và một tiến trình AI agent chạy song song. Mọi con số trong báo cáo chỉ có nghĩa
-   **kèm điều kiện `load_1m` ≈ 3,3–5,7**.
+1. **Tải nền của máy không được kiểm soát.** Ba lượt có `load_1m` 5,2 / 3,1 / 5,7 đi cùng p95
+   Stress 26 / 7 / 18 ms. Đây là tương quan và cảnh báo về confounding, không chứng minh tải nền là
+   nguyên nhân. Lúc đo vẫn có 4 container Docker, VS Code, Chrome và một AI agent chạy song song;
+   mọi số phải kèm điều kiện `load_1m` ≈ 3,3–5,7.
 2. **Load generator và SUT chạy trên cùng một máy.** JMeter tiêu CPU đỉnh **49,3–205,2%** tuỳ lượt (Load 118,3 · Stress 178,3 · Spike 205,2 · Soak 49,3) —
-   nhiều hơn `node` ở ba lượt. Một phần latency đo được là chi phí của chính JMeter.
+   nhiều hơn `node` ở cả bốn lượt. Latency có thể bị ảnh hưởng bởi tranh chấp tài nguyên với JMeter.
 3. **Mật khẩu lưu plaintext, so sánh bằng `===`** ([`server.js:46`](../../eshop-sut/backend/server.js#L46)).
    Không có bcrypt/argon2 nên login không tốn CPU băm. p95 24ms của `POST /api/login` ở 200 VU
    **không** đại diện cho hệ thống băm mật khẩu đúng cách.

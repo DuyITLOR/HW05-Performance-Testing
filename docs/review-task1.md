@@ -103,14 +103,16 @@ quyết gì ở mỗi bước, không phải AI. Tôi cố ý để trống, kh�
 
 | File | Dòng | Cột | Dùng ở bước |
 |---|---|---|---|
-| [`data/users.csv`](../data/users.csv) | 50 | `email,password,expect` | 1 — **mỗi VU một tài khoản riêng** |
+| [`data/users.csv`](../data/users.csv) | 50 | `email,password,expect` | 1 — pool tài khoản hợp lệ; đủ một account/VU ở Load/Soak, tái sử dụng ở Stress/Spike |
 | [`data/users_lockout.csv`](../data/users_lockout.csv) | 2 | `email,password,expect_regex` | 6 — **file riêng** |
 | [`data/products_import.csv`](../data/products_import.csv) | 60 | `name,price,description,category_id` | 4 |
 | [`data/orders.csv`](../data/orders.csv) | 400 | `order_id,next_status` | 5 |
 
 Hai quyết định đáng review:
 
-1. **Mỗi VU một tài khoản.** Dùng chung một dòng `users` là tự tạo write-contention trên đúng dòng đó (login nào cũng `UPDATE login_attempts` — `server.js:47`), tức đo ra nghẽn của **cách sinh tải** chứ không phải của endpoint.
+1. **Không dùng một account duy nhất.** Pool 50 account giảm write-contention trên một dòng
+   (`login` luôn `UPDATE login_attempts` — `server.js:47`), nhưng Stress 200 VU vẫn trung bình bốn VU
+   dùng chung một account; đây là giới hạn dữ liệu phải ghi rõ.
 2. **Nhánh lockout dùng file CSV riêng.** Bản đầu để 2 dòng mật khẩu sai ở cuối `users.csv`; luồng chính đọc chính file đó với `recycle=true` nên **tự khoá tài khoản của mình** → 2,9% iteration vô giá trị. Đây là lỗi #5 trong bảng human review.
 
 ### Tự kiểm

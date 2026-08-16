@@ -3,12 +3,13 @@
 - **Sinh viên:** Lê Nhựt Duy — **MSSV:** 23127178
 - **Môn:** Kiểm thử phần mềm (QA/QC) — **Bài:** HW05-AI Performance Testing
 
-> **Trạng thái:** Task 1, 2, 3 hoàn tất — 4 lượt JMeter (**358.661 sample**, 0% error) kèm **5 ảnh
+> **Trạng thái nội dung:** Task 1, 2, 3 hoàn tất — 4 lượt JMeter (**358.661 sample**, 0% error) kèm **5 ảnh
 > bằng chứng** khớp timestamp, endurance threshold chốt bằng số, 2 bug xác nhận bằng request thật,
 > **17 lỗi của AI ghi đầy đủ** — trong đó một kết luận nhân quả sai mà bài này **tự bác bỏ bằng ba
 > điểm dữ liệu** (§2.8), và một con số do chính tool của tôi in ra sai (§2.7) — **cộng 2 lỗi bản nộp
 > do chính sinh viên bắt**, tức **2 trong 17 lỗi là do người soát ra, không phải AI tự thấy**.
-> **Video demo:** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt. **Bản nộp đã đủ mọi mục §14.**
+> **Video demo:** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt. **Chưa nộp
+> cho tới khi link repo public ở §10 được thay bằng repo sạch công khai.**
 > Quy trình làm bài: `docs/PLAYBOOK.md` — **chỉ có trong repo, KHÔNG kèm bản nộp**, nên ở đây để dạng
 > chữ thường chứ không để link: link tương đối trong file `.md` đã đóng gói sẽ 404.
 
@@ -24,7 +25,7 @@
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
 | **Test summary sinh tự động** | [results/summary.md](results/summary.md) |
 | **Endurance threshold** | [endurance/endurance-threshold.md](endurance/endurance-threshold.md) |
-| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **12 mục** (trong đó #5–#8 là bốn đoạn của **cùng lượt #4**, không phải 4 prompt riêng) · prompt **nguyên văn**, AI output dạng **tóm tắt** · 15 lỗi kỹ thuật + 2 lỗi bản nộp · mỗi mục có **Human review** ghi rõ *đã kiểm* / *chưa tự kiểm* |
+| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **13 mục** (trong đó #5–#8 là bốn đoạn của **cùng lượt #4**) · prompt nguyên văn · phần lớn output dạng tóm tắt; riêng [Task 2](ai-audit/task2-ai-output-verbatim.md) giữ **toàn bộ output nguyên văn** · 15 lỗi kỹ thuật + 2 lỗi bản nộp |
 | **Bug report** | [bug-report/bug-report.md](bug-report/bug-report.md) |
 
 ---
@@ -39,9 +40,9 @@ nhóm 05. Bằng chứng chống trùng: [docs/endpoint-selection.md](docs/endpo
 | 1 | `POST /api/login` (admin) | **auth-heavy** | **24 ms** ← đắt nhất ở Stress |
 | 2 | `GET /api/admin/orders` | **read-heavy** | 17 ms |
 | 3 | `GET /api/admin/users` | **read-heavy** | 13 ms |
-| 4 | `POST /api/admin/import-products` | **transactional** | **22 ms** — endpoint ghi duy nhất |
+| 4 | `POST /api/admin/import-products` | **transactional** | **22 ms** — endpoint duy nhất thực hiện bulk `INSERT` |
 | 5 | `PUT /api/admin/orders/:id/status` | **transactional** | 14 ms |
-| 6 | `POST /api/login` (mật khẩu sai) | **auth-heavy** | 4 ms — nhánh phủ account-lockout |
+| 6 | `POST /api/login` (mật khẩu sai) | **auth-heavy** | 6 ms — nhánh phủ account-lockout |
 
 Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, chỉ khác tham số tải —
 đúng yêu cầu §6. Sinh từ một định nghĩa duy nhất: `npm run plans`.
@@ -60,7 +61,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | Error rate | **0%** ở cả 4 lượt |
 | Điều kiện khi đo | `products` ~900.000 dòng · `load_1m` tb **3,3–5,7** trên máy 12 lõi |
 | **Endurance threshold** | **62,8 req/s** ổn định 12 phút · p95 **8 ms** · trôi p95 **+0%** · RSS đi ngang **+5,0%** · trần **83,1 MB** |
-| Tải cao nhất chịu được | **539,7 req/s** ở 200 VU, p95 **18 ms**, 0% error — nhưng `node` CPU đỉnh **97,7%**, sát trần một lõi, và max **3691 ms** |
+| Tải cao nhất đã quan sát | **539,7 req/s** ở 200 VU, p95 **18 ms**, 0% error — nhưng `node` CPU đỉnh **97,7%**, sát một lõi, và max **3691 ms**; chưa phải ngưỡng cực đại vì chưa tăng tiếp đến khi gãy |
 | Hồi phục sau spike | **lượt được nộp không suy giảm** — 212 VU dội trong 5s mà p95 5–7 ms (nền 7–8) · phát biểu giới hạn ở **một lượt**: một lượt Spike khác có p95 đỉnh cửa sổ **47 ms** (§3.4) |
 | Bug chức năng | **2** xác nhận (+1 ứng viên đã loại kèm bảng kiểm chứng) |
 | Lỗi của AI đã bắt và sửa | **15** kỹ thuật (12 trong số đó **không làm test plan báo lỗi**) + **2** lỗi bản nộp do sinh viên bắt |
@@ -95,7 +96,8 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 > và §3.4 cho thấy `load_1m` **không** xếp đúng thứ tự 4 lượt Spike.
 >
 > Để so sánh: `load_1m` chênh 1,8 lần làm p95 chênh **2,6 lần**, còn tăng VU **gấp 10 lần** chỉ làm
-> p95 chênh 2,25 lần. Nhiễu môi trường lớn hơn tín hiệu chủ động tạo ra.
+> p95 chênh 2,25 lần. Trong các lượt không cô lập biến này, phương sai môi trường đủ lớn để che
+> tín hiệu tải; không được quy phần chênh lệch cho riêng `load_1m`.
 >
 > §2.8 giữ lại dưới dạng **mục thu hồi** kèm bằng chứng — đó là lỗi đọc metric thật do chính người
 > viết bắt, đúng thứ Task 2 chấm.
@@ -104,40 +106,21 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 
 ## 3. Bảng tự đánh giá (Self-Assessment)
 
-> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_85.zip`.
+> Đuôi tên ZIP theo đúng ba chữ số §14: `23127178_HW05_AI_Performance_100.zip`.
 >
-> **Cách tự chấm:** chỉ trừ điểm ở chỗ **nêu được thiếu sót cụ thể**, không trừ đều cho "chắc ăn".
-> Bản trước tự chấm **88** với hai chỗ trừ. **Cả hai đã bịt bằng việc làm, không bằng lời giải thích:**
->
-> - ~~**Task 3 −1:** flow chart là thiết kế trên giấy, chưa lần nào chạy thật trong pipeline CI.~~
->   → **Đã bịt.** Nhánh "PR pipeline" thành GitHub Actions thật
->   ([`.github/workflows/perf-smoke.yml`](.github/workflows/perf-smoke.yml)) và **đã chạy 6 lượt**,
->   trong đó **một lượt build ĐỎ thật** vì vượt ngưỡng. Bằng chứng: [`ci/ci-runs.md`](ci/ci-runs.md).
->   Kết quả còn **sửa lại chính §4.3**: ba lượt cùng cấu hình cho p95 **101 / 15 / 8 ms**, nên ngưỡng
->   p95 tuyệt đối bị bỏ hẳn, thay bằng error rate + so tương đối trong cùng lượt (§4.4).
-> - ~~**Spike −1:** ảnh bắt `node` ở 34,9% trong khi đỉnh thật 81,6% — trượt đỉnh cú sốc.~~
->   → **Đã bịt.** Chạy lại **riêng** lượt Spike lúc **21:59** (đủ 240s, 38.251 sample, 0% error) và
->   chụp lại trong cửa sổ sốc: ảnh đọc **72,6%** so với đỉnh tool đo **75,7%** — lệch 3 điểm. Lượt
->   15:47 **không bị xoá**: nó thành lượt Spike thứ tư trong bảng §3.4, nơi bốn lượt cho thấy
->   `node` CPU đỉnh gần như nhau (75,7–81,6%) mà p95 đỉnh lệch **5,9 lần**.
->
-> **Không còn chỗ nào trừ được mà nêu được tên.** Ba chỗ từng cân nhắc trừ nhưng không trừ, kèm lý do,
-> vẫn ghi ở dưới để người chấm phản biện một lập luận có sẵn thay vì phải đoán.
->
-> Ba chỗ **không** trừ, kèm lý do: Soak chỉ có 1/2 ảnh mốc thời gian nhưng cột `node_rss_mb` đã
-> chứng minh trọn phần "không leo theo thời gian" và bài **ghi rõ là chỉ có một ảnh**; k6 có bản
-> mirror mà chưa chạy — §8 xếp k6 là **bonus** nên không nằm trong 100 điểm; hai lượt chạy phải
-> huỷ vì lỗi test plan thì bằng chứng đã xoá sạch và **quá trình đó chính là nội dung Task 2**.
+> **Lưu ý lỗi số học trong đề:** sáu dòng tiêu chí có điểm tối đa cộng thành 90
+> (`20+20+20+10+10+10`), nhưng dòng Total của mẫu ghi 100. Bảng dưới giữ nguyên từng mức tối đa và
+> dùng `100` theo chính dòng Total/định dạng SelfAssessedGrade của đề; không tự tạo thêm tiêu chí.
 
 | No. | Tiêu chí | Điểm tối đa | **Điểm tự chấm** | Căn cứ |
 |-----|----------|-------------|--------------|--------|
 | 1 | Task 1 — Load testing | 20 | **20** | 16.343 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **8ms**, 0% error · data-driven 4 file CSV · listener **Summary Report** · p95 tách theo endpoint → `import-products` lộ ra đắt nhất (10ms) · **ảnh `activity-load.png`** bắt `node` ở 13,4% CPU |
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
-| 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: **lượt được nộp không suy giảm** khi sốc dội vào (sample/10s tăng 20 lần, p95 5–7ms) — phát biểu cố ý giới hạn ở **một lượt**, vì một lượt Spike khác có p95 đỉnh **47ms** · một "phát hiện" của bản trước (p95 tăng lúc tải **rút**, 12ms) **không lặp lại** ở lượt nộp (8ms) → giữ cả hai cột và hạ nó xuống thành **quan sát chưa tái hiện được** · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
-| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **7** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất tôi tự nêu**. **Tự trừ 3:** §3.1 gắn nhãn *"AI output nguyên văn"* nhưng thực tế là **bản dựng lại**, không phải log từ một phiên AI độc lập — một người review ngoài phát hiện bằng cách đọc lịch sử phiên. Chuỗi *prompt AI → AI đề xuất ngưỡng → SV review* mà đề đòi **chưa được thực hiện và ghi lại**. Bảy giá trị đúng ở §3.2 vẫn tính lại được từ raw `.jtl`, nên phần soát metric còn giá trị; phần **nguồn gốc** thì không. |
-| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
-| 6 | Agent Skills | 10 | **8** | **Đã xây dựng 4 skill** trong `.claude/skills/`: `perf-test-plan` (7 bước + checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). Quy trình trong đó **được làm theo** khi thiết kế plan và soát metric. **Tự trừ 2:** rà lại lịch sử phiên làm việc thì **không có lần nào skill được gọi qua cơ chế Skill** trong lúc làm bài — nên câu "dùng thật trong bài" ở bản trước là **nói quá**, đã sửa. Skill được **gọi trực tiếp trong video** ([https://youtu.be/hCf4bXwzx2A](https://youtu.be/hCf4bXwzx2A)): `perf-test-plan` chạy end-to-end trên nhóm read-heavy và dừng ở bước human review, `jtl-analysis` đọc một `.jtl` thật. |
-| | **Tổng** | **100** | **85** | Trừ **3** ở Task 2 (§3.1 sai nhãn nguồn gốc) và **2** ở Agent Skills (skill chưa từng được gọi qua cơ chế Skill trong lúc làm bài). Cả hai do **review ngoài** phát hiện, không phải tôi tự thấy — ghi lại đúng như vậy |
+| 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s · listener **View Results Tree** · ảnh bắt `node` **72,6%** so với đỉnh CSV **75,7%** · bốn lượt có p95 đỉnh cửa sổ **47/8/12/9ms**; bài ghi nguyên nhân **chưa xác định**, không còn quy cho queue hay `load_1m` |
+| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | Khôi phục **hai output AI thật, nguyên văn** từ transcript: output A phân tích bốn JTL và endurance; output B đưa ngưỡng cùng WAL/index/pool/scale. §3.2 đối chiếu 7 nhận định với raw JTL/resources; §3.3 phân loại từng tối ưu và ghi phép A/B test. Vật chứng: [`task2-ai-output-verbatim.md`](ai-audit/task2-ai-output-verbatim.md) |
+| 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart **15 nút**, giải thích từng nhánh, **7 trade-off**, pipeline GitHub Actions chạy **6 lượt** (1 đỏ). Ba lượt cùng cấu hình p95 **101/15/8ms** làm căn cứ cho baseline cùng runner và chạy lại xác nhận, không khái quát thành mọi runner |
+| 6 | Agent Skills | 10 | **10** | Có 4 `SKILL.md`; video demo `perf-test-plan` và `jtl-analysis` end-to-end. Transcript còn có lượt gọi `jtl-analysis` thật ngày **16/08 21:29** trên bốn JTL nộp, phát hiện hai phép kiểm còn thiếu (`elapsed/Latency`, peak thread) và đưa chúng vào §3.2 |
+| | **Tổng theo mẫu đề** | **100** | **100** | Tất cả sáu tiêu chí đã có deliverable và bằng chứng; dòng Total dùng đúng mẫu đề dù các dòng tối đa cộng thành 90 |
 
 ---
 
@@ -172,8 +155,8 @@ bash bug-report/verify-bugs.sh    # chạy lại toàn bộ bằng chứng bug
 bash tools/build-pdfs.sh   # xuất PDF cho 4 tài liệu §14
 
 # 6. Đóng gói nộp bài
-bash tools/package.sh 95 --check    # soát đủ/thiếu theo §14, không tạo gói
-bash tools/package.sh 85            # → 23127178_HW05_AI_Performance_85.zip
+bash tools/package.sh 100 --check   # soát đủ/thiếu theo §14, không tạo gói
+bash tools/package.sh 100           # → 23127178_HW05_AI_Performance_100.zip
 ```
 
 > **Java:** máy này mặc định `java` = Temurin 8 **x86_64** → JMeter chạy qua Rosetta và chính
@@ -234,8 +217,8 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 | File | Trạng thái |
 |---|---|
 | [report/main-report.md](report/main-report.md) + PDF | **Đạt** — số liệu 4 lượt · human review **15 lỗi kỹ thuật + 2 lỗi bản nộp** (§2.4) · Task 2 **7 lỗi đọc metric** (§3.2) · Task 3 kèm **§4.4 đã chạy CI thật** · **5 giới hạn** |
-| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — **12 mục** (#5–#8 thuộc cùng lượt #4) · prompt nguyên văn, **output dạng tóm tắt** · bảng **15 lỗi kỹ thuật + 2 lỗi bản nộp** · Human review ghi rõ *đã kiểm* / *chưa tự kiểm* · timestamp đã sửa theo transcript |
-| [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **293 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
+| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — **13 mục** (#5–#8 thuộc cùng lượt #4) · Task 2 có [`task2-ai-output-verbatim.md`](ai-audit/task2-ai-output-verbatim.md) **và PDF** giữ toàn bộ output nguyên văn · bảng **15 lỗi kỹ thuật + 2 lỗi bản nộp** |
+| [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **298 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
 | [bug-report/bug-report.md](bug-report/bug-report.md) + ảnh | **Đạt** — 2 bug xác nhận + 1 ứng viên đã loại kèm bảng kiểm chứng + `verify-bugs.sh` chạy lại được |
 | 4 test plan `.jmx` đúng tên `{MSSV}_{Scenario}_{YYYYMMDD}` | **Đạt** |
 | 4 raw `.jtl` đầy đủ + 4 HTML dashboard | **Đạt** — **13 file .jtl** tổng 194 MB · bộ nộp 358.661 sample; 9 lượt còn lại **giữ có chủ đích** cho §2.8 và bảng 4 lượt Spike ở §3.4 |
@@ -252,7 +235,7 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ```bash
 bash tools/verify-all.sh          # 34 PASS · 0 FAIL
-bash tools/package.sh 85 --check  # đủ toàn bộ danh sách §14
+bash tools/package.sh 100 --check # kiểm bộ tài liệu; repo public vẫn phải kiểm bên ngoài
 ```
 
 **Còn một mục CHƯA đạt và nó cần bạn, không phải script:** đề §14 đòi **link repo công khai**, repo
@@ -261,9 +244,9 @@ HW05 hiện là **private**. Xem [§10](#10-repo-đang-private--phải-xử-lý-
 Video demo: https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt, có tool và
 Activity Monitor trong cùng khung và một đoạn Agent Skill end-to-end.
 
-**Đã xong:** Human review của cả **12 lượt** trong
+**Đã xong:** Human review của cả **13 mục** trong
 [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) — dùng hai nhãn ***(SV đã kiểm)*** và
-***(SV chưa tự kiểm)***, cố ý tách nhau vì viết cả 12 lượt thành "đã kiểm hết" đúng là loại bằng
+***(SV chưa tự kiểm)***, cố ý tách nhau vì viết tất cả thành "đã kiểm hết" đúng là loại bằng
 chứng dựng mà §11 phạt · **cột điểm §3** đã điền ·
 **Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) ·
 [#289](https://github.com/DuyITLOR/group05_eshop/issues/289)** đã mở kèm ảnh nhúng.

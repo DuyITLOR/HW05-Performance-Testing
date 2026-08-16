@@ -16,7 +16,7 @@
 >    sửa theo transcript, và ghi chú ngay tại từng lượt cả giá trị cũ để thấy được đã sửa gì.
 > 2. **#5, #6, #7, #8 không phải bốn lượt tương tác độc lập.** Chúng là bốn *đoạn đọc kết quả và
 >    sửa lỗi* **trong cùng lượt #4** — trường "Prompt" của chúng ghi rõ "cùng lượt #4". Đếm "12
->    lượt" là đếm **mục trong file này**, không phải 12 prompt riêng của sinh viên. Số prompt riêng
+>    lượt" là đếm **mục trong file này**, không phải 13 prompt riêng của sinh viên. Số prompt riêng
 >    ít hơn.
 > 3. **Trường "AI output" là *tóm tắt*, không phải nguyên văn.** Đề đòi *"The AI output"*; ở đây
 >    output được rút gọn cho đọc được. Prompt thì nguyên văn.
@@ -38,7 +38,7 @@
 > - ***(SV chưa tự kiểm)*** — chỗ tôi **nhận theo bằng chứng AI đưa ra** mà không kiểm độc lập,
 >   kèm việc cụ thể lẽ ra phải làm để kiểm.
 >
-> Ghi nhãn thứ hai là có chủ ý. Viết cả 12 lượt thành "đã kiểm hết" thì nhanh hơn, nhưng đó đúng
+> Ghi nhãn thứ hai là có chủ ý. Viết mọi mục thành "đã kiểm hết" thì nhanh hơn, nhưng đó đúng
 > là loại bằng chứng dựng mà §11 phạt — và một bản audit không có dòng nào tự nhận là chưa kiểm
 > thì tự nó đáng ngờ.
 
@@ -142,12 +142,14 @@
 - **Task / Scenario:** Load · Stress · Spike · Soak
 - **Bước trong quy trình:** `perf-test-plan` bước 1→7
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-13 12:00
+- **Date & time:** 2026-08-13 **12:07** (prompt); output tổng kết sau JTL lúc **14:12**
 - **Prompt:**
   ```
   hãy thực hiện toàn bộ giùm tui
   ```
-- **AI output (tóm tắt):** Cài JMeter, seed 50 tài khoản + 430 order + 3 file CSV, viết
+- **AI output:** Bản tóm tắt quy trình ở dưới; riêng output tổng kết bốn JTL lúc 14:12 được giữ
+  **nguyên văn** trong [`task2-ai-output-verbatim.md`](task2-ai-output-verbatim.md). AI cài JMeter,
+  seed 50 tài khoản + 430 order + 3 file CSV, viết
   `tools/gen-test-plans.py` sinh 4 `.jmx` từ **một** định nghĩa workflow dùng chung (§6 đòi 3
   plan cùng workflow), chạy smoke test 20s, sửa lỗi, rồi chạy 3 lượt chính + soak.
 - **AI sai / bỏ sót:** **Hai lỗi thật trong test plan do AI sinh, smoke test mới lộ ra:**
@@ -358,9 +360,9 @@
   làm đi
   ```
   *(tiếp nối "okay sửa cho tui đi" — chạy lại batch sạch để `.jmx` khớp `.jtl` sau khi sửa lỗi #11)*
-- **AI output (tóm tắt):** Batch 15/08 cho p95 Stress **7ms** — trong khi batch 14/08 cho **70ms** với
-  cùng test plan. Kiểm `load_1m` trong file resources thì thấy nguyên nhân, và nó không phải nguyên
-  nhân đã viết trong báo cáo.
+- **AI output (tóm tắt):** Batch 15/08 cho p95 Stress **7ms** — trong khi batch 13/08 cho **26ms** với
+  cùng test plan. Kiểm `load_1m` trong file resources cho thấy một biến tương quan mạnh hơn kích
+  thước DB, nhưng chưa đủ để gọi là nguyên nhân.
 - **AI sai / bỏ sót:**
   12. **Kết luận nhân quả từ một so sánh không kiểm soát biến nào.** Báo cáo từng có mục §2.8 mang tên
       *"phát hiện quan trọng nhất của bài"*: so hai batch, thấy p95 chênh 2,4–6,4 lần, kết luận
@@ -383,11 +385,10 @@
   hồi, không xoá** — vì đó là nội dung giá trị nhất cho Task 2, một lỗi đọc metric thật, có bằng
   chứng, do chính bài này bắt được. Xoá đi thì bài trông sạch hơn mà mất đúng phần đáng đọc.
   ***(SV chưa tự kiểm)*** Tôi **không tự chạy lại** batch 13/08 để tái hiện điều kiện tải nền, và
-  cũng không tự mở 4 file `resources-*.csv` đối chiếu cột `load_1m` — tôi nhận theo 4 cặp số trong
-  §2.8. Nói cho đúng: điều tôi kiểm được là **kết luận cũ đã sai** (DB lớn hơn 16 lần mà nhanh hơn
-  ~10 lần thì không thể do kích thước dữ liệu); còn `load_1m` **là** nguyên nhân thay thế thì với
-  4 điểm dữ liệu vẫn là **tương quan**, và §2.8 phải nói đúng như vậy chứ không được nâng lên
-  thành nhân quả lần thứ hai.
+  cũng không tự mở 4 file `resources-*.csv` đối chiếu cột `load_1m` — tôi nhận theo các cặp số trong
+  §2.8. Nói cho đúng: batch DB lớn hơn nhưng p95 thấp hơn **3,7 lần** (26 → 7ms) bác bỏ xu hướng đơn
+  điệu mà kết luận cũ dựa vào; nó **không chứng minh** kích thước dữ liệu không có ảnh hưởng. Tương
+  tự, `load_1m` chỉ là tương quan, không được nâng lên thành nguyên nhân thay thế.
 - **Commit:** `docs: retract the data-growth finding the new batch disproves`
 
 ### Interaction #10 — Tool của tôi in ra một con số dẫn tới kết luận sai
@@ -516,6 +517,35 @@
 - **Commit:** `ci: run the Task 3 pipeline for real instead of describing it`
 
 <!-- NEW_INTERACTION_MARKER -->
+
+### Interaction #13 — Gọi thật Agent Skill `jtl-analysis`
+
+- **Task / Scenario:** Task 2 + Agent Skills — soát bốn JTL của batch nộp
+- **Bước trong quy trình:** `jtl-analysis` bước 0→4
+- **AI tool:** Claude Code (Opus 5), cơ chế Skill
+- **Date & time:** 2026-08-16 **21:29**
+- **Prompt / Arguments:**
+  ```
+  Soát lại 4 file .jtl của batch được nộp
+  (results/jtl/23127178_Load_20260815-152938.jtl,
+  results/jtl/23127178_Stress_20260815-153717.jtl,
+  results/jtl/23127178_Spike_20260815-215939.jtl,
+  endurance/jtl/23127178_Soak_20260815-155240.jtl)
+  theo đúng quy trình trong skill: tính lại metric từ raw, soát các kiểu đọc sai metric,
+  và chốt endurance threshold. Ghi lại phát hiện nào chưa có trong báo cáo.
+  ```
+- **AI output (tóm tắt):** Tính lại metric và chạy hai phép kiểm mà bảy dòng review cũ chưa phủ:
+  `elapsed` so với `Latency`, và peak thread so với cấu hình. Kết quả: p95 hai cột bằng nhau ở bốn
+  lượt, hiệu trung bình 0,04–0,07ms, Connect p95 1ms; peak thread đạt 22/22, 200/200, 212/212.
+- **AI sai / bỏ sót:** Output ban đầu diễn giải hai kết quả quá mạnh: gọi p95 là **thời gian server
+  xử lý thuần**, và coi đạt peak thread là bằng chứng load generator **không** làm hụt tải. Thực tế
+  elapsed vẫn gồm client scheduling/network stack; peak thread chỉ chứng minh thread đã được cấp,
+  không chứng minh nhịp request hay generator không nghẽn.
+- **Human review:** ***(SV đã kiểm)*** Tôi yêu cầu đích danh bốn file JTL nộp và yêu cầu chỉ ghi phát
+  hiện chưa có. Sau khi đối chiếu lại định nghĩa JMeter và giới hạn generator/SUT cùng máy, hai câu
+  quá mạnh được hạ xuống ở `report/main-report.md §3.2`: body transfer sau byte đầu gần như bằng 0;
+  thread đạt cấu hình, nhưng cả hai kết quả không tách được thời gian nội bộ server.
+- **Commit:** `docs(task2): two checks from actually running the jtl-analysis skill, both clean`
 
 ---
 

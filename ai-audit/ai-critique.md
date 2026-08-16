@@ -10,8 +10,8 @@
 
 ## Critique
 
-AI sai mười bảy lần, nhưng chỉ **một loại** đáng viết ra. Mười bốn lỗi lộ ra ngay khi đọc `.jtl`:
-dữ liệu test tự khoá tài khoản của chính nó, 4xx hợp lệ bị tính thành lỗi, số chép nhầm giữa hai lượt.
+AI Audit ghi mười bảy lỗi, nhưng chỉ **một loại** đáng viết. Nhiều lỗi lộ khi đối chiếu `.jtl`, code
+và resource CSV: dữ liệu test tự khoá tài khoản, 4xx hợp lệ bị tính thành lỗi, số chép nhầm giữa hai lượt.
 
 Ba lỗi còn lại cùng một hình dạng. Lần rõ nhất: AI so hai lượt cách nhau hai ngày, thấy p95 chênh
 vài lần, kết luận **kích thước dữ liệu** là nguyên nhân, kèm cơ chế thuyết phục về SQLite một writer.

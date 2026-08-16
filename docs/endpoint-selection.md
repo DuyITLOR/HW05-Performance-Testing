@@ -49,8 +49,9 @@ xuất hiện trong đăng ký của bất kỳ ai**, nên workflow là duy nh�
 1. **Lockout kích hoạt sau 2 lần sai, không phải 3.** `login_attempts + 2` với ngưỡng 3
    ([`server.js:54-58`](../../eshop-sut/backend/server.js#L54)) → 2 lần sai mật khẩu là khoá
    180 giây. Ở Stress/Spike, dùng chung vài tài khoản là tự tạo ra một đợt 403 hàng loạt và
-   rất dễ đọc sai thành "server sụp". Cách xử lý: mỗi VU một tài khoản riêng từ
-   [`data/users.csv`](../data/users.csv), nhánh test lockout dùng **tài khoản riêng biệt**
+   rất dễ đọc sai thành "server sụp". Cách xử lý: dùng pool **50 tài khoản hợp lệ** từ
+   [`data/users.csv`](../data/users.csv) (một tài khoản/VU ở Load/Soak; tái sử dụng theo vòng ở
+   Stress/Spike), còn nhánh test lockout dùng **tài khoản riêng biệt**
    (`perf_23127178_lockout_*`), và reset trước mỗi lượt bằng `npm run reset:lockout`.
 2. **Không có rate limiting ở bất kỳ route nào.** Mọi 4xx đo được đến từ lockout / token /
    body sai — không phải throttling. Đừng giải thích 403 bằng "server tự bảo vệ".
@@ -68,7 +69,7 @@ xuất hiện trong đăng ký của bất kỳ ai**, nên workflow là duy nh�
 
 | File | Cột | Dùng ở bước |
 |---|---|---|
-| [`data/users.csv`](../data/users.csv) | `email,password,expect` | 1 — mỗi VU một tài khoản, **chỉ tài khoản đăng nhập được** |
+| [`data/users.csv`](../data/users.csv) | `email,password,expect` | 1 — pool 50 tài khoản hợp lệ; ở Stress/Spike nhiều VU sẽ tái sử dụng cùng account |
 | [`data/users_lockout.csv`](../data/users_lockout.csv) | `email,password,expect_regex` | nhánh lockout — **file riêng**, xem lý do dưới |
 | [`data/products_import.csv`](../data/products_import.csv) | `name,price,description,category_id` | 4 — body của import |
 | [`data/orders.csv`](../data/orders.csv) | `order_id,next_status` | 5 — id order thật; chỉ `confirmed`, là chuyển đổi hợp lệ duy nhất từ `pending` |

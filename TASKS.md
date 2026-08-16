@@ -14,9 +14,9 @@ phân biệt "con số này đo được" với "con số này được viết r
 bash tools/verify-all.sh      # hoac: npm run verify
 ```
 
-Script đó tính lại mọi con số **từ `.jmx` · `.jtl` · `.csv` · mtime của ảnh**, rồi so với con số
-đang in trong báo cáo. Lệch thì in `[FAIL]` kèm **cả hai giá trị**. Nó không đọc số từ file `.md`
-nào để tính — `.md` chỉ dùng để so.
+Script tính lại **các invariant đã được cài kiểm tra** từ `.jmx` · `.jtl` · `.csv` · mtime của ảnh,
+rồi so với báo cáo. Nó không chứng minh mọi câu văn, nguồn gốc AI, nội dung hình hay trạng thái public
+của repo; các mục đó nằm ở danh sách kiểm tay cuối file.
 
 Trạng thái hiện tại: **34 PASS · 0 FAIL**.
 
@@ -38,7 +38,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 | Phủ **3 endpoint group** + *briefly justify* | [`report/main-report.md §1.2`](report/main-report.md) — bảng 6 bước, cột "Vì sao đáng đo" | `grep 'HTTPSampler.path' test-plans/23127178_Load_*.jmx` |
 | **Không trùng** trong nhóm (§5) | [`report/main-report.md §1.1`](report/main-report.md) — bảng đăng ký nhóm 05 · bản đầy đủ: [`docs/endpoint-selection.md`](docs/endpoint-selection.md) | đối chiếu tay với ảnh chat nhóm — **chỉ mục này không tự động kiểm được** |
 | **Tham số** think-time / ramp-up / VU + lý do | [`report/main-report.md §2.1`](report/main-report.md) | `sed -n '/^SCENARIOS/,/^}/p' tools/gen-test-plans.py` |
-| **Dùng AI từng bước**, không một prompt gộp (§2) | [`ai-audit/design-log.md`](ai-audit/design-log.md) — **7 bước** · prompt nguyên văn: [`ai-audit/ai-audit-report.md`](ai-audit/ai-audit-report.md) — **12 lượt** | `grep -c '^### Interaction #' ai-audit/ai-audit-report.md` |
+| **Dùng AI từng bước**, không một prompt gộp (§2) | [`ai-audit/design-log.md`](ai-audit/design-log.md) — **7 bước** · prompt nguyên văn: [`ai-audit/ai-audit-report.md`](ai-audit/ai-audit-report.md) — **13 mục** | `grep -c '^### Interaction #' ai-audit/ai-audit-report.md` |
 | **Data-driven bằng CSV** | [`data/`](data/) — 4 file · §1.3 | `verify-all.sh` mục 2 — kiểm mỗi CSV **có được plan nào dùng thật** không |
 | **Ba listener khác loại** | Summary Report (Load) · Aggregate Report (Stress) · View Results Tree (Spike) | `verify-all.sh` mục 1 — đếm listener **khác loại**, phải đúng 3 |
 | **Human review** — AI sai gì, vì sao | [`report/main-report.md §2.4`](report/main-report.md) — **15 lỗi kỹ thuật + 2 lỗi bản nộp**, 3 nhóm lý do | `grep -c '^| 1[0-9] \||^| [1-9] \|' report/main-report.md` |
@@ -56,8 +56,8 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 
 | Yêu cầu của đề | Nơi đáp ứng | **Tự kiểm bằng** |
 |---|---|---|
-| **AI phân tích** `.jtl` + đề xuất ngưỡng | [`§3.1`](report/main-report.md) — nguyên văn, **chưa sửa một chữ** | đọc — chỗ này cố tình không sửa để còn cái mà soát |
-| **Soát lỗi đọc metric** kèm *"correct value from your raw `.jtl`"* | [`§3.2`](report/main-report.md) — **7 lỗi**, mỗi lỗi kèm giá trị đúng **và tên file** | `node tools/ci-gate.mjs results/jtl/23127178_Stress_20260815-153717.jtl --p95 20` → so p99/max với bảng |
+| **AI phân tích** `.jtl` + đề xuất ngưỡng | [`§3.1`](report/main-report.md) · [`task2-ai-output-verbatim.md`](ai-audit/task2-ai-output-verbatim.md) — hai output Claude thật, giữ nguyên văn từ transcript | đối chiếu timestamp, prompt và SHA-256 transcript ghi ở đầu phụ lục |
+| **Soát lỗi đọc metric** kèm *"correct value from your raw `.jtl`"* | [`§3.2`](report/main-report.md) — **7 nhận định**, mỗi dòng có file/số raw và giới hạn suy luận | `npm run summary` + đọc resource CSV đúng basename; `ci-gate.mjs` chỉ kiểm một phần metric |
 | Trong đó có lỗi của **chính báo cáo**, bị bác bỏ | [`§2.8`](report/main-report.md) — mục **thu hồi**, giữ lại thay vì xoá | so 3 batch: `npm run summary` rồi đọc `results/summary.md` |
 | Phân loại đề xuất **feasible / hallucinated** | [`§3.3`](report/main-report.md) — 6 đề xuất + **cách kiểm chứng** từng cái, + **4 đề xuất AI không nêu** | mỗi dòng feasible có cột "cách kiểm chứng" — chạy được |
 | Bản tính độc lập từ raw log để đối chất | [`results/summary.md`](results/summary.md) ← [`tools/summarize-jtl.mjs`](tools/summarize-jtl.mjs) | `npm run summary` — sinh lại, so với bản đang có |
@@ -79,14 +79,14 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 
 | Mục | Nơi đáp ứng | **Tự kiểm bằng** |
 |---|---|---|
-| §7 Agent Skills | [`.claude/skills/`](.claude/skills/) — **đã xây dựng 4 skill**; quy trình trong đó được **làm theo** khi thiết kế plan và soát metric, nhưng **không lần nào được gọi qua cơ chế Skill** trong lúc làm bài. Skill được **gọi trực tiếp trong video** | `ls .claude/skills/` · xem đoạn Agent Skill trong video |
+| §7 Agent Skills | [`.claude/skills/`](.claude/skills/) — 4 skill; video demo `perf-test-plan` + `jtl-analysis`; transcript có lượt gọi `jtl-analysis` thật ngày 16/08 21:29 trên bốn JTL | `ls .claude/skills/` · xem video · đối chiếu Interaction #13 trong AI Audit |
 | §8 Công cụ | JMeter 5.6.3 · k6 v2.1.0 ([`k6/`](k6/), bonus, **chưa chạy**) · Activity Monitor · Claude Code (Opus 5) | `jmeter -v` |
-| §9 AI Audit Report | [`ai-audit/ai-audit-report.md`](ai-audit/ai-audit-report.md) — **12 lượt**, prompt nguyên văn, mỗi lượt có Human review ghi rõ *đã kiểm* / *chưa tự kiểm* | `grep -c 'SV đã kiểm' ai-audit/ai-audit-report.md` |
-| §10 AI Critique 200–300 từ | [`ai-audit/ai-critique.md`](ai-audit/ai-critique.md) — **293 từ** | `verify-all.sh` mục 6 — đếm lại |
+| §9 AI Audit Report | [`ai-audit/ai-audit-report.md`](ai-audit/ai-audit-report.md) — **13 mục**, prompt nguyên văn, mỗi mục có Human review ghi rõ *đã kiểm* / *chưa tự kiểm* | `grep -c 'SV đã kiểm' ai-audit/ai-audit-report.md` |
+| §10 AI Critique 200–300 từ | [`ai-audit/ai-critique.md`](ai-audit/ai-critique.md) — **298 từ** | `verify-all.sh` mục 6 — đếm lại |
 | §11 Anti-AI-Cheat | tên `.jmx` đúng mẫu · `.jtl` đầy đủ · hostname khớp HW trước · mốc thời gian: [`results/run-log.md`](results/run-log.md), [`endurance/run-log.md`](endurance/run-log.md) | **`verify-all.sh` mục 1 + 4** — đây là mục kiểm được chặt nhất: ảnh phải nằm trong khoảng lượt chạy |
 | §12 Commit theo từng bước | [`git-log/commit-log.txt`](git-log/) ← [`tools/commit-plan.sh`](tools/commit-plan.sh) | `git log --oneline \| wc -l` |
-| §14 Đóng gói nộp bài | [`tools/package.sh`](tools/package.sh) — **từ chối** báo đủ khi còn thiếu | `bash tools/package.sh 100 --check` |
-| §15 Self-assessment | [`README.md §3`](README.md) — **100/100**, hai chỗ từng trừ đã bịt bằng việc làm | đọc §3, mỗi dòng có cột căn cứ |
+| §14 Đóng gói nộp bài | [`tools/package.sh`](tools/package.sh) — kiểm file bắt buộc và tạo tên điểm đúng 3 chữ số | `bash tools/package.sh 100 --check`; kiểm repo public bằng cửa sổ ẩn danh |
+| §15 Self-assessment | [`README.md §3`](README.md) — **100 theo dòng Total của mẫu đề**; ghi rõ sáu dòng tối đa trong đề chỉ cộng thành 90 | đọc §3, mỗi dòng có cột căn cứ |
 
 ---
 
@@ -100,3 +100,5 @@ Nói ra để không tạo cảm giác mọi thứ đều đã được máy xá
 3. **Nội dung nói trong video** — script kiểm được *link có trong README*, không kiểm được *trong video nói gì*. Link: https://youtu.be/hCf4bXwzx2A
 4. **k6** — có bản mirror, **chưa chạy lần nào**. §8 xếp k6 là bonus nên không tính điểm, nhưng cũng
    không được nói là đã đối chiếu chéo.
+5. **Repo public** — `gh` hiện mất đăng nhập và repo cũ từng có dữ liệu nhạy cảm trong history. Chỉ
+   nộp sau khi mở link repo sạch ở cửa sổ ẩn danh và thấy được README/test-plans/data.

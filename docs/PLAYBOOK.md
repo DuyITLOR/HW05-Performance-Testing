@@ -177,7 +177,7 @@ bash tools/build-pdfs.sh    # main-report · ai-audit-report · ai-critique · b
 | Bẫy | Hậu quả nếu sập | Cách tránh |
 |---|---|---|
 | JMeter chạy trên Java 8 x86_64 (Rosetta) | load generator tự nó là điểm nghẽn, mọi số đo nhiễu | dùng `tools/run-scenario.sh` (tự ép JAVA_HOME arm64) |
-| Dùng chung 1 tài khoản cho mọi VU | 403 hàng loạt do lockout, đọc sai thành server sụp | mỗi VU một dòng `data/users.csv` |
+| Dùng chung 1 tài khoản cho mọi VU | 403 hàng loạt do lockout, đọc sai thành server sụp | dùng pool account hợp lệ; ghi rõ khi VU vượt số account |
 | Không reset lockout giữa các lượt | lượt sau đo trên tài khoản còn bị khoá | `run-scenario.sh` tự reset; §6 đòi ghi lại bước này |
 | Bật View Results Tree ở lượt dài | listener ăn hết RAM, JMeter chậm hơn cả SUT | chỉ bật ở lượt Spike ngắn |
 | Chạy 3 scenario song song | 3 lượt tranh CPU, cả 3 bộ số liệu vô nghĩa | `run-all.sh` chạy tuần tự + cooldown |

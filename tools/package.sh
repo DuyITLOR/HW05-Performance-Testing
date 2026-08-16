@@ -2,7 +2,7 @@
 # ============================================================================
 # package.sh — đóng gói bản nộp theo ĐÚNG danh sách §14, rồi zip.
 #
-#   bash tools/package.sh 95        # điểm tự chấm → 23127178_HW05_AI_Performance_095.zip
+#   bash tools/package.sh 95           # điểm tự chấm → 23127178_HW05_AI_Performance_095.zip
 #   bash tools/package.sh 95 --check   # chỉ soát thiếu gì, không tạo gói
 #
 # Vì sao cần script thay vì kéo thả tay:
@@ -28,10 +28,19 @@ if [ -z "$GRADE" ]; then
   echo "Dùng: bash tools/package.sh <điểm 0-100> [--check]"
   exit 2
 fi
-# Điểm ghi ĐÚNG như nhập, không pad thêm 0. HW02/03/04 đều tự chấm 100 nên tên file khi đó là
-# `_100` — đọc nhầm thành "luôn 3 chữ số" thì điểm 88 sẽ ra `_088`, một dạng số không ai viết.
+if ! [[ "$GRADE" =~ ^[0-9]{1,3}$ ]]; then
+  echo "Điểm phải là số nguyên trong [000, 100]."
+  exit 2
+fi
+GRADE_NUM=$((10#$GRADE))
+if [ "$GRADE_NUM" -lt 0 ] || [ "$GRADE_NUM" -gt 100 ]; then
+  echo "Điểm phải nằm trong [000, 100]."
+  exit 2
+fi
+# §14 ghi rõ SelfAssessedGrade là số 3 chữ số; ví dụ 90 phải thành 090.
+printf -v GRADE3 '%03d' "$GRADE_NUM"
 MSSV="23127178"
-NAME="${MSSV}_HW05_AI_Performance_${GRADE}"
+NAME="${MSSV}_HW05_AI_Performance_${GRADE3}"
 
 MISSING=0
 need() { # $1 = đường dẫn, $2 = mô tả theo §14
@@ -58,6 +67,8 @@ need "report/main-report.md"              "Main report (Markdown)"
 need "report/main-report.pdf"             "Main report (PDF)"
 need "ai-audit/ai-audit-report.md"        "AI Audit Report (MD)"
 need "ai-audit/ai-audit-report.pdf"       "AI Audit Report (PDF)"
+need "ai-audit/task2-ai-output-verbatim.md" "Task 2 — prompt + AI output nguyên văn"
+need "ai-audit/task2-ai-output-verbatim.pdf" "Task 2 — output nguyên văn (PDF)"
 need "ai-audit/design-log.md"             "Nhật ký thiết kế 7 bước (§2 step-by-step)"
 need "ai-audit/ai-critique.md"            "AI Critique (MD) — phải 200–300 từ"
 need "ai-audit/ai-critique.pdf"           "AI Critique (PDF)"
@@ -69,7 +80,7 @@ needglob "test-plans/${MSSV}_*.jmx" 3     "Test plan {MSSV}_{Scenario}_{YYYYMMDD
 needglob "results/jtl/*.jtl" 3            "Raw .jtl (nộp ĐẦY ĐỦ)"
 needglob "results/html/*/index.html" 3    "HTML report folder"
 need "endurance/endurance-threshold.md"   "Endurance threshold (§6)"
-need "ci/ci-runs.md"                      "5 lượt CI thật + output cổng ngưỡng (§4.4)"
+need "ci/ci-runs.md"                      "6 lượt CI thật + output cổng ngưỡng (§4.4)"
 need ".github/workflows/perf-smoke.yml"   "Workflow CI hiện thực flow chart Task 3"
 need "resource-monitor/hardware-report.md" "Hardware report (hostname khớp HW trước)"
 needglob "resource-monitor/screenshots/activity-*.png" 4 "Ảnh resource monitor + tool CÙNG khung"
@@ -108,6 +119,13 @@ else
   printf "  [OK]    AI Audit không còn chỗ trống Human review\n"
 fi
 
+if grep -qiE 'repo (HW05 )?(hiện là|đang) \*\*private\*\*|repo đang PRIVATE' README.md 2>/dev/null; then
+  printf "  [THIEU] Repo public (§14) — README vẫn ghi repo private; phải dùng repo sạch công khai\n"
+  MISSING=$((MISSING + 1))
+else
+  printf "  [KIEM TAY] Mở link repo bằng cửa sổ ẩn danh để xác nhận Public\n"
+fi
+
 echo ""
 if [ "$MISSING" -gt 0 ]; then
   echo "  ⚠ Thiếu $MISSING mục. §17: thiếu tài liệu bắt buộc = 0 điểm."
@@ -115,7 +133,7 @@ if [ "$MISSING" -gt 0 ]; then
   echo "  Vẫn đóng gói để xem trước, nhưng ĐỪNG nộp bản này."
   echo ""
 else
-  echo "  Đủ toàn bộ danh sách §14."
+  echo "  Đủ danh sách file cục bộ §14; vẫn phải kiểm link/video/repo từ cửa sổ ẩn danh."
   echo ""
 fi
 [ "$CHECK" = "1" ] && exit 0

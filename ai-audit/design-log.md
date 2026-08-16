@@ -134,8 +134,8 @@ JMeter chèn nó trước **từng** sampler — 5 lần một iteration, tức 
 
 **3. p95 của từng endpoint, hay chỉ p95 tổng?**
 
-Từng endpoint. Và chính điều này lộ ra rằng `POST /api/login` (107ms) đắt hơn p95 tổng (70ms)
-**1,53 lần** — một hồi quy ở login sẽ không làm p95 tổng nhích lên.
+Từng endpoint. Ở lượt Stress 13/08 được giữ làm dữ liệu lịch sử, `POST /api/login` có p95 **40ms**,
+cao hơn p95 tổng **26ms** khoảng **1,54 lần** — một hồi quy ở login có thể bị số tổng pha loãng.
 
 Lượt thứ ba còn lộ thêm: **18,25% error**, toàn bộ là 400 hợp lệ của FR-10 ở bước 5 — **đúng cơ chế
 đã sửa cho nhánh lockout ở bước 6 mà quên áp cho bước 5**.
