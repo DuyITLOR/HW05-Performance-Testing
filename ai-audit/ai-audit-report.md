@@ -9,6 +9,18 @@
 |---|---|---|
 | Claude Code | Opus 5 (1M context) | Chọn phạm vi endpoint (§5) · dựng repo + tooling · sinh 4 test plan JMeter · bản mirror k6 · phân tích `.jtl` · viết báo cáo |
 
+> **Ba điều phải nói trước, vì một người review ngoài đã đối chiếu file này với lịch sử phiên làm
+> việc và tìm ra sai:**
+>
+> 1. **Timestamp của #1, #3, #9, #11 trước đây ghi sai** — #1 lệch một ngày, #3 lệch cả ngày. Đã
+>    sửa theo transcript, và ghi chú ngay tại từng lượt cả giá trị cũ để thấy được đã sửa gì.
+> 2. **#5, #6, #7, #8 không phải bốn lượt tương tác độc lập.** Chúng là bốn *đoạn đọc kết quả và
+>    sửa lỗi* **trong cùng lượt #4** — trường "Prompt" của chúng ghi rõ "cùng lượt #4". Đếm "12
+>    lượt" là đếm **mục trong file này**, không phải 12 prompt riêng của sinh viên. Số prompt riêng
+>    ít hơn.
+> 3. **Trường "AI output" là *tóm tắt*, không phải nguyên văn.** Đề đòi *"The AI output"*; ở đây
+>    output được rút gọn cho đọc được. Prompt thì nguyên văn.
+>
 > **§2 đòi dùng AI *"step by step, not with a single generic prompt"*.** File này ghi **prompt
 > nguyên văn của sinh viên** — và những prompt đó ngắn. Bảy bước của quy trình được ghi riêng ở
 > [`design-log.md`](design-log.md): mỗi bước hỏi gì, căn cứ nào, quyết ra sao, thay đổi cụ thể nào
@@ -38,7 +50,7 @@
 - **Task / Scenario:** §5 — chọn endpoint group, chống trùng trong nhóm
 - **Bước trong quy trình:** trước `perf-test-plan` bước 1
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-13 11:05
+- **Date & time:** **2026-08-12 11:28** *(sửa: bản trước ghi 13/08 11:05 — lệch một ngày)*
 - **Prompt:**
   ```
   ngoài endpoint nhóm đã chọn thì bạn hãy chọn cho tui 1 vài endpoint đi
@@ -104,7 +116,7 @@
 - **Task / Scenario:** lập kế hoạch
 - **Bước trong quy trình:** —
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-13 11:40
+- **Date & time:** **2026-08-15 15:17** *(sửa: bản trước ghi 13/08 11:40 — lệch cả ngày. Prompt "giờ tui phải làm j nữa" được lặp nhiều lần; mốc này là lần khớp với transcript)*
 - **Prompt:**
   ```
   giờ tui phải làm j nữa
@@ -340,7 +352,7 @@
 - **Task / Scenario:** cả 4 scenario, batch 15/08
 - **Bước trong quy trình:** `jtl-analysis` bước 2 (soát lỗi đọc metric) — lần này soát chính mình
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-15 15:05
+- **Date & time:** **2026-08-15 14:27** *(sửa: bản trước ghi 15:05)*
 - **Prompt:**
   ```
   làm đi
@@ -353,7 +365,7 @@
   12. **Kết luận nhân quả từ một so sánh không kiểm soát biến nào.** Báo cáo từng có mục §2.8 mang tên
       *"phát hiện quan trọng nhất của bài"*: so hai batch, thấy p95 chênh 2,4–6,4 lần, kết luận
       **kích thước dữ liệu** là nguyên nhân, kèm cơ chế nghe rất hợp lý (SQLite một writer). Batch
-      15/08 bác bỏ: database **lớn hơn 16 lần** (50k → 830.139 dòng) mà **nhanh hơn ~10 lần**. Biến
+      15/08 bác bỏ: database **lớn hơn 16 lần** (50k → 830.139 dòng) mà p95 **thấp hơn 3,7 lần** (26 → 7 ms). Biến
       thật là `load_1m` — batch 13/08 chạy khi máy gánh 1,3–2 lần tải nền, nhất quán trên cả 4 lượt.
       Lúc đo vẫn có 4 container Docker, VS Code và một tiến trình AI agent chạy song song.
       Kết luận sai đó đã lan tới: **headline README**, **một nhánh flow chart Task 3**, và một dòng
@@ -417,7 +429,7 @@
 - **Task / Scenario:** §14 nội dung bản nộp · §2 *"step by step"* · cấu trúc repo
 - **Bước trong quy trình:** soát lại toàn bài trước khi đóng gói
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-15 16:40
+- **Date & time:** **13:57 · 14:01 · 14:18** ngày 2026-08-15 — **ba prompt ở ba mốc khác nhau**, không phải một lượt lúc 16:40 như bản trước ghi
 - **Prompt:**
   ```
   ủa nội dung trong docs có nộp đâu dm
@@ -466,7 +478,7 @@
 - **Task / Scenario:** Task 3 §4 — hiện thực nhánh "PR pipeline" thành GitHub Actions
 - **Bước trong quy trình:** sau khi tự chấm — bịt hai chỗ bị trừ điểm
 - **AI tool:** Claude Code (Opus 5)
-- **Date & time:** 2026-08-15 17:00
+- **Date & time:** 2026-08-15 **16:56**
 - **Prompt:**
   ```
   nếu bạn chấm 88 thì phải tự biết tại sao nó 88 rùi sửa lại cho uti
@@ -522,7 +534,7 @@
 | 9 | #8 | Khẳng định `import-products` báo sai số dòng insert — **bác bỏ** khi chạy thử (5/5, 60/60, 2/3 đều đúng). Đã lan vào 5 file | phương pháp: suy luận từ code trình bày như sự thật đã kiểm | giữ lại ở mục "đã loại" kèm bảng kiểm chứng; sửa lý do không assert theo `inserted` |
 | 10 | #8 | `Math.min(...array)` trong `summarize-jtl.mjs` tràn call stack với `.jtl` 264k sample — chạy qua bình thường ở lượt Load 16k | đặc điểm dữ liệu (chỉ lộ ở file lớn) | thay bằng `reduce` |
 | 11 | #8 | `mark_expected_4xx()` hardcode chữ *"Expected lockout response"*, dùng lại cho bước 5 mà quên đổi → raw `.jtl` ghi nhãn **"lockout"** cho ~50.000 sample của một endpoint không liên quan gì tới lockout | suy luận không mở rộng (cùng loại lỗi #7) | tham số hoá `reason`: bước 5 ghi *"FR-10 invalid transition"*, nhánh lockout ghi *"Account lockout"* |
-| 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà nhanh hơn 10 lần; biến thật là `load_1m`. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
+| 12 | #9 | Kết luận **kích thước dữ liệu** gây suy giảm 2,4–6,4 lần, từ một so sánh hai batch không kiểm soát biến nào. Batch 15/08 bác bỏ: DB lớn hơn 16 lần mà p95 **thấp hơn 3,7 lần** (26 → 7 ms); biến **tương quan mạnh nhất** là `load_1m` — không phải nguyên nhân đã chứng minh. Đã lan tới headline README, flow chart Task 3, self-assessment | phương pháp: nhân quả từ tương quan không kiểm soát | §2.8 viết lại thành **mục thu hồi**, kèm 4 cặp `load_1m` làm bằng chứng |
 | 13 | #10 | `soak-drift.mjs` tính "trôi RSS" bằng mẫu-cuối / mẫu-đầu, mà mẫu đầu lấy trước warm-up → in **+228,9%**, đọc như rò rỉ. Thực tế nửa-đầu/nửa-sau chỉ **+5,0%** | đặc điểm dữ liệu: chuỗi đo có warm-up ở đầu | so nửa đầu với nửa sau; giữ dòng cũ kèm cảnh báo |
 | 16 | #12 | Hai kết luận về lượt CI, rút từ **một** lượt mỗi kết luận: "runner 2 vCPU chậm hơn máy 12 lõi" (ở 5 VU nó nhanh **bằng**) và "CI chậm hơn local **12,6 lần**" (lượt sau cho **8ms**, đúng bằng local). Cả hai đã **viết vào chú thích workflow** trước khi có điểm dữ liệu thứ ba | phương pháp: nhân quả từ so sánh không kiểm soát biến — **lần thứ ba**, sau #9 và #12 | chạy thêm 2 lượt cùng 20 VU → phương sai **12,6 lần** giữa các lượt y hệt nhau; sửa chú thích + đổi hẳn đề xuất §4.3 |
 

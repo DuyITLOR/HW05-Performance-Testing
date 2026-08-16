@@ -79,7 +79,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 
 | Mục | Nơi đáp ứng | **Tự kiểm bằng** |
 |---|---|---|
-| §7 Agent Skills | [`.claude/skills/`](.claude/skills/) — 4 skill, dùng thật trong bài | `ls .claude/skills/` |
+| §7 Agent Skills | [`.claude/skills/`](.claude/skills/) — **đã xây dựng 4 skill**; quy trình trong đó được **làm theo** khi thiết kế plan và soát metric, nhưng **không lần nào được gọi qua cơ chế Skill** trong lúc làm bài. Skill được **gọi trực tiếp trong video** | `ls .claude/skills/` · xem đoạn Agent Skill trong video |
 | §8 Công cụ | JMeter 5.6.3 · k6 v2.1.0 ([`k6/`](k6/), bonus, **chưa chạy**) · Activity Monitor · Claude Code (Opus 5) | `jmeter -v` |
 | §9 AI Audit Report | [`ai-audit/ai-audit-report.md`](ai-audit/ai-audit-report.md) — **12 lượt**, prompt nguyên văn, mỗi lượt có Human review ghi rõ *đã kiểm* / *chưa tự kiểm* | `grep -c 'SV đã kiểm' ai-audit/ai-audit-report.md` |
 | §10 AI Critique 200–300 từ | [`ai-audit/ai-critique.md`](ai-audit/ai-critique.md) — **293 từ** | `verify-all.sh` mục 6 — đếm lại |

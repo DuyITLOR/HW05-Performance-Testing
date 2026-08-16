@@ -24,7 +24,7 @@
 | **Báo cáo chính** | [report/main-report.md](report/main-report.md) |
 | **Test summary sinh tự động** | [results/summary.md](results/summary.md) |
 | **Endurance threshold** | [endurance/endurance-threshold.md](endurance/endurance-threshold.md) |
-| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **12 lượt**, 15 lỗi kỹ thuật + 2 lỗi bản nộp, mỗi lượt có **Human review** ghi rõ *đã kiểm* / *chưa tự kiểm* |
+| **AI Audit + Critique** | [ai-audit/](ai-audit/) — **12 mục** (trong đó #5–#8 là bốn đoạn của **cùng lượt #4**, không phải 4 prompt riêng) · prompt **nguyên văn**, AI output dạng **tóm tắt** · 15 lỗi kỹ thuật + 2 lỗi bản nộp · mỗi mục có **Human review** ghi rõ *đã kiểm* / *chưa tự kiểm* |
 | **Bug report** | [bug-report/bug-report.md](bug-report/bug-report.md) |
 
 ---
@@ -58,7 +58,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | Endpoint group được phủ | **3** — auth-heavy · read-heavy · transactional |
 | Tổng sample | **358.661** |
 | Error rate | **0%** ở cả 4 lượt |
-| Điều kiện khi đo | `products` ~900.000 dòng · `load_1m` tb **4,4–6,0** trên máy 12 lõi |
+| Điều kiện khi đo | `products` ~900.000 dòng · `load_1m` tb **3,3–5,7** trên máy 12 lõi |
 | **Endurance threshold** | **62,8 req/s** ổn định 12 phút · p95 **8 ms** · trôi p95 **+0%** · RSS đi ngang **+5,0%** · trần **83,1 MB** |
 | Tải cao nhất chịu được | **539,7 req/s** ở 200 VU, p95 **18 ms**, 0% error — nhưng `node` CPU đỉnh **97,7%**, sát trần một lõi, và max **3691 ms** |
 | Hồi phục sau spike | **lượt được nộp không suy giảm** — 212 VU dội trong 5s mà p95 5–7 ms (nền 7–8) · phát biểu giới hạn ở **một lượt**: một lượt Spike khác có p95 đỉnh cửa sổ **47 ms** (§3.4) |
@@ -104,7 +104,7 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 
 ## 3. Bảng tự đánh giá (Self-Assessment)
 
-> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_100.zip`.
+> Đuôi tên file zip = tổng điểm tự chấm → `23127178_HW05_AI_Performance_85.zip`.
 >
 > **Cách tự chấm:** chỉ trừ điểm ở chỗ **nêu được thiếu sót cụ thể**, không trừ đều cho "chắc ăn".
 > Bản trước tự chấm **88** với hai chỗ trừ. **Cả hai đã bịt bằng việc làm, không bằng lời giải thích:**
@@ -134,10 +134,10 @@ Cả 4 test plan (Load / Stress / Spike / Soak) chạy **cùng** workflow này, 
 | 1 | Task 1 — Load testing | 20 | **20** | 16.343 sample · 20 VU · think-time 1–3s/iteration bằng Uniform Random Timer · p95 **8ms**, 0% error · data-driven 4 file CSV · listener **Summary Report** · p95 tách theo endpoint → `import-products` lộ ra đắt nhất (10ms) · **ảnh `activity-load.png`** bắt `node` ở 13,4% CPU |
 | 2 | Task 1 — Stress testing | 20 | **20** | **258.992 sample** · tăng **theo bậc** 25→50→100→200 VU để tìm *điểm* gãy · **539,7 RPS** · listener **Aggregate Report** · **ảnh `activity-stress.png`** bắt `node` ở **91,7% CPU** đúng bậc 200 VU · không kết luận "chịu tải tốt" từ p95 18ms mà đối chiếu CPU 20,3%→**97,7%**, p99 12→**124ms**, max **3691ms** → sát trần một lõi và đuôi đang dãn |
 | 3 | Task 1 — Spike testing | 20 | **20** | 38.251 sample · 10 VU nền + 200 VU trong 5s, nhánh nền chạy xuyên lượt để **đo được hồi phục** · listener **View Results Tree** · **ảnh `activity-spike.png`** bắt `node` ở **72,6%** so với đỉnh tool đo **75,7%** · bảng p95 theo cửa sổ 10s: **lượt được nộp không suy giảm** khi sốc dội vào (sample/10s tăng 20 lần, p95 5–7ms) — phát biểu cố ý giới hạn ở **một lượt**, vì một lượt Spike khác có p95 đỉnh **47ms** · một "phát hiện" của bản trước (p95 tăng lúc tải **rút**, 12ms) **không lặp lại** ở lượt nộp (8ms) → giữ cả hai cột và hạ nó xuống thành **quan sát chưa tái hiện được** · **bốn lượt Spike cho bốn kết quả** — p95 đỉnh cửa sổ **47 / 8 / 12 / 9 ms**, lệch 5,9 lần trong khi sample lệch 0,8% **và `node` CPU đỉnh lệch chỉ 4 điểm** → server làm cùng lượng việc, cái nhảy nằm ở **thứ tự chờ**; `load_1m` **không** xếp đúng thứ tự nên nguyên nhân ghi là **chưa biết** (§3.4) |
-| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **10** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất AI không nêu** |
+| 4 | Task 2 — AI analysis + misinterpretation hunt | 10 | **7** | **7 lỗi đọc metric**, mỗi lỗi kèm giá trị đúng **và tên file**: gán chênh lệch p95 cho "database lớn hơn" (DB +8% vs `load_1m` +84%) · đọc p95 mà bỏ CPU · average 9,6ms khi p99 gấp **12,9 lần** và max gấp **384 lần** · "0% error" khi 99,2% bước 5 trả 400 · **đúng kết luận nhưng dùng cặp số mà tool của tôi in ra sai** · ngưỡng tự đề xuất rộng gấp 2,8 lần nên vô dụng · "đạt yêu cầu" khi chưa có SLA nào. 6 đề xuất phân loại feasible/hallucinated kèm **cách kiểm chứng**, + **4 đề xuất tôi tự nêu**. **Tự trừ 3:** §3.1 gắn nhãn *"AI output nguyên văn"* nhưng thực tế là **bản dựng lại**, không phải log từ một phiên AI độc lập — một người review ngoài phát hiện bằng cách đọc lịch sử phiên. Chuỗi *prompt AI → AI đề xuất ngưỡng → SV review* mà đề đòi **chưa được thực hiện và ghi lại**. Bảy giá trị đúng ở §3.2 vẫn tính lại được từ raw `.jtl`, nên phần soát metric còn giá trị; phần **nguồn gốc** thì không. |
 | 5 | Task 3 — Continuous Performance Testing (G9.6) | 10 | **10** | Flow chart mermaid **15 nút** · giải thích **từng** nhánh · **7 trade-off** · trade-off quan trọng nhất có **ba điểm dữ liệu** hậu thuẫn: §2.8 cho thấy nhiễu môi trường (2,6×) **lớn hơn** tín hiệu chủ động tạo ra (2,25× khi tăng VU gấp 10) → baseline buộc phải đo lại trong **cùng lượt CI, cùng runner**, và mọi so sánh tuyệt đối giữa hai lượt là vô giá trị |
-| 6 | Agent Skills | 10 | **10** | 4 skill trong `.claude/skills/`, **dùng thật trong bài**: `perf-test-plan` (7 bước, checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). **§7 đòi demo skill trong video — đã có:** video [https://youtu.be/hCf4bXwzx2A](https://youtu.be/hCf4bXwzx2A) chạy `perf-test-plan` end-to-end trên nhóm endpoint read-heavy, dừng ở **bước human review**, rồi mở output; và `jtl-analysis` đọc một `.jtl` thật để chỉ ra một chỗ AI đọc sai metric. |
-| | **Tổng** | **100** | **100** | Hai chỗ từng trừ đã bịt **bằng việc làm**: 6 lượt CI thật (1 lượt build đỏ) và lượt Spike chạy lại có ảnh khớp đỉnh. Mọi mục §14 đã đủ, gồm video **11:49** |
+| 6 | Agent Skills | 10 | **8** | **Đã xây dựng 4 skill** trong `.claude/skills/`: `perf-test-plan` (7 bước + checklist duyệt 8 mục), `jtl-analysis` (bảng lỗi đọc metric + phân loại feasible/hallucinated), `resource-evidence` (định dạng bằng chứng §6/§11), `ai-audit-logger` (§9 + 3 trường riêng HW05). Quy trình trong đó **được làm theo** khi thiết kế plan và soát metric. **Tự trừ 2:** rà lại lịch sử phiên làm việc thì **không có lần nào skill được gọi qua cơ chế Skill** trong lúc làm bài — nên câu "dùng thật trong bài" ở bản trước là **nói quá**, đã sửa. Skill được **gọi trực tiếp trong video** ([https://youtu.be/hCf4bXwzx2A](https://youtu.be/hCf4bXwzx2A)): `perf-test-plan` chạy end-to-end trên nhóm read-heavy và dừng ở bước human review, `jtl-analysis` đọc một `.jtl` thật. |
+| | **Tổng** | **100** | **85** | Trừ **3** ở Task 2 (§3.1 sai nhãn nguồn gốc) và **2** ở Agent Skills (skill chưa từng được gọi qua cơ chế Skill trong lúc làm bài). Cả hai do **review ngoài** phát hiện, không phải tôi tự thấy — ghi lại đúng như vậy |
 
 ---
 
@@ -173,7 +173,7 @@ bash tools/build-pdfs.sh   # xuất PDF cho 4 tài liệu §14
 
 # 6. Đóng gói nộp bài
 bash tools/package.sh 95 --check    # soát đủ/thiếu theo §14, không tạo gói
-bash tools/package.sh 100           # → 23127178_HW05_AI_Performance_100.zip
+bash tools/package.sh 85            # → 23127178_HW05_AI_Performance_85.zip
 ```
 
 > **Java:** máy này mặc định `java` = Temurin 8 **x86_64** → JMeter chạy qua Rosetta và chính
@@ -234,7 +234,7 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 | File | Trạng thái |
 |---|---|
 | [report/main-report.md](report/main-report.md) + PDF | **Đạt** — số liệu 4 lượt · human review **15 lỗi kỹ thuật + 2 lỗi bản nộp** (§2.4) · Task 2 **7 lỗi đọc metric** (§3.2) · Task 3 kèm **§4.4 đã chạy CI thật** · **5 giới hạn** |
-| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — **12 lượt** tương tác, prompt nguyên văn, bảng tổng hợp **15 lỗi kỹ thuật + 2 lỗi bản nộp**, mỗi lượt có Human review ghi rõ *đã kiểm* / *chưa tự kiểm* |
+| [ai-audit/ai-audit-report.md](ai-audit/ai-audit-report.md) + PDF | **Đạt** — **12 mục** (#5–#8 thuộc cùng lượt #4) · prompt nguyên văn, **output dạng tóm tắt** · bảng **15 lỗi kỹ thuật + 2 lỗi bản nộp** · Human review ghi rõ *đã kiểm* / *chưa tự kiểm* · timestamp đã sửa theo transcript |
 | [ai-audit/ai-critique.md](ai-audit/ai-critique.md) + PDF | **Đạt** — **293 từ** (yêu cầu 200–300), trả lời đủ 3 câu §10 |
 | [bug-report/bug-report.md](bug-report/bug-report.md) + ảnh | **Đạt** — 2 bug xác nhận + 1 ứng viên đã loại kèm bảng kiểm chứng + `verify-bugs.sh` chạy lại được |
 | 4 test plan `.jmx` đúng tên `{MSSV}_{Scenario}_{YYYYMMDD}` | **Đạt** |
@@ -252,10 +252,13 @@ docs/                endpoint-selection.md NỘP KÈM (bằng chứng §5) · PL
 
 ```bash
 bash tools/verify-all.sh          # 34 PASS · 0 FAIL
-bash tools/package.sh 100 --check # đủ toàn bộ danh sách §14
+bash tools/package.sh 85 --check  # đủ toàn bộ danh sách §14
 ```
 
-**Không còn mục nào thiếu.** Video demo: https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt, có tool và
+**Còn một mục CHƯA đạt và nó cần bạn, không phải script:** đề §14 đòi **link repo công khai**, repo
+HW05 hiện là **private**. Xem [§10](#10-repo-đang-private--phải-xử-lý-trước-khi-nộp).
+
+Video demo: https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt, có tool và
 Activity Monitor trong cùng khung và một đoạn Agent Skill end-to-end.
 
 **Đã xong:** Human review của cả **12 lượt** trong
@@ -265,13 +268,26 @@ chứng dựng mà §11 phạt · **cột điểm §3** đã điền ·
 **Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) ·
 [#289](https://github.com/DuyITLOR/group05_eshop/issues/289)** đã mở kèm ảnh nhúng.
 
-## 10. Năm điều quyết định cách đọc mọi con số của bài này
+## 10. Repo đang PRIVATE — phải xử lý trước khi nộp
+
+Đề §14 đòi **link GitHub repository công khai**. Repo [HW05-Performance-Testing](https://github.com/DuyITLOR/HW05-Performance-Testing)
+hiện là **private**, nên yêu cầu này **chưa đạt**.
+
+**Đừng bật public trực tiếp.** Lịch sử repo từng có commit `88d27a1` chứa 5 ảnh chụp toàn màn hình lọt
+dữ liệu riêng tư (IP nội bộ, cửa sổ Zalo/Gmail, số điện thoại khách hàng trong một CRM). Chúng đã bị
+xoá khỏi cả history bằng `reflog expire` + `gc --prune=now` + `push --force-with-lease`, **nhưng
+GitHub vẫn có thể trả về commit theo SHA cho tới khi nó tự dọn**. Bật public là mở luôn cửa đó.
+
+**Cách an toàn:** tạo repo mới, push bản làm việc hiện tại (không mang history cũ), rồi dùng link đó
+cho §14.
+
+## 11. Năm điều quyết định cách đọc mọi con số của bài này
 
 1. **Tải nền của máy là biến tương quan mạnh nhất** (không phải nguyên nhân đã chứng minh) — bài học đắt nhất, và có ba điểm dữ liệu: `load_1m` 5,2/3,1/5,7
    → p95 Stress 26/7/18 ms. Chênh 1,8 lần tải nền tạo chênh **2,6 lần** p95, còn tăng VU **gấp 10
-   lần** chỉ tạo chênh 2,25 lần. Mọi con số chỉ có nghĩa kèm điều kiện `load_1m` ≈ 4,4–6,0.
+   lần** chỉ tạo chênh 2,25 lần. Mọi con số chỉ có nghĩa kèm điều kiện `load_1m` ≈ 3,3–5,7.
    Xem [§2.8](report/main-report.md).
-2. **Load generator và SUT cùng một máy.** JMeter CPU đỉnh 118–183%, nhiều hơn `node` ở ba trong bốn
+2. **Load generator và SUT cùng một máy.** JMeter CPU đỉnh **118,3 / 178,3 / 205,2 / 49,3%** (Load/Stress/Spike/Soak), nhiều hơn `node` ở cả bốn
    lượt.
 3. **Mật khẩu lưu plaintext** ([`server.js:46`](../eshop-sut/backend/server.js#L46)) — login không tốn
    CPU băm, nên p95 24ms của nó **không** đại diện cho hệ thống băm mật khẩu đúng cách.

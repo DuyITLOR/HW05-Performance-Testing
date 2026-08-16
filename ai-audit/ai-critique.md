@@ -10,22 +10,21 @@
 
 ## Critique
 
-AI sai mười sáu lần, nhưng chỉ **một loại** lỗi đáng viết ra. Mười ba lỗi là kỹ thuật: dữ liệu
-test tự khoá tài khoản của chính nó, 4xx hợp lệ bị tính thành lỗi hiệu năng. Chúng lộ ra ngay khi
-đọc `.jtl`.
+AI sai mười bảy lần, nhưng chỉ **một loại** đáng viết ra. Mười bốn lỗi lộ ra ngay khi đọc `.jtl`:
+dữ liệu test tự khoá tài khoản của chính nó, 4xx hợp lệ bị tính thành lỗi, số chép nhầm giữa hai lượt.
 
 Ba lỗi còn lại cùng một hình dạng. Lần rõ nhất: AI so hai lượt cách nhau hai ngày, thấy p95 chênh
 vài lần, kết luận **kích thước dữ liệu** là nguyên nhân, kèm cơ chế thuyết phục về SQLite một writer.
-Nó gọi đó là "phát hiện quan trọng nhất của bài" và đưa lên headline README. Lượt sạch hôm sau
-bác bỏ: database lớn hơn mười sáu lần mà nhanh hơn mười lần.
-Biến thật nằm ở cột `load_1m` mà AI tự ghi ra nhưng không đọc.
+Nó gọi đó là "phát hiện quan trọng nhất của bài". Lượt sạch hôm sau bác bỏ: database lớn hơn mười sáu
+lần mà p95 vẫn **thấp hơn** — 26 xuống 7ms. Biến tương quan mạnh nhất nằm ở cột `load_1m` mà AI tự
+ghi ra nhưng không đọc — vẫn chưa đủ gọi là nguyên nhân.
 
-Vì sao không tự bắt được? Vì cơ chế nó viện ra **đúng về lý thuyết** — SQLite thật sự có một
-writer. Nhưng cơ chế đúng không chứng minh được nó gây ra con số đang xét.
+Vì sao không tự bắt được? Vì cơ chế nó viện ra **đúng về lý thuyết** — SQLite thật sự có một writer.
+Nhưng cơ chế đúng không chứng minh được nó gây ra con số đang xét.
 
-Và rút ra nguyên tắc thì không bảo vệ được ai: lần thứ ba xảy ra **trong lúc đang viết mục này**. Đo
-**một** lượt CI, AI viết ngay "runner chậm hơn máy local 12,6 lần". Ba lượt cùng cấu hình sau đó cho
-p95 101, 15 và 8ms — phương sai lớn hơn hiệu số nó vừa quy cho phần cứng.
+Rút ra nguyên tắc cũng không bảo vệ được ai: lần thứ ba xảy ra **trong lúc đang viết mục này**. Đo
+**một** lượt CI, AI viết ngay "runner chậm hơn local 12,6 lần". Ba lượt cùng cấu hình sau cho p95
+101, 15 và 8ms — phương sai lớn hơn hiệu số nó vừa quy cho phần cứng.
 
 Nghi ngờ mạnh nhất phải dành cho kết luận **nghe hay nhất**. Lỗi kỹ thuật tự lộ khi chạy; một giải
 thích nhân quả sai sống lâu vì nó thoả mãn người đọc. Biết tên lỗi không ngăn được việc mắc nó — chỉ

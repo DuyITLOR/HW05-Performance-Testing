@@ -1,5 +1,5 @@
 {
-  "note": "captured_at chốt một lần từ repo gốc — KHÔNG đọc lại mtime, vì cp/zip đặt mtime mới. sha256 để ảnh không thể bị thay. Nội dung trong ảnh vẫn phải xem bằng mắt.",
+  "note": "captured_at chốt một lần từ repo gốc — KHÔNG đọc lại mtime, vì cp/zip đặt mtime mới. sha256 phát hiện ảnh bị ĐỔI SAU KHI đóng dấu (copy sai, ghi đè vô tình, hoặc thay ảnh mà quên chạy lại stamp) — nó KHÔNG chống được người cố ý sửa ảnh rồi cập nhật luôn hash, vì manifest nằm cùng repo. Không phải dấu xác thực. Nội dung trong ảnh vẫn phải xem bằng mắt.",
   "screenshots": {
     "activity-load.png": {
       "sha256": "0acd3ef08f4f5ffdabfb3ea7e589b715deeda331dd33560742503d6df5c3c010",

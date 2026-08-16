@@ -31,11 +31,16 @@ Test plan: **cùng file** `23127178_Load_*.jmx` sinh từ `tools/gen-test-plans.
 | 3 | `31878808200` | push | 5 | 200 ms | 779 | **8** | 223 | 395 | 0% | 0,49 | **PASS** |
 | 4 | `31878937737` | tay | **20** | 200 ms | 2.646 | **15** | 918 | 2.296 | 0% | 0,34 | **PASS** |
 | 5 | `31879092139` | tay | **20** | 200 ms | 2.763 | **8** | 32 | 720 | 0% | 0,88 | **PASS** |
-| 6 | `31879549205` | push | 5 | 200 ms | 779 | **8** | 223* | 395* | 0% | *(chưa đọc)* | **PASS** |
+| 6 | `31879549205` | push | 5 | 200 ms | 779 | **8** | 14 | 389 | 0% | *(chưa đọc)* | **PASS** |
 
-\* Lượt 6 cho **đúng 779 sample và p95 8ms** — trùng khít lượt 3, cùng 5 VU. Hai lượt 5 VU cho kết
-quả y hệt nhau, trong khi ba lượt 20 VU lệch 12,6 lần: **phương sai bật lên theo mức tải**, không có
-sẵn ở mọi mức.
+**Lượt 6 so với lượt 3 — sửa lại một câu đã viết sai.** Bản trước ghi p99/max của lượt 6 là
+**223/395** rồi kết luận *"trùng khít lượt 3"*. Đọc lại log GitHub thì lượt 6 là **p99 14 · max 389**,
+còn lượt 3 là **p99 223 · max 395** — hai con số 223/395 bị **chép nhầm từ lượt 3 sang lượt 6**, và
+người review ngoài bắt được.
+
+Đúng là: hai lượt 5 VU **khớp ở p95** (đều 8ms, đều 779 sample) nhưng **đuôi lệch 16 lần** ở p99
+(14 so với 223). Nghĩa là ngay ở 5 VU, **p95 thì lặp lại được, p99 thì không** — kết luận này *mạnh
+hơn* câu "trùng khít" ban đầu, vì nó cho thấy phần không ổn định nằm ở **đuôi**, không ở phân vị giữa.
 
 **Một điều chưa giải thích được về lượt 6:** nó do `push` kích hoạt, nhưng đối chiếu
 `git diff --name-only` của push đó thì **không file nào khớp** danh sách `paths` của workflow

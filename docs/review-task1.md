@@ -277,7 +277,7 @@ Chi tiết: [`endurance/endurance-threshold.md`](../endurance/endurance-threshol
 tăng quá 20%), nên không thể chọn ngưỡng sau khi thấy kết quả.
 
 Điểm trung thực đáng giữ: mục 6 nói rõ 62,8 RPS **không** phải năng lực tối đa — `node` CPU lúc đó
-mới 22,1%, còn ở lượt Stress cùng backend chịu 564 req/s với CPU 98,4%. Và mục đó cũng ghi rằng con số
+mới 23,6%, còn ở lượt Stress cùng backend chịu **539,7 req/s** với CPU **97,7%** (batch được nộp). Và mục đó cũng ghi rằng con số
 này chỉ có nghĩa **kèm điều kiện `load_1m` ≈ 3,8**, sau bài học §2.8.
 
 ### Tự kiểm

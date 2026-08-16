@@ -12,8 +12,10 @@
 // Manifest giải quyết bằng cách **chốt giờ chụp thành dữ liệu** thay vì đọc từ metadata filesystem:
 //
 //   - `captured_at`  ghi một lần từ mtime trong repo gốc, sau đó không đổi dù copy bao nhiêu lần.
-//   - `sha256`       để ảnh không thể bị thay mà manifest vẫn đúng. Đây là phần làm manifest có
-//                    giá trị: nếu chỉ ghi giờ thì ai cũng sửa được một dòng JSON.
+//   - `sha256`       phát hiện ảnh bị đổi SAU KHI đóng dấu. Nói cho đúng: nó KHÔNG chống được người
+//                    cố ý sửa ảnh rồi chạy lại stamp — manifest nằm cùng repo nên hash cập nhật theo.
+//                    Cái nó chống được là thay đổi vô tình và sai sót lúc đóng gói. Đừng đọc nó
+//                    thành một dấu xác thực.
 //   - `run`          lượt chạy tương ứng trong run-log, cùng offset giây tính từ lúc lượt bắt đầu.
 //
 // Manifest KHÔNG chứng minh ảnh chụp đúng cái gì — nó chỉ chốt "file này, giờ này". Nội dung trong
@@ -45,7 +47,7 @@ const SCENARIO_OF = { 'activity-load.png': 'Load', 'activity-stress.png': 'Stres
                       'activity-spike.png': 'Spike', 'activity-soak.png': 'Soak' };
 
 const prev = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : { screenshots: {} };
-const out = { note: 'captured_at chốt một lần từ repo gốc — KHÔNG đọc lại mtime, vì cp/zip đặt mtime mới. sha256 để ảnh không thể bị thay. Nội dung trong ảnh vẫn phải xem bằng mắt.', screenshots: {} };
+const out = { note: 'captured_at chốt một lần từ repo gốc — KHÔNG đọc lại mtime, vì cp/zip đặt mtime mới. sha256 phát hiện ảnh bị ĐỔI SAU KHI đóng dấu (copy sai, ghi đè vô tình, hoặc thay ảnh mà quên chạy lại stamp) — nó KHÔNG chống được người cố ý sửa ảnh rồi cập nhật luôn hash, vì manifest nằm cùng repo. Không phải dấu xác thực. Nội dung trong ảnh vẫn phải xem bằng mắt.', screenshots: {} };
 
 let changed = 0, problems = 0;
 for (const f of readdirSync(SHOTS).filter((f) => f.endsWith('.png')).sort()) {

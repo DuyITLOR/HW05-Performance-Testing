@@ -111,7 +111,9 @@ head_ "4. §11 — giờ chụp ảnh phải nằm TRONG khoảng lượt chạy
 
 # Nguồn giờ chụp là `manifest.json`, KHÔNG phải mtime. Lý do: `package.sh` dùng `cp -R`, và `cp`
 # đặt mtime mới cho bản copy → chạy validator bên trong bản nộp sẽ đỏ toàn bộ dù ảnh thật. Manifest
-# chốt `captured_at` một lần trong repo gốc, kèm `sha256` để ảnh không thể bị thay mà dấu vẫn đúng.
+# chốt `captured_at` một lần trong repo gốc, kèm `sha256` để phát hiện ảnh bị đổi SAU khi đóng dấu.
+# (Không chống được người cố ý sửa ảnh rồi chạy lại stamp — manifest nằm cùng repo. Không phải dấu
+# xác thực; nó bắt sai sót lúc copy/đóng gói.)
 MANIFEST="resource-monitor/screenshots/manifest.json"
 if [ -f "$MANIFEST" ]; then
   if node tools/stamp-screenshots.mjs --check >/dev/null 2>&1; then
