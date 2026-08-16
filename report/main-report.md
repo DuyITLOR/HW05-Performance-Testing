@@ -5,6 +5,7 @@
 - **SUT:** EShop — https://github.com/ttbhanh/eshop-sut (backend API `:3000`)
 - **Công cụ:** Apache JMeter 5.6.3 (mặc định §8) · k6 v2.1.0 (bonus) · Activity Monitor · Claude Code (Opus 5)
 - **Máy chạy:** `Le-Nhut-Duy.local` — Apple M2 Pro, 12 lõi, 16 GB, macOS 26.1 ([hardware-report.md](../resource-monitor/hardware-report.md))
+- **Video demo (§14):** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted, giọng tiếng Việt · JMeter và Activity Monitor trong cùng khung · có đoạn **Agent Skill end-to-end**
 
 > **Quy tắc số liệu:** mọi con số lấy từ [`results/summary.md`](../results/summary.md), sinh tự
 > động bằng `npm run summary` đọc từ raw `.jtl`. Không con số nào đếm tay (§11).

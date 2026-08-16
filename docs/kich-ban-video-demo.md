@@ -1,406 +1,385 @@
-# Kịch bản quay video demo — HW05
+# KỊCH BẢN QUAY VIDEO DEMO HW05 — BẢN DỄ ĐỌC
 
-- **Sinh viên:** Lê Nhựt Duy — **MSSV:** 23127178
-- **Yêu cầu:** ≥ 6 phút · YouTube **Unlisted** · giọng **tiếng Việt** của mình · tool và resource
-  monitor **trong cùng khung**
-- **Mục tiêu:** **10:00**. Đề cho phép **chia nhiều clip**, mỗi scenario một clip — tổng ≥6 phút là đủ,
-  không cần một take liền mạch.
+- **Sinh viên:** Lê Nhựt Duy
+- **MSSV:** 23127178
+- **Video đã quay:** https://youtu.be/hCf4bXwzx2A — **11:49**, unlisted (đã kiểm `isUnlisted:true`, `isPrivate:false`)
+- **Thời lượng nên quay:** 8–10 phút
+- **Bắt buộc:** video từ 6 phút, YouTube **Unlisted**, giọng nói tiếng Việt của mình
+- **Trong lúc chạy test:** Terminal/JMeter và Activity Monitor phải xuất hiện **cùng một khung hình**
+- **Agent Skill:** phải có một đoạn sử dụng skill từ đầu đến kết quả
 
----
-
-## Mục đích của video (đọc trước khi quay — nó quyết định quay cái gì)
-
-Video **không phải để trình bày kết quả**. Kết quả đã nằm trong `.zip` rồi, người chấm đọc nhanh hơn
-bạn nói. Video là **thứ duy nhất** nối kết quả đó với **bạn**, trên **máy của bạn**, tại **một thời
-điểm**. Đọc ba ràng buộc của đề thì thấy rõ:
-
-| Đề bắt buộc | Nó chặn gì |
-|---|---|
-| tool + resource monitor **cùng khung** | `.jtl` sửa được, ảnh mượn được — video liên tục có đồng hồ, hostname, số **nhảy thật** thì không |
-| **giọng của chính bạn** | AI làm được file; AI không giải thích thay bạn được |
-| **≥ 6 phút** | đủ dài để không thể đọc một bản tóm tắt rồi xong |
-
-**Hệ quả thực tế:**
-
-- **Đáng quay dù nhìn tầm thường:** đồng hồ menu bar trong khung · số Activity Monitor nhảy trong lúc
-  chạy · bạn kể **một lỗi bạn từng mắc** và vì sao · gõ lệnh rồi để nó chạy ra kết quả.
-- **Nhìn oách mà gần như không tính:** slide · nhạc · đọc to báo cáo · zoom vào dashboard đẹp.
-
-Nếu người chấm chỉ hỏi một câu sau khi xem, nó là: *"em có thật sự chạy cái này, và có hiểu số này
-không?"* Mọi thứ trong kịch bản phục vụ đúng câu đó.
+> Những câu nằm trong khối **ĐỌC NGUYÊN VĂN** đã được viết để đọc thẳng khi quay.
+> Không cần học thuộc. Đọc chậm, nghỉ một nhịp ở dấu chấm.
 
 ---
 
-## Đường đi của dữ liệu — nói ở đầu video, 30 giây
+# 1. Chuẩn bị trước khi quay
 
-Nói cái này TRƯỚC khi mở file nào. Không có nó thì người xem không biết mỗi file đứng ở đâu.
+## Mở sẵn các cửa sổ
 
-```
-  tools/gen-test-plans.py          ← script Python. KHÔNG test gì. Nó VIẾT RA file.
-            ↓  npm run plans
-  test-plans/*.jmx  (4 file XML)   ← "đề bài" cho JMeter: gọi endpoint nào, bao nhiêu VU
-            ↓  jmeter -n -t <file>
-  JMeter                           ← NGƯỜI ĐI THI. Bắn request thật vào SUT
-            ↓
-  results/jtl/*.jtl                ← sổ ghi thô: MỖI request một dòng, kèm thời gian phản hồi
-            ↓  npm run summary
-  results/summary.md               ← p95 / p99 / error rate
-            ↓
-  report/main-report.md            ← số trong báo cáo
-```
+- VS Code mở thư mục `HW05-Performance-Testing`.
+- Terminal đặt bên phải màn hình.
+- Activity Monitor đặt phía dưới hoặc bên trái Terminal.
+- Trong Activity Monitor:
+  - chọn tab **CPU**;
+  - nhập `node` vào ô tìm kiếm;
+  - chọn **View → Update Frequency → Very Often**.
+- Mở sẵn các file:
+  - `README.md`;
+  - `test-plans/23127178_Stress_20260813.jmx`;
+  - `results/summary.md`;
+  - `report/main-report.md`;
+  - `.claude/skills/perf-test-plan/SKILL.md`.
 
-**[NÓI]** *"Em nói trước đường đi này để anh/chị biết mỗi file đứng ở đâu. Chỉ có JMeter là thứ thật
-sự đo. Mọi script khác của em làm ba việc: **viết đề bài** cho JMeter, **dọn dẹp** trước khi đo, và
-**đọc lại** sổ ghi thô sau khi đo."*
+## Kiểm tra trước khi bấm ghi
 
----
-
-## Chuẩn bị trước khi bấm ghi
-
-| Việc | Chi tiết |
-|---|---|
-| Cửa sổ | Terminal **phải**, Activity Monitor **dưới** (tab CPU, ô tìm gõ `node`), VS Code **trái** |
-| Activity Monitor | **View → Update Frequency → Very often (1s)** |
-| SUT | `cd eshop-sut/backend && node server.js` ở tab riêng, để thấy được |
-| Cỡ chữ Terminal | ≥ 16pt |
-| Đóng | Zalo, Mail, Discord, mọi tab riêng tư — menu bar sẽ nằm trong khung |
-| Ghi | QuickTime → New Screen Recording → **Options → Microphone** |
-| Thử | Quay 20 giây, **nghe lại**. Sai mic là mất cả 10 phút |
+- Đóng Zalo, Mail, Discord và các tab có thông tin riêng tư.
+- Tăng cỡ chữ Terminal và VS Code để người xem đọc được.
+- Bật SUT trước khi quay.
+- Chọn đúng microphone trong QuickTime.
+- Quay thử 15–20 giây rồi nghe lại tiếng.
+- Có thể quay thành nhiều đoạn rồi ghép; đề không yêu cầu một lần quay liên tục.
 
 ---
 
-## 0:00 – 0:50 · Mở đầu + đường đi dữ liệu
+# 2. Kịch bản chính
 
-**[NÓI]** *"Em là Lê Nhựt Duy, MSSV 23127178, HW05 Performance Testing trên EShop backend API."*
+## CẢNH 1 — GIỚI THIỆU (0:00–0:40)
 
-**[LÀM]** Vẽ/đọc sơ đồ đường đi ở trên.
+### THAO TÁC
 
-**[NÓI]** *"Em đi theo **file**. Với mỗi file em nói ba điều: nó **không** làm gì, nó **làm** gì, và
-**thiếu nó thì hỏng ở đâu**. Vì bài này có 15 lỗi kỹ thuật bị bắt trong quá trình làm, và phần lớn
-công cụ ở đây sinh ra đúng để chặn những lỗi đó."*
+Mở `README.md`, để phần tên sinh viên và bảng kết quả tổng quan trên màn hình.
+
+### ĐỌC NGUYÊN VĂN
+
+> Em là Lê Nhựt Duy, MSSV 23127178. Đây là video demo bài HW05 Performance Testing trên hệ thống
+> EShop.
+>
+> Trong bài này, em dùng JMeter để chạy ba loại kiểm thử chính là Load, Stress và Spike. Em cũng chạy
+> thêm một lượt Soak trong 12 phút để kiểm tra độ ổn định.
+>
+> Video này sẽ trình bày ba phần: cách em thiết kế test plan, cách em chạy và đọc kết quả, và cách em
+> dùng Agent Skill để kiểm soát quy trình.
 
 ---
 
-## 0:50 – 2:30 · Nhóm 1 — File **viết ra đề bài** cho JMeter
+## CẢNH 2 — GIẢI THÍCH LUỒNG KIỂM THỬ (0:40–1:25)
 
-### `tools/gen-test-plans.py`
+### THAO TÁC
 
-**[NÓI — nói thẳng, đừng vòng]** *"File này **không test gì cả**. Nó là **máy đánh máy**: chạy nó thì
-**không có một request nào được gửi đi**. Nó chỉ viết ra 4 file XML — cái mà JMeter sẽ đọc."*
+Trong `README.md`, cuộn đến bảng **Phạm vi — ba endpoint group**.
 
-**[LÀM]** Mở file, chỉ vào **dòng 29** (`WORKFLOW`) rồi **dòng 108** (`SCENARIOS`).
+### ĐỌC NGUYÊN VĂN
 
-**[NÓI]** *"Cả file 480 dòng nhưng chỉ có hai chỗ đáng nhìn. Dòng 29: **6 bước** của luồng admin —
-login, xem đơn, xem user, import sản phẩm, đổi trạng thái đơn, và một nhánh login sai mật khẩu.
-Dòng 108: tham số tải của 4 scenario — Load 20 VU, Stress tăng bậc 25→50→100→200, Spike 10 VU nền rồi
-dội 200 VU trong 5 giây, Soak 20 VU chạy 12 phút."*
+> Cả ba test plan đều chạy cùng một luồng quản trị.
+>
+> Đầu tiên là đăng nhập, thuộc nhóm auth-heavy. Tiếp theo là xem danh sách đơn hàng và người dùng,
+> thuộc nhóm read-heavy. Sau đó là import sản phẩm và đổi trạng thái đơn hàng, thuộc nhóm
+> transactional.
+>
+> Ngoài ra, em có một nhánh đăng nhập sai mật khẩu để kiểm tra account lockout.
+>
+> Em giữ nguyên luồng này trong Load, Stress và Spike. Ba plan chỉ khác số người dùng ảo, thời gian
+> tăng tải và think-time. Nhờ vậy, kết quả giữa ba scenario có thể so sánh với nhau.
 
-**[GÕ]** `npm run plans`
+---
 
-**[NÓI]** *"Ra 4 file. Mỗi file khoảng 425 dòng XML."*
+## CẢNH 3 — TEST PLAN VÀ DỮ LIỆU CSV (1:25–2:20)
 
-**[TÁC DỤNG — nói chậm, đây là chỗ dễ nói hỏng nhất]**
+### THAO TÁC
 
-*"Bình thường người ta tạo file `.jmx` bằng **GUI của JMeter**, kéo thả chuột. Một file thì nhanh.
-Nhưng bài này cần **4** file, và đề bắt cả 4 phải chạy **đúng cùng 6 bước** đó.*
+Mở `tools/gen-test-plans.py`, tìm `WORKFLOW`, sau đó tìm `SCENARIOS`.
 
-*Nếu làm bằng GUI thì em sẽ dựng 1 file rồi copy ra 4, sửa số VU trong từng bản. Hôm sau phát hiện
-bước 4 assert sai — **em phải sửa 4 chỗ**. Quên một chỗ thì Load và Stress **không còn đo cùng một
-thứ nữa**, mà nhìn vào file XML 425 dòng thì **không ai thấy được**. Số vẫn ra, bảng so sánh vẫn vẽ
-được — và bảng đó vô nghĩa.*
+Chạy:
 
-*Bài này đã bị đúng chuyện đó ở việc khác: em sửa lỗi 4xx cho nhánh lockout mà **quên** áp cho bước 5,
-kết quả là báo **18% error** trên một hệ thống hoàn toàn khoẻ.*
-
-*Nên: 6 bước viết **một lần**, ở một chỗ. Sửa một chỗ, chạy lại, cả 4 file đổi theo. **Không thể
-quên — vì không có chỗ thứ hai để quên.**"*
-
-**[LÀM — chứng minh 10 giây, thay cho mọi lời giải thích]**
-
-**[GÕ]**
 ```bash
-for f in test-plans/*.jmx; do
-  echo "$(basename $f)  $(grep -oE 'name="HTTPSampler.path">[^<]*' $f | sed 's/.*>//' | sort -u | md5)"
-done
+npm run plans
 ```
 
-**[NÓI]** *"Bốn dòng, **cùng một mã băm**. Tức danh sách endpoint của 4 plan **giống hệt nhau** —
-không phải em nói, mà máy tính ra."*
+Sau đó mở thư mục `test-plans/` và `data/`.
 
-### `test-plans/23127178_Load_20260813.jmx` — khối JSR223
+### ĐỌC NGUYÊN VĂN
 
-**[LÀM]** Mở file, tìm `JSR223PostProcessor`.
-
-**[NÓI]** *"Đây là mấy dòng Groovy. Nó gọi `prev.setSuccessful(true)` khi mã trả về là 400 của FR-10
-hoặc 403 của lockout — tức **ép JMeter coi mấy mã đó là thành công**."*
-
-**[TÁC DỤNG]** *"Vì sao phải ép: JMeter mặc định coi **mọi** mã 4xx là **thất bại**. Mà bài này có hai
-loại 4xx là phản hồi **đúng**: 403 khi tài khoản bị khoá — đó là bảo mật hoạt động đúng; và 400 khi
-đổi trạng thái đơn không hợp lệ — đó là state machine hoạt động đúng.*
-
-*Chỗ khó là: em đã thử dùng assertion để nói 'mã này chấp nhận được', **nhưng không được** — assertion
-chỉ **thêm** được lỗi, chứ **không xoá** được cờ thất bại JMeter đã gắn từ trước. Nên smoke test đầu
-tiên báo **41% error** trên một hệ thống chạy hoàn toàn đúng. Em mất hai lượt chạy mới hiểu ra, và
-đoạn Groovy này là cách sửa."*
-
-### `data/` — 4 file CSV
-
-**[GÕ]** `head -3 data/users.csv` rồi `cat data/users_lockout.csv`
-
-**[NÓI]** *"50 tài khoản, mỗi VU một tài khoản riêng. Và một file **thứ hai** chỉ có 2 dòng mật khẩu
-sai."*
-
-**[TÁC DỤNG]** *"Hai file tách nhau vì bản đầu em để chung. Luồng chính đọc chính file đó, nên nó
-**gặp 2 dòng sai mật khẩu và tự khoá tài khoản của mình** — 2,9% iteration thành rác. Tách file là để
-dữ liệu test không tự đầu độc lượt chạy của nó."*
+> File này không trực tiếp gửi request. Nó tạo ra bốn file JMeter gồm Load, Stress, Spike và Soak.
+>
+> Workflow được viết một lần rồi dùng chung cho cả bốn plan. Khi cần sửa endpoint hoặc assertion,
+> em chỉ sửa một chỗ và sinh lại toàn bộ. Cách này tránh việc bốn file JMeter bị lệch nhau.
+>
+> Toàn bộ dữ liệu test nằm ngoài script. Em dùng bốn file CSV cho tài khoản, tài khoản lockout, sản
+> phẩm import và đơn hàng.
+>
+> Em tách tài khoản lockout thành file riêng. Bản đầu em để chung với tài khoản bình thường, làm luồng
+> chính tự đăng nhập sai và tự khóa tài khoản của nó. Đây là một lỗi dữ liệu test mà em phát hiện sau
+> khi kiểm tra kết quả chạy thử.
 
 ---
 
-## 2:30 – 3:30 · Nhóm 2 — File **dọn dẹp trước khi đo**
+## CẢNH 4 — LOAD, STRESS VÀ SPIKE KHÁC NHAU THẾ NÀO (2:20–3:05)
 
-**[NÓI]** *"Ba file này không đo gì. Chúng đưa hệ thống về trạng thái sạch trước khi đo."*
+### THAO TÁC
 
-### `tools/preflight.mjs`
+Mở bảng cấu hình scenario trong `report/main-report.md`, mục cấu hình Load, Stress, Spike và Soak.
 
-**[GÕ]** `npm run preflight`
+### ĐỌC NGUYÊN VĂN
 
-**[NÓI]** *"Kiểm SUT có sống, CSV có đủ dòng, và Java nào đang chạy."*
-
-**[TÁC DỤNG]** *"Dòng Java là dòng quan trọng. `java` mặc định trên máy em là Temurin 8 **x86_64** —
-bản Intel, chạy qua Rosetta. Nếu JMeter chạy trên bản đó thì **chính JMeter thành điểm nghẽn**, và
-mọi con số đo được là chi phí của công cụ đo, không phải của server. Preflight bắt chuyện đó **trước**
-khi mất 6 phút chạy.*
-
-*Bản đầu của file này còn có bug: nó đọc kết quả từ luồng ra chuẩn, trong khi lệnh in ra **luồng
-lỗi**, nên nó báo `[OK] Java` với giá trị **rỗng** — báo xanh mà thực ra không kiểm gì."*
-
-### `tools/reset-lockout.mjs` và `tools/reset-orders.mjs`
-
-**[GÕ]** `node tools/reset-lockout.mjs` rồi `node tools/reset-orders.mjs`
-
-**[NÓI]** *"Cái đầu đưa số lần đăng nhập sai về 0 cho mọi tài khoản. Cái sau đưa đơn hàng về trạng
-thái `pending`."*
-
-**[TÁC DỤNG]** *"Đề đòi **reset account lockout giữa các lượt** và ghi lại thủ tục. Cụ thể ở SUT này:
-nó cộng số lần sai **2 đơn vị** mỗi lần — bug có từ bài trước — nên tài khoản bị khoá sau **2** lần
-sai, không phải 3. Không reset thì lượt sau bắt đầu với tài khoản đang bị khoá, và toàn bộ 403 đó sẽ
-bị đọc thành lỗi hiệu năng.*
-
-*`reset-orders` thì vì bước 5 đi qua state machine: một đơn chỉ chuyển tiếp được **một lần** cho mỗi
-trạng thái. Không reset thì từ lượt thứ hai nó trả 400 hết."*
+> Load dùng 20 người dùng ảo để mô phỏng mức tải thông thường.
+>
+> Stress tăng theo bốn bậc: 25, 50, 100 và 200 người dùng ảo. Mục tiêu là quan sát hệ thống khi tải
+> tăng dần và xem tài nguyên bắt đầu tiến gần giới hạn ở đâu.
+>
+> Spike giữ 10 người dùng nền, sau đó thêm 200 người dùng trong 5 giây. Thiết kế này giúp em nhìn được
+> trạng thái trước, trong và sau cú sốc.
+>
+> Soak dùng 20 người dùng ảo trong 12 phút. Kết quả 62,8 request mỗi giây là mức em đã xác nhận ổn
+> định trong 12 phút. Em không gọi đây là mức tối đa, vì em chưa chạy nhiều bậc soak để tìm giới hạn
+> cuối cùng.
 
 ---
 
-## 3:30 – 5:40 · Nhóm 3 — **Chạy thật**, hai cửa sổ trong cùng khung
+## CẢNH 5 — CHẠY THẬT VÀ THEO DÕI TÀI NGUYÊN (3:05–5:00)
 
-> Đoạn bắt buộc. Chọn **Spike** vì chỉ 4 phút và có khoảnh khắc rõ nhất.
+> Đây là cảnh bắt buộc. Terminal và Activity Monitor phải nằm trong cùng khung hình.
 
-### `tools/capture-run.sh`
+### THAO TÁC
 
-**[GÕ]** `bash tools/capture-run.sh Spike`
+Đặt Terminal và Activity Monitor cạnh nhau. Trong Terminal chạy:
 
-**[NÓI]** *"Script này gọi JMeter chạy thật, đồng thời lấy mẫu CPU mỗi 2 giây, và **đếm ngược** tới
-giây thứ 72 để nhắc em chụp ảnh."*
-
-**[TÁC DỤNG]** *"Vì sao cần đếm ngược: cửa sổ cú sốc chỉ rộng **30 giây** — CPU lên 75% rồi tụt về 8%
-trong khoảng 24 giây. Canh bằng mắt là trượt. Lần đầu em chụp được **34,9%** trong khi đỉnh thật là
-**81,6%** — tức tấm ảnh **nói ngược** điều báo cáo nói. Script đếm từ lúc **JMeter thật sự bắt đầu**,
-không phải từ lúc em bấm Enter."*
-
-**[LÀM — đây là bằng chứng chính của cả video]** Đến mốc: **chỉ vào Activity Monitor**, đọc to số
-`node` đang chạm ~72%. Giữ khung có **cả hai cửa sổ** vài giây. Đừng nói gì thêm, để người xem nhìn.
-
-**[NÓI]** *"Đây đúng là tấm `activity-spike.png` trong bài nộp: ảnh đọc **72,6%**, còn tool đo đỉnh
-**75,7%**. Hai nguồn độc lập, lệch 3 điểm."*
-
-### `tools/sample-resources.sh`
-
-**[GÕ]** `tail -3 results/resources/23127178_Spike_*.resources.csv`
-
-**[NÓI]** *"Đây là file mà script vừa ghi song song: CPU và bộ nhớ của `node` **và** của JMeter, mỗi
-2 giây, cộng cột tải nền của máy."*
-
-**[TÁC DỤNG]** *"Tấm ảnh chỉ là **một lát cắt**; file này cho **cả đường cong**, nên tính được đỉnh.
-Bản đầu nó bám sai tiến trình — lệnh tìm khớp cả cái **shell** đã khởi động backend — nên nó ghi bộ
-nhớ 0,5 MB suốt 6 phút trong khi `node` thật đang ở 76 MB."*
-
----
-
-## 5:40 – 7:20 · Nhóm 4 — File **đọc sổ ghi thô** (p95, p99, error rate)
-
-### `tools/summarize-jtl.mjs`
-
-**[GÕ]** `npm run summary` → mở `results/summary.md`
-
-**[NÓI]** *"Đọc cả 13 file `.jtl` thô, tính ra bảng này."*
-
-**[TÁC DỤNG]** *"Tác dụng: **không con số nào trong báo cáo được đếm bằng tay.** Mọi số trong báo cáo
-truy được về file này, và file này truy được về `.jtl`. Đề có mục chống gian lận, và đây là cách em
-trả lời mục đó."*
-
-### `tools/ci-gate.mjs` — giải thích p95 / p99 / error rate
-
-**[GÕ]** `node tools/ci-gate.mjs results/jtl/23127178_Stress_20260815-153717.jtl --p95 20`
-
-**[NÓI]** chỉ tay vào từng số:
-- *"**p95 = 18ms** — 95 phần trăm request nhanh hơn 18 mili-giây."*
-- *"**p99 = 124ms** — nhưng 1% chậm nhất thì gấp **7 lần** con số vừa rồi."*
-- *"**max = 3.691ms** — có request phải chờ **gần 4 giây**."*
-- *"**avg = 9,6ms** — và đây là lý do **không được báo cáo bằng average**: p99 gấp **13 lần** avg, max
-  gấp **205 lần** p95. Average xoá sạch cái đuôi, mà cái đuôi mới là chỗ người dùng thấy chậm."*
-
-**[TÁC DỤNG — quan trọng nhất cả video, nói chậm]**
-
-*"Giờ đến chỗ dễ hiểu sai nhất. Bài em ghi **error rate 0%** ở cả 4 lượt. Nhưng nhìn dòng mã trả về:
-có **51.301 mã 400**.*
-
-*Không mâu thuẫn. Test plan **cố ý** đánh dấu hai loại mã là thành công, vì chúng là phản hồi **đúng
-đặc tả**: 400 khi state machine chặn một chuyển trạng thái không hợp lệ, và 401/403 của nhánh thử
-lockout. Cái sai sẽ là 500 hoặc timeout — và **không có mẫu nào** như vậy.*
-
-*Cổng này đọc **cột `success`** mà JMeter ghi, **không** tự suy từ mã HTTP. Nếu nó tự suy thì sẽ dựng
-lại đúng cái lỗi 18% error rate em nói ở đầu video.*
-
-*Và hệ quả phải nói ra: **539,7 request/giây là throughput của toàn bộ workflow HTTP, không phải của
-giao dịch đổi trạng thái đơn hoàn tất.** Chỉ **400** request chạm được lệnh ghi thật; tải ghi thật của
-bài đến từ bước **import sản phẩm**, không phải bước 5. Nói 539 giao dịch/giây là nói quá."*
-
-### `tools/soak-drift.mjs`
-
-**[GÕ]** `npm run drift`
-
-**[TÁC DỤNG]** *"Tính độ trôi của p95 và bộ nhớ qua lượt Soak 12 phút, để chốt ngưỡng chịu đựng
-**62,8 request/giây**. Em **cố ý không** gọi đó là *mức tối đa*, vì chính lượt Stress đã đạt **539,7**.
-62,8 là mức em **đã xác nhận giữ ổn định 12 phút** ở 20 VU — muốn tìm mức tối đa thì phải tăng dần
-nhiều bậc, việc đó em chưa làm và có ghi rõ.*
-
-*File này cũng từng in **'trôi bộ nhớ +228,9%'** — đọc y như rò rỉ bộ nhớ — chỉ vì nó lấy mẫu đầu
-**trước khi tiến trình khởi động xong**. So nửa đầu với nửa sau thì chỉ **+5%**."*
-
-**[LÀM]** Mở `results/html/spike/index.html`, chỉ vào đồ thị response time theo thời gian. 15 giây.
-
----
-
-## 7:20 – 8:50 · Nhóm 5 — **Agent Skills** (§7, end-to-end)
-
-> Đoạn quyết định 10 điểm Agent Skills. Phải thấy **input → human review → output**.
-
-**[NÓI]** *"Agent Skill là file hướng dẫn quy trình cho AI. Nó không phải prompt, mà là **checklist
-bắt AI đi từng bước và dừng lại cho em duyệt**."*
-
-### `.claude/skills/perf-test-plan/SKILL.md`
-
-**[LÀM]** Mở file, cuộn qua 7 bước.
-
-**[NÓI]** *"7 bước để thiết kế **một** test plan cho **một** nhóm endpoint, kèm checklist 8 mục phải
-duyệt trước khi chạy."*
-
-**[LÀM — chạy thật trên một nhóm endpoint hoàn chỉnh]** Gõ vào Claude Code:
-
-```
-Dùng skill perf-test-plan, thiết kế lượt Load cho endpoint group read-heavy
-(GET /api/admin/orders và GET /api/admin/users). Đi từng bước, dừng ở bước
-duyệt để tôi kiểm.
+```bash
+bash tools/capture-run.sh Spike
 ```
 
-**[NÓI]** khi nó dừng *"Đây là **bước human review** — skill bắt dừng ở đây, không cho chạy tiếp. Em
-kiểm think-time đặt ở phạm vi nào, vì lỗi số 6 của bài là timer đặt ở phạm vi thread group nên JMeter
-chèn nó **5 lần mỗi vòng lặp** thay vì 1 lần — làm tải thực tế **nhẹ hơn thiết kế 5 lần**, mà plan
-vẫn chạy bình thường, vẫn ra số, vẫn ra dashboard đẹp."*
+Trong lúc chờ JMeter chạy, đọc phần bên dưới. Khi script báo đến mốc spike, chỉ vào dòng `node` trong
+Activity Monitor và giữ nguyên khung hình vài giây.
 
-**[LÀM]** Mở output nó sinh ra.
+### ĐỌC NGUYÊN VĂN
 
-### `.claude/skills/jtl-analysis/SKILL.md`
+> Bây giờ em chạy thật scenario Spike. Terminal bên phải đang chạy JMeter. Activity Monitor bên cạnh
+> đang hiển thị CPU của backend Node.
+>
+> Script này vừa chạy JMeter, vừa ghi CPU và bộ nhớ mỗi hai giây. Nó cũng nhắc em đúng thời điểm cú
+> spike xảy ra để em không chụp trượt đỉnh tải.
+>
+> Bản đầu em canh bằng mắt nên ảnh chỉ bắt được khoảng 35 phần trăm CPU, trong khi file tài nguyên ghi
+> đỉnh hơn 80 phần trăm. Vì vậy em sửa quy trình: thời điểm chụp phải được tính từ lúc JMeter bắt đầu,
+> không tính từ lúc em bấm Enter.
+>
+> Ở lượt Spike dùng làm kết quả chính, ảnh Activity Monitor ghi khoảng 72,6 phần trăm CPU. File lấy mẫu
+> độc lập ghi đỉnh 75,7 phần trăm. Hai nguồn chỉ lệch khoảng ba điểm phần trăm.
+>
+> Việc để tool và Activity Monitor trong cùng khung chứng minh đây là lượt chạy thật trên máy của em,
+> chứ không chỉ là một bảng số liệu đã chuẩn bị trước.
 
-**[LÀM]** Mở file, chỉ vào bảng các kiểu đọc sai metric. Rồi mở `report/main-report.md` mục 3.2.
+### NẾU KHÔNG MUỐN CHỜ HẾT 4 PHÚT
 
-**[NÓI]** *"Em cho AI phân tích `.jtl` **trước**, giữ nguyên văn trong báo cáo, rồi dùng skill này
-soát lại — ra **7 lỗi**. Em đọc một lỗi."*
-
-**[TÁC DỤNG]** *"AI nói p95 tăng *'có thể do database đã lớn hơn'*. Kiểm lại: database tăng **8%**,
-còn tải nền của máy tăng **84%**. Nó chọn giả thuyết **nghe hợp lý** thay vì đọc cột tải nền mà chính
-bộ tool của em đã ghi ra.*
-
-*Và điều đáng nói nhất: **em cũng từng mắc đúng lỗi đó.** Mục 2.8 của báo cáo là mục em **thu hồi**
-một kết luận của chính mình — em từng viết rằng dữ liệu lớn hơn làm hệ thống chậm đi, rồi một lượt
-chạy sạch bác bỏ: database **lớn hơn 16 lần** mà **nhanh hơn 10 lần**. Em giữ mục đó lại dưới dạng
-thu hồi thay vì xoá."*
-
-**[NÓI nhanh]** *"Hai skill còn lại: `resource-evidence` quy định định dạng bằng chứng ảnh,
-`ai-audit-logger` ghi mỗi lượt tương tác vào phụ lục — hiện **12 lượt**, mỗi lượt có prompt nguyên
-văn và ô ghi rõ chỗ nào em **đã tự kiểm**, chỗ nào **chưa**."*
-
----
-
-## 8:50 – 9:40 · Nhóm 6 — File **kiểm lại chính bài mình**
-
-### `tools/verify-all.sh`
-
-**[GÕ]** `npm run verify`
-
-**[TÁC DỤNG]** *"Mọi tài liệu trong repo chỉ là **lời khẳng định**. Người chấm không có cách nào phân
-biệt 'con số này đo được' với 'con số này được viết ra'. Script này đi ngược lại: **tính lại** từ
-`.jmx`, `.jtl`, `.csv`, rồi **so với con số đang in trong báo cáo**. Lệch thì in FAIL kèm **cả hai
-giá trị**. Nó không lấy số từ file markdown nào để tính."*
-
-**[LÀM]** Chỉ vào mục 1 và mục 4.
-
-**[NÓI]** *"Mục 1 rút danh sách endpoint của **từng** plan rồi so — sửa tay một plan là đỏ ngay. Mục 4
-kiểm bằng chứng ảnh: giờ chụp mỗi ảnh phải nằm **trong khoảng lượt chạy**, lấy từ file dấu có kèm mã
-băm, **không** lấy từ thời gian sửa file — vì lệnh copy khi đóng gói đặt thời gian mới, nên chạy
-validator bên trong file zip sẽ báo đỏ mọi ảnh thật."*
-
-### `bug-report/verify-bugs.sh`
-
-**[GÕ]** `bash bug-report/verify-bugs.sh`
-
-**[TÁC DỤNG]** *"Gọi request **thật** vào SUT để chứng minh lại 2 bug em báo. Dòng quan trọng nhất là
-dòng **đối chứng**: gọi `/api/orders/1` không token trả **200**, còn `/api/orders/my-orders` không
-token trả **401**. Không có dòng đối chứng thì bug chỉ là 'endpoint này không cần token' — có thể bị
-phản biện là API vốn công khai. Có nó thì thành **một route bị bỏ sót**. Đã mở Issue **#288** và
-**#289**."*
+Có thể dừng phần ghi sau khi đã quay được cảnh spike, rồi chuyển sang clip tiếp theo. Khi dựng video,
+giữ ít nhất 60–90 giây có Terminal và Activity Monitor cùng xuất hiện.
 
 ---
 
-## 9:40 – 10:00 · Kết — Task 3 đã chạy thật
+## CẢNH 6 — RESET ACCOUNT LOCKOUT (5:00–5:35)
 
-**[GÕ]** `gh run list --workflow=perf-smoke.yml`
+### THAO TÁC
 
-**[NÓI]** *"Task 3 đề chỉ đòi **đề xuất trên giấy**. Em hiện thực nhánh PR pipeline thành GitHub
-Actions thật và chạy **6 lượt**, trong đó **một lượt build đỏ** vì vượt ngưỡng."*
+Chạy:
 
-**[TÁC DỤNG — câu kết]** *"Và nó **không** xác nhận điều em dựng nó ra để xác nhận. Ba lượt **giống
-nhau từng tham số** cho p95 **101, 15 và 8 mili-giây**. Cùng code, cùng ngưỡng — ngưỡng 8ms làm build
-đỏ ở lượt này thì lượt kia vừa đủ xanh. Nên em **bỏ hẳn** ngưỡng p95 tuyệt đối trong đề xuất, chuyển
-sang chặn bằng error rate và so thứ hạng endpoint **trong cùng một lượt**.*
+```bash
+node tools/reset-lockout.mjs
+node tools/reset-orders.mjs
+```
 
-*Kết quả đo **sửa lại đề xuất**, chứ không phải minh hoạ cho nó. Em xin hết."*
+### ĐỌC NGUYÊN VĂN
 
----
-
-## Soát sau khi quay
-
-| | |
-|---|---|
-| ☐ | Tổng thời lượng **≥ 6:00** (cộng dồn nếu chia clip) — kiểm bằng thanh thời gian |
-| ☐ | Đoạn 3:30–5:40 thấy **rõ cả** Activity Monitor và Terminal |
-| ☐ | Đã nói **vì sao 400/403 được đánh dấu thành công** |
-| ☐ | Đã nói **cách reset lockout giữa các lượt** |
-| ☐ | Có đoạn **Agent Skill end-to-end**, thấy bước human review |
-| ☐ | Không cửa sổ riêng tư / thông báo nào lọt khung |
-| ☐ | YouTube: **Unlisted**, KHÔNG phải Private |
-| ☐ | Mở link ở cửa sổ ẩn danh để chắc người khác xem được |
-| ☐ | Thêm **timestamp** vào description, nhất là mốc Agent Skill |
-
-**Sau khi có link:** đưa link để dán vào `README.md`, `report/main-report.md`, `TASKS.md`, đổi Agent
-Skills thành **10**, bỏ dấu `100*`, xoá mọi câu *"CHƯA CÓ"/"THIẾU"/"chờ quay"*, build lại PDF, đóng gói.
+> Trước mỗi lượt, em reset account lockout và đưa đơn hàng về trạng thái pending.
+>
+> Nếu không reset lockout, lượt sau sẽ bắt đầu bằng các tài khoản đã bị khóa và kết quả sẽ sai.
+>
+> Nếu không reset đơn hàng, bước đổi trạng thái sẽ trả 400 vì đơn đó đã được chuyển ở lượt trước.
+>
+> Hai bước reset này được tự động gọi trước mỗi scenario và cũng được ghi trong run log.
 
 ---
 
-## Nếu quay quá dài — cắt theo thứ tự này
+## CẢNH 7 — ĐỌC KẾT QUẢ JTL (5:35–6:55)
 
-**Giữ bằng mọi giá:** đoạn chạy thật có Activity Monitor · giải thích 400/403 thành công · Agent Skill
-end-to-end · reset lockout · giải thích p95/p99/error rate.
+### THAO TÁC
 
-**Cắt được:** `soak-drift` (nói một câu thay vì chạy) · hai skill cuối · HTML dashboard · phần
-`verify-bugs.sh` (bug report đã nộp kèm).
+Chạy:
+
+```bash
+npm run summary
+```
+
+Mở `results/summary.md`, chỉ vào bảng tổng quan. Sau đó chạy:
+
+```bash
+node tools/ci-gate.mjs results/jtl/23127178_Stress_20260815-153717.jtl --p95 20
+```
+
+### ĐỌC NGUYÊN VĂN
+
+> File JTL là dữ liệu thô. Mỗi request được ghi thành một dòng. Script summary đọc trực tiếp các file
+> này để tính số sample, throughput, p95, p99 và error rate. Vì vậy các con số trong báo cáo đều có
+> thể tính lại, không phải nhập bằng tay.
+>
+> Kết quả Stress chính có 258.992 sample, throughput 539,7 request mỗi giây, p95 là 18 mili-giây và
+> p99 là 124 mili-giây. Request chậm nhất mất gần 3,7 giây.
+>
+> Average chỉ là 9,6 mili-giây. Nếu chỉ nhìn average, em sẽ bỏ qua phần đuôi rất chậm. Vì vậy em luôn
+> đọc p95, p99 và max cùng nhau.
+>
+> Error rate được ghi là 0 phần trăm, nhưng điều này cần giải thích. Một số mã 400 của state machine
+> và 401, 403 của nhánh lockout là phản hồi đúng theo kịch bản, nên test plan đánh dấu chúng là thành
+> công.
+>
+> Vì vậy, 539,7 request mỗi giây là throughput của toàn bộ workflow HTTP. Nó không có nghĩa là có
+> 539 giao dịch đổi trạng thái đơn hàng hoàn tất trong một giây.
+
+---
+
+## CẢNH 8 — HUMAN REVIEW: AI ĐÃ ĐỌC SAI GÌ (6:55–7:55)
+
+### THAO TÁC
+
+Mở `report/main-report.md`, đến mục **AI phân tích và soát lỗi đọc metric**.
+
+### ĐỌC NGUYÊN VĂN
+
+> Sau khi có raw JTL, em nhờ AI phân tích trước rồi tự kiểm tra lại.
+>
+> AI nói hệ thống xử lý 200 người dùng đồng thời tốt vì p95 chỉ 18 mili-giây. Kết luận này thiếu một
+> nửa dữ liệu: CPU của Node đã lên 97,7 phần trăm của một lõi, p99 là 124 mili-giây và max gần 3,7
+> giây. Hệ thống giữ được p95 thấp nhưng đã tiến gần giới hạn một luồng.
+>
+> AI cũng cho rằng p95 tăng vì database lớn hơn. Em từng tin và từng viết đúng kết luận đó. Sau khi
+> có thêm một lượt chạy, dữ liệu lớn hơn nhưng kết quả lại nhanh hơn. Vì vậy em thu hồi kết luận cũ.
+>
+> Bài học của em là một nguyên nhân nghe hợp lý chưa phải là một nguyên nhân đã được chứng minh. Khi
+> so các lượt performance test, phải kiểm soát tải nền và các biến môi trường trước khi kết luận.
+
+---
+
+## CẢNH 9 — DEMO AGENT SKILL END-TO-END (7:55–8:55)
+
+### THAO TÁC
+
+Mở `.claude/skills/perf-test-plan/SKILL.md`, cuộn chậm qua bảy bước.
+
+Trong Claude Code, nhập đúng prompt sau:
+
+```text
+Dùng skill perf-test-plan để thiết kế một lượt Load cho nhóm read-heavy gồm
+GET /api/admin/orders và GET /api/admin/users. Đi từng bước và dừng ở bước
+human review để tôi kiểm tra trước khi chốt kết quả.
+```
+
+Nếu AI xử lý lâu, có thể tạm dừng ghi và quay tiếp khi nó đã tới bước human review.
+
+### ĐỌC NGUYÊN VĂN
+
+> Đây là Agent Skill perf-test-plan mà em dùng trong bài.
+>
+> Skill chia việc thiết kế test plan thành bảy bước. AI phải xác định endpoint, dữ liệu, tải, assertion
+> và bằng chứng. Sau đó nó phải dừng ở bước human review để em kiểm tra trước khi chốt.
+>
+> Ở ví dụ này, em yêu cầu skill thiết kế một lượt Load cho nhóm read-heavy. Đây là input của em. Phần
+> AI đang trả về là quá trình thực hiện. Và đây là điểm dừng human review.
+>
+> Em kiểm tra số người dùng ảo, ramp-up, think-time, dữ liệu CSV và assertion. Nếu một mục chưa hợp lý,
+> em sửa ở bước này thay vì chạy ngay.
+>
+> Tác dụng của skill không phải là thay em quyết định. Nó giúp em không bỏ sót bước, còn kết quả cuối
+> cùng vẫn do em kiểm tra và chịu trách nhiệm.
+
+### THAO TÁC CUỐI CẢNH
+
+Sau khi kiểm tra phần human review, nhập tiếp:
+
+```text
+Tôi đã kiểm tra các tham số. Hãy tiếp tục, chốt test plan và cho tôi xem
+output cuối cùng gồm endpoint, VU, ramp-up, think-time và assertion.
+```
+
+Mở output cuối cùng hoặc test plan mà skill vừa tạo. Chỉ vào endpoint, VU, ramp-up, think-time và
+assertion để chứng minh quy trình đã đi từ **input → human review → output**.
+
+---
+
+## CẢNH 10 — KẾT THÚC (8:55–9:15)
+
+### THAO TÁC
+
+Giữ màn hình ở output cuối cùng của Agent Skill hoặc quay lại bảng kết quả tổng quan trong
+`README.md`.
+
+### ĐỌC NGUYÊN VĂN
+
+> Qua Agent Skill này, AI giúp em thực hiện đúng từng bước, nhưng em vẫn là người kiểm tra tham số và
+> chịu trách nhiệm cho kết quả cuối cùng.
+>
+> Em xin kết thúc phần demo. Cảm ơn thầy cô và anh chị đã xem video.
+
+---
+
+# 3. Nếu cần rút video xuống gần 7 phút
+
+Giữ nguyên các cảnh sau:
+
+1. Giới thiệu.
+2. Workflow ba endpoint group.
+3. Cảnh chạy thật có Activity Monitor.
+4. Reset lockout.
+5. Giải thích p95, p99 và error rate.
+6. Human review AI.
+7. Agent Skill end-to-end.
+
+Có thể rút ngắn:
+
+- Cảnh tạo test plan còn 30 giây.
+- Chỉ nói một câu về Load/Stress/Spike.
+- Không cần chạy `npm run summary` nếu đã mở sẵn `results/summary.md`.
+
+Không được cắt:
+
+- Tool và Activity Monitor cùng khung.
+- Giọng nói của mình.
+- Giải thích reset lockout.
+- Agent Skill từ input đến human review và output.
+
+---
+
+# 4. Checklist sau khi quay
+
+- [ ] Tổng thời lượng ít nhất **6 phút**.
+- [ ] Nghe rõ giọng nói từ đầu đến cuối.
+- [ ] Có Terminal/JMeter và Activity Monitor trong cùng khung khi test đang chạy.
+- [ ] Có nói về Load, Stress và Spike.
+- [ ] Có giải thích reset account lockout.
+- [ ] Có giải thích p95, p99 và error rate.
+- [ ] Có nói rõ vì sao một số 400/401/403 được tính là phản hồi hợp lệ.
+- [ ] Có demo Agent Skill từ prompt đến human review và output.
+- [ ] Không lộ thông báo hoặc thông tin riêng tư.
+- [ ] Upload YouTube ở chế độ **Unlisted**, không phải Private.
+- [ ] Mở link bằng cửa sổ ẩn danh để chắc chắn người chấm xem được.
+- [ ] Dán link vào `README.md`, `report/main-report.md` và `TASKS.md`.
+- [ ] Xóa các dòng `CHƯA CÓ`, `THIẾU` và `chờ quay`.
+- [ ] Xuất lại PDF và đóng gói lại bài nộp.
+
+---
+
+# 5. Mẫu mô tả YouTube
+
+```text
+HW05 — Performance Testing on EShop
+Sinh viên: Lê Nhựt Duy — MSSV 23127178
+
+00:00 Giới thiệu
+00:40 Workflow và endpoint groups
+01:25 Test plan và CSV data-driven
+02:20 Load, Stress, Spike và Soak
+03:05 Chạy JMeter cùng Activity Monitor
+05:00 Reset account lockout
+05:35 Đọc JTL, p95, p99 và error rate
+06:55 Human review kết quả AI
+07:55 Agent Skill end-to-end
+08:55 Kết thúc
+```

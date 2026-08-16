@@ -142,29 +142,26 @@ else
   bad "thiếu manifest.json" "chạy: node tools/stamp-screenshots.mjs"
 fi
 
-echo "     Đối chiếu dự phòng bằng mtime (chỉ đúng trong repo gốc, KHÔNG đúng trong bản nộp):"
-for pair in "load|Load" "stress|Stress" "spike|Spike" "soak|Soak"; do
-  img="resource-monitor/screenshots/activity-${pair%%|*}.png"; s="${pair##*|}"
-  [ ! -f "$img" ] && { bad "$s — thiếu ảnh" "$img"; continue; }
-  logf="results/run-log.md"; [ "$s" = "Soak" ] && logf="endurance/run-log.md"
-  line=$(grep -E "^\| $s \|" "$logf" | tail -1)
-  st=$(echo "$line" | awk -F'|' '{gsub(/ /,"",$3); print $3}')
-  en=$(echo "$line" | awk -F'|' '{gsub(/ /,"",$4); print $4}')
-  [ -z "$st" ] && { note "$s — run-log không có dòng"; continue; }
-  se=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$st" +%s 2>/dev/null)
-  ee=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$en" +%s 2>/dev/null)
-  ie=$(stat -f %m "$img")
-  # mtime là lúc LƯU file, trễ hơn lúc chụp vài giây (Cmd+Shift+4 lưu khi nhả chuột). Cho biên
-  # độ 90s sau khi lượt kết thúc, nhưng nói rõ khi ảnh nằm ngoài khoảng chặt.
-  GRACE=90
-  if [ -n "$se" ] && [ "$ie" -ge "$se" ] && [ "$ie" -le "$ee" ]; then
-    ok "$s — ảnh chụp TRONG lượt chạy" "giây thứ $((ie - se))/$((ee - se))"
-  elif [ -n "$se" ] && [ "$ie" -gt "$ee" ] && [ "$ie" -le $((ee + GRACE)) ]; then
-    note "$s — ảnh lưu $((ie - ee))s SAU khi lượt kết thúc" "trong biên độ ${GRACE}s (mtime = lúc lưu, không phải lúc chụp)"
-  else
-    bad "$s — ảnh NGOÀI khoảng lượt chạy" "ảnh $(date -r "$ie" +%H:%M:%S) · lượt $(date -r "${se:-0}" +%H:%M:%S)–$(date -r "${ee:-0}" +%H:%M:%S)"
-  fi
-done
+# Đối chiếu phụ: mtime của file còn khớp `captured_at` trong manifest không.
+#
+# KHÔNG so mtime với run-log nữa. Bản trước lấy dòng run-log CUỐI CÙNG của mỗi scenario, nên khi
+# lượt Spike được chạy lại lúc quay video thì nó so ảnh của lượt được nộp với lượt quay video và
+# báo FAIL sai. Manifest đã ghim đúng lượt của từng ảnh, nên chỗ này chỉ còn một việc: nói mtime
+# có bị thay đổi so với lúc đóng dấu hay chưa. Lệch là BÌNH THƯỜNG bên trong bản nộp — `cp` đặt
+# mtime mới — nên đây là dòng thông tin, không phải điều kiện pass/fail.
+echo "     mtime file so với captured_at trong manifest (lệch là bình thường sau khi đóng gói):"
+if [ -f "$MANIFEST" ]; then
+  for img in resource-monitor/screenshots/*.png; do
+    b=$(basename "$img")
+    cap=$(node -e "const m=require('./resource-monitor/screenshots/manifest.json').screenshots;const e=m['$b'];console.log(e?e.captured_at:'')" 2>/dev/null)
+    [ -z "$cap" ] && continue
+    ct=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${cap%.*}" +%s 2>/dev/null)
+    mt=$(stat -f %m "$img")
+    d=$(( mt - ct )); [ "$d" -lt 0 ] && d=$(( -d ))
+    if [ "$d" -le 2 ]; then printf "       %-32s mtime khớp dấu\n" "$b"
+    else printf "       %-32s mtime lệch %ss — file đã được copy/ghi lại\n" "$b" "$d"; fi
+  done
+fi
 
 # ── 5. Bằng chứng tài nguyên: ảnh đọc được vs tool đo ───────────────────────
 head_ "5. §6 — số tài nguyên tính được từ CSV"

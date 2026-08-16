@@ -18,7 +18,7 @@ Script đó tính lại mọi con số **từ `.jmx` · `.jtl` · `.csv` · mtim
 đang in trong báo cáo. Lệch thì in `[FAIL]` kèm **cả hai giá trị**. Nó không đọc số từ file `.md`
 nào để tính — `.md` chỉ dùng để so.
 
-Trạng thái hiện tại: **33 PASS · 1 FAIL** (FAIL duy nhất là **link video demo** chưa có).
+Trạng thái hiện tại: **34 PASS · 0 FAIL**.
 
 **Vì sao không tách thành `task1/` `task2/` `task3/`:** §14 đòi *"**Main report** … including the
 performance-testing report **and** your AI-analysis critique"* — Task 1 và Task 2 phải nằm trong
@@ -49,7 +49,7 @@ task vì thế là **ba chương của báo cáo**, còn bằng chứng nằm th
 | **Hardware report** (hostname khớp HW trước) | [`resource-monitor/hardware-report.md`](resource-monitor/hardware-report.md) — `Le-Nhut-Duy.local` | `verify-all.sh` mục 6 · `hostname -s` |
 | **Reset lockout giữa các lượt** + ghi thủ tục | [`report/main-report.md §2.6`](report/main-report.md) · [`tools/reset-lockout.mjs`](tools/reset-lockout.mjs), [`tools/reset-orders.mjs`](tools/reset-orders.mjs) | `node tools/reset-lockout.mjs` (cần SUT chạy) |
 | **Endurance threshold** kèm số cụ thể | [`endurance/endurance-threshold.md`](endurance/endurance-threshold.md) · §2.7 | `node tools/soak-drift.mjs` — tính lại từ `.jtl` |
-| **Video demo ≥6 phút** | **CHƯA CÓ** — kịch bản `docs/kich-ban-video-demo.md` (chỉ trong repo, không đóng gói) · phải có cả đoạn **demo Agent Skill end-to-end** (§7) | `verify-all.sh` mục 6 — đang **[FAIL]** |
+| **Video demo ≥6 phút** | **Đạt** — https://youtu.be/hCf4bXwzx2A · **11:49** · unlisted · tool + Activity Monitor cùng khung · có đoạn **Agent Skill end-to-end** (§7) | `verify-all.sh` mục 6 — **[PASS]** · kiểm link: mở ở cửa sổ ẩn danh |
 | **Report issues** lên GitHub Issues | [`bug-report/bug-report.md`](bug-report/bug-report.md) — Issue [#288](https://github.com/DuyITLOR/group05_eshop/issues/288) · [#289](https://github.com/DuyITLOR/group05_eshop/issues/289) | `bash bug-report/verify-bugs.sh` — **gọi request thật** vào SUT, chạy lại từng bằng chứng |
 
 ## Task 2 — AI analysis and misinterpretation hunt (10 điểm)
@@ -97,6 +97,6 @@ Nói ra để không tạo cảm giác mọi thứ đều đã được máy xá
 1. **Không trùng endpoint trong nhóm (§5)** — căn cứ là ảnh chat nhóm, phải đối chiếu bằng mắt.
 2. **Nội dung ảnh chụp** — script kiểm được *thời điểm* ảnh, không kiểm được *trong ảnh có gì*. Con
    số CPU đọc từ ảnh phải xem bằng mắt và so với `results/resources/*.csv`.
-3. **Video demo** — chưa có.
+3. **Nội dung nói trong video** — script kiểm được *link có trong README*, không kiểm được *trong video nói gì*. Link: https://youtu.be/hCf4bXwzx2A
 4. **k6** — có bản mirror, **chưa chạy lần nào**. §8 xếp k6 là bonus nên không tính điểm, nhưng cũng
    không được nói là đã đối chiếu chéo.
