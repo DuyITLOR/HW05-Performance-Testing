@@ -28,9 +28,9 @@ Kiểm lại bất cứ lúc nào: `npm run drift`
 | Think-time | 5 bước × (200–400ms) = **1–2s mỗi iteration** |
 | Thời lượng | **719,6s** (12 phút) |
 | Bắt đầu / kết thúc (UTC) | `2026-08-15T08:52:47Z` → `2026-08-15T09:04:51Z` |
-| Raw log | [`endurance/jtl/23127178_Soak_20260815-155247.jtl`](jtl/) — 45.166 sample |
+| Raw log | [`endurance/jtl/23127178_Soak_20260815-155240.jtl`](jtl/23127178_Soak_20260815-155240.jtl) — 45.166 sample |
 | Dashboard | [`endurance/html/soak/index.html`](html/soak/index.html) |
-| Mẫu tài nguyên | [`endurance/resources/23127178_Soak_20260815-155247.resources.csv`](resources/) — 2 giây/mẫu |
+| Mẫu tài nguyên | [`endurance/resources/23127178_Soak_20260815-155240.resources.csv`](resources/23127178_Soak_20260815-155240.resources.csv) — 2 giây/mẫu |
 | Kích thước dữ liệu | bảng `products` ~**900.000 dòng** |
 | **Tải nền khi đo** | `load_1m` trung bình **4,6** trên máy 12 lõi — biến số áp đảo, xem [main-report §2.8](../report/main-report.md) |
 

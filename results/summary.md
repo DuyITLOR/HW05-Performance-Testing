@@ -172,6 +172,9 @@ Không có sample lỗi nào trong lượt này.
 
 ## Các lượt chạy cũ (không dùng làm số liệu báo cáo)
 
+> Các lượt dưới đây được giữ trên repo public để phục vụ audit. Do Moodle giới hạn 20 MB, ZIP chỉ
+> chứa ba raw JTL bắt buộc của Load/Stress/Spike và raw JTL của lượt Soak được dùng trong báo cáo.
+
 | File | Bắt đầu | Sample | Error % | p95 |
 |---|---|---|---|---|
 | `23127178_Load_20260813-131228.jtl` | 2026-08-13T06:12:29.700Z | 16436 | 0% | 7 |
@@ -185,4 +188,3 @@ Không có sample lỗi nào trong lượt này.
 | `23127178_Spike_20260815-154700.jtl` | 2026-08-15T08:47:02.046Z | 38160 | 0% | 7 |
 
 > Giữ lại để minh bạch quá trình. Bảng chính chỉ lấy **lượt mới nhất của mỗi scenario**.
-

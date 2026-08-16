@@ -162,7 +162,30 @@ find "$NAME" -name '.DS_Store' -delete 2>/dev/null
 rm -rf "$NAME/results/html"/*/trace "$NAME/k6/raw" 2>/dev/null
 find "$NAME" -name '*.jmeter.log' -size +5M -delete 2>/dev/null
 
-zip -qr "$NAME.zip" "$NAME"
+# Moodle giới hạn 20 MB. §14 chỉ đòi ba raw JTL Load/Stress/Spike; giữ thêm đúng lượt Soak dùng
+# để tính endurance threshold. Các lượt cũ vẫn có trên repo public và được liệt kê trong summary.md,
+# nhưng không nhân đôi trong ZIP. Resource CSV cũng chỉ giữ các lượt khớp bốn raw log này.
+find "$NAME/results/jtl" -type f \( -name '*.jtl' -o -name '*.jmeter.log' \) \
+  ! -name "${MSSV}_Load_20260815-152938.jtl" \
+  ! -name "${MSSV}_Load_20260815-152938.jmeter.log" \
+  ! -name "${MSSV}_Stress_20260815-153717.jtl" \
+  ! -name "${MSSV}_Stress_20260815-153717.jmeter.log" \
+  ! -name "${MSSV}_Spike_20260815-215939.jtl" \
+  ! -name "${MSSV}_Spike_20260815-215939.jmeter.log" -delete
+
+find "$NAME/results/resources" -type f -name '*.resources.csv' \
+  ! -name "${MSSV}_Load_20260815-152938.resources.csv" \
+  ! -name "${MSSV}_Stress_20260815-153717.resources.csv" \
+  ! -name "${MSSV}_Spike_20260815-215939.resources.csv" -delete
+
+find "$NAME/endurance/jtl" -type f \( -name '*.jtl' -o -name '*.jmeter.log' \) \
+  ! -name "${MSSV}_Soak_20260815-155240.jtl" \
+  ! -name "${MSSV}_Soak_20260815-155240.jmeter.log" -delete
+
+find "$NAME/endurance/resources" -type f -name '*.resources.csv' \
+  ! -name "${MSSV}_Soak_20260815-155240.resources.csv" -delete
+
+zip -9qr "$NAME.zip" "$NAME"
 SIZE=$(du -h "$NAME.zip" | cut -f1)
 
 echo ""
