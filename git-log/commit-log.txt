@@ -1,3 +1,56 @@
+* 65b98fa 2026-08-16 19:48:06 +0700 DuyITLOR
+|   docs: file the demo video link, and clean up what recording it left behind
+| Video is up: https://youtu.be/hCf4bXwzx2A - 709 seconds, so 11:49 against a 6:00 minimum. Checked
+| before filing it rather than trusting the URL: HTTP 200 without logging in, isUnlisted true and
+| isPrivate false, and the title carries the student ID. Private would have been invisible to a grader
+| and the assignment asks for unlisted specifically.
+| 
+| Link now in README's header, links table, self-assessment and §14 checklist; in TASKS.md's video row;
+| and in main-report's header, which had no video line at all. Agent Skills drops its conditional
+| wording - §7 wanted a skill demo in the video and the video has one - and the total loses its asterisk.
+| §9 turns from a to-do list into a status section.
+| 
+| Recording the video ran capture-run.sh Spike twice and npm run plans once, which left three things
+| behind:
+| 
+|   - Two Spike runs dated 16/08 with .jtl, resources and run-log rows. Deleted per the user's call -
+|     they were demonstrations, not measurements.
+|   - Four duplicate .jmx stamped 20260816. Verified byte-identical to the 20260813 set once the date
+|     string is normalised, so nothing was lost by removing them.
+|   - results/html/spike/ silently overwritten with the demo run's dashboard - 38,497 samples against
+|     the submitted run's 38,251. Regenerated from the submitted .jtl with jmeter -g. This one would
+|     have shipped a dashboard that did not match its own .jtl, and no document would have contradicted
+|     it.
+| 
+| That third one also exposed a real bug in verify-all.sh: the mtime cross-check took the LAST run-log
+| row per scenario, so once a newer Spike run existed it compared the submitted screenshot against the
+| wrong run and reported a FAIL on genuine evidence. The manifest already pins each screenshot to its
+| run, so the cross-check now reports whether mtime still agrees with captured_at - drift being normal
+| inside the package - instead of inventing a pass/fail from the wrong row.
+| 
+| Verified inside the extracted zip, not just in the repo: 34 PASS, 0 FAIL, no dead relative links, the
+| manifest's sha256 still matching after cp, and the link present in the built PDF.
+| 
+|  README.md                         |  24 +-
+|  TASKS.md                          |   6 +-
+|  ai-audit/ai-audit-report.pdf      | Bin 677856 -> 677856 bytes
+|  ai-audit/ai-critique.pdf          | Bin 55844 -> 55844 bytes
+|  bug-report/bug-report.pdf         | Bin 349229 -> 349229 bytes
+|  docs/kich-ban-video-demo.md       | 575 +++++++++++++++++-------------------
+|  recording/2026-08-16 19-09-26.mp4 | Bin 0 -> 43404803 bytes
+|  recording/2026-08-16 19-27-09.mp4 | Bin 0 -> 47680295 bytes
+|  report/main-report.md             |   1 +
+|  report/main-report.pdf            | Bin 984497 -> 986410 bytes
+|  results/summary.md                |   2 +-
+|  tools/verify-all.sh               |  43 ++-
+|  12 files changed, 315 insertions(+), 336 deletions(-)
+| 
+* c591c91 2026-08-16 18:29:17 +0700 DuyITLOR
+|   docs: refresh the commit log
+| 
+|  git-log/commit-log.txt | 34 ++++++++++++++++++++++++++++++++++
+|  1 file changed, 34 insertions(+)
+| 
 * 884c936 2026-08-16 18:29:15 +0700 DuyITLOR
 |   docs: rewrite the video script to say what files do instead of what they guarantee
 | The old script told the narrator to say gen-test-plans.py makes the shared workflow 'a structural
